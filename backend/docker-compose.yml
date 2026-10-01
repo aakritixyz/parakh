@@ -1,0 +1,51 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: Parakh
+      DATABASE_URL: sqlite:///./parakh.db
+      USE_SQLITE: "true"
+      STORAGE_ROOT: ./data/storage
+      SECRET_KEY: change-me-in-production
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: parakh
+      POSTGRES_PASSWORD: parakh
+      POSTGRES_DB: parakh
+    ports:
+      - "5432:5432"
+    volumes:
+      - parakh_pg:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:latest
+    profiles: ["minio"]
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: parakh
+      MINIO_ROOT_PASSWORD: parakh-password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - parakh_minio:/data
+
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["ollama"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - parakh_ollama:/root/.ollama
+
+volumes:
+  parakh_pg:
+  parakh_minio:
+  parakh_ollama:

@@ -1,0 +1,5 @@
+timestamp,account,type,amount,counterparty,note
+2026-09-12 09:25 IST,victim,debit,25000,arjun@upi,investment plan
+2026-09-12 09:33 IST,victim,debit,25000,arjun@upi,urgent payment
+2026-09-12 09:45 IST,mule,credit,50000,victim@upi,rapid pass-through
+2026-09-12 09:47 IST,mule,debit,49500,cashout@upi,pass-through

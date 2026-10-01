@@ -1,0 +1,50 @@
+[project]
+name = "parakh"
+version = "0.1.0"
+description = "AI-powered indigenous digital forensics investigation framework"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.8.0",
+  "pydantic-settings>=2.4.0",
+  "sqlalchemy>=2.0.32",
+  "alembic>=1.13.2",
+  "python-multipart>=0.0.9",
+  "python-jose[cryptography]>=3.3.0",
+  "passlib[bcrypt]>=1.7.4",
+  "pillow>=10.4.0",
+  "pypdf>=4.3.0",
+  "email-validator>=2.2.0",
+  "networkx>=3.3",
+  "scikit-learn>=1.5.1",
+  "numpy>=1.26.4",
+  "reportlab>=4.2.2",
+  "python-dateutil>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.2",
+  "httpx>=0.27.0",
+  "ruff>=0.6.0",
+  "mypy>=1.11.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008", "E501", "E402"]
+
+[tool.mypy]
+python_version = "3.11"
+plugins = []
+strict = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
