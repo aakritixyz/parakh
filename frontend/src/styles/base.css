@@ -1,0 +1,117 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--bg);
+  font-variant-numeric: tabular-nums;
+}
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  min-height: var(--s8);
+  padding: var(--s1) var(--s3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+}
+button:hover {
+  background: var(--hover);
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: var(--focus);
+}
+input:not([type="checkbox"]),
+select {
+  min-width: 0;
+  height: var(--s8);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: var(--s1) var(--s3);
+}
+input[type="checkbox"] {
+  accent-color: var(--info);
+  width: var(--text-control);
+  height: var(--text-control);
+  flex-shrink: 0;
+}
+h1 {
+  font-size: var(--title-size);
+}
+h2 {
+  font-size: var(--text-control);
+}
+h3 {
+  font-size: var(--text-control);
+}
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+strong {
+  font-weight: 600;
+}
+small,
+time {
+  font-size: var(--s3);
+  color: var(--ink-3);
+}
+time,
+code {
+  font-family: var(--font-mono);
+}
+p {
+  margin: var(--s2) 0 var(--s4);
+}
+svg.lucide {
+  width: var(--s4);
+  height: var(--s4);
+  stroke-width: 1.75;
+  flex-shrink: 0;
+}
+button,
+input {
+  transition: opacity var(--motion-fast);
+}
+ul {
+  padding-left: var(--s6);
+}
+::selection {
+  background: var(--info-bg);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

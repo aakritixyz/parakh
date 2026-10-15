@@ -1,0 +1,83 @@
+.button {
+  font-weight: 500;
+}
+.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+.primary:hover {
+  background: var(--accent-600);
+}
+.secondary {
+  background: var(--surface);
+}
+.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.sm {
+  min-height: var(--kpi-size);
+  font-size: var(--s3);
+  padding: var(--s1) var(--s2);
+}
+.md {
+  min-height: var(--s8);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s1) var(--s2);
+  font-size: var(--s3);
+  color: var(--ink-2);
+  background: var(--hover);
+}
+.skeleton {
+  display: block;
+  width: var(--map-preview-height);
+  height: var(--s4);
+  border-radius: var(--radius);
+  background: var(--line);
+  margin: var(--s2) 0;
+}
+.empty {
+  padding: var(--s8);
+  display: grid;
+  justify-items: center;
+  color: var(--ink-3);
+}
+.tabs {
+  display: inline-flex;
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.tabs button {
+  border: 0;
+  border-radius: 0;
+}
+.tabs button[aria-pressed="true"] {
+  background: var(--info-bg);
+  color: var(--info);
+}
+.table {
+  max-width: 100%;
+  overflow: auto;
+}
+.virtualList {
+  height: var(--events-height);
+  overflow: auto;
+  contain: strict;
+}
+.virtualSpace {
+  position: relative;
+  width: 100%;
+}
+.virtualRow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

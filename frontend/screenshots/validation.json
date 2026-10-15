@@ -1,0 +1,30 @@
+[
+  {
+    "width": 1280,
+    "screens": 21,
+    "overflow": false,
+    "bodyFont": "13px",
+    "drawer": "passed"
+  },
+  {
+    "width": 1440,
+    "screens": 21,
+    "overflow": false,
+    "bodyFont": "13px",
+    "drawer": "passed"
+  },
+  {
+    "width": 1600,
+    "screens": 21,
+    "overflow": false,
+    "bodyFont": "13px",
+    "drawer": "passed"
+  },
+  {
+    "width": 1920,
+    "screens": 21,
+    "overflow": false,
+    "bodyFont": "13px",
+    "drawer": "passed"
+  }
+]

@@ -1,0 +1,78 @@
+import { useEffect } from "react";
+import {
+  Menu,
+  Search,
+  ShieldCheck,
+  ShieldAlert,
+  UserRound,
+} from "lucide-react";
+export function Header({
+  title,
+  online,
+  verified,
+  onToggle,
+  onProfile,
+  query,
+  onQuery,
+}: {
+  title: string;
+  online: boolean;
+  verified: boolean;
+  onToggle: () => void;
+  onProfile: () => void;
+  query: string;
+  onQuery: (query: string) => void;
+}) {
+  useEffect(() => {
+    const handle = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        document.querySelector<HTMLInputElement>("#global-search")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handle);
+    return () => window.removeEventListener("keydown", handle);
+  }, []);
+  return (
+    <header className="suite-topbar">
+      <button
+        className="hamburger"
+        aria-label="Toggle navigation"
+        onClick={onToggle}
+      >
+        <Menu />
+      </button>
+      <div className="product-lockup">
+        <div className="brand-mark">P</div>
+        <strong>Parakh</strong>
+      </div>
+      <div className="case-title">
+        <strong title={title}>{title}</strong>
+        <small>{online ? "Backend connected" : "Demo data · Offline"}</small>
+      </div>
+      <label className="global-search">
+        <Search />
+        <input
+          id="global-search"
+          type="search"
+          placeholder="Search workspace…"
+          aria-label="Search workspace"
+          value={query}
+          onChange={(event) => onQuery(event.target.value)}
+        />
+        <kbd>⌘K</kbd>
+      </label>
+      <span className={`chain-status ${verified ? "" : "chain-warning"}`}>
+        {verified ? <ShieldCheck /> : <ShieldAlert />}
+        {verified ? "Chain verified" : "Chain needs review"}
+      </span>
+      <button
+        className="profile-button"
+        aria-label="User profile"
+        onClick={onProfile}
+      >
+        <UserRound />
+      </button>
+    </header>
+  );
+}
