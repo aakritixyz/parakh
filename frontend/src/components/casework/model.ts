@@ -161,17 +161,17 @@ export const findings: Finding[] = [
     ],
   },
 ];
-export const time = (value?: string | null) =>
+export const time = (value?: string | null, zone = "Asia/Kolkata") =>
   value
     ? new Intl.DateTimeFormat("en-IN", {
-        timeZone: "Asia/Kolkata",
+        timeZone: zone,
         day: "2-digit",
         month: "short",
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
         hour12: false,
-      }).format(new Date(value)) + " IST"
+      }).format(new Date(value)) + (zone === "UTC" ? " UTC" : " IST")
     : "Time not established";
 export const sha256 = async (data: BufferSource) =>
   Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", data)))

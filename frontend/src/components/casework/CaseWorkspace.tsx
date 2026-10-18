@@ -3,15 +3,21 @@ import {
   getIdentities,
   getModelCards,
   getMoneyAnalysis,
+  getCaseIntegrity,
+  getOriginAnalysis,
   getPatterns,
+  downloadVerifiedBundle,
+  runTamperDemo,
   searchCaseEvents,
   unmergeAlias,
   verifyLiveIntegrity,
   type Audit,
   type IdentityOverview,
+  type IntegrityResult,
   type ModelCard,
   type MoneyResult,
   type PatternResult,
+  type OriginResult,
   type SearchResult,
 } from "../../caseApi";
 import {
@@ -200,6 +206,10 @@ export function CaseWorkspace({
   const [patterns, setPatterns] = useState<PatternResult | null>(null);
   const [moneyRule, setMoneyRule] = useState<"fifo" | "proportional" | "lifo">("fifo");
   const [moneyAnalysis, setMoneyAnalysis] = useState<MoneyResult | null>(null);
+  const [integrityData, setIntegrityData] = useState<IntegrityResult | null>(null);
+  const [originData, setOriginData] = useState<OriginResult | null>(null);
+  const [tamperResult, setTamperResult] = useState("");
+  const [displayZone, setDisplayZone] = useState<"Asia/Kolkata" | "UTC" | "Source time">("Asia/Kolkata");
   const records: RecordEvent[] = useMemo(
     () =>
       searchResult
@@ -306,6 +316,14 @@ export function CaseWorkspace({
     if (!token || !caseId || view !== "Money") return;
     void getMoneyAnalysis(caseId, moneyRule).then(setMoneyAnalysis);
   }, [caseId, moneyRule, token, view]);
+  useEffect(() => {
+    if (!token || !caseId || (!custody && view !== "Evidence")) return;
+    void getCaseIntegrity(caseId).then((result) => { setIntegrityData(result); setChain(result.valid); });
+  }, [caseId, custody, token, view]);
+  useEffect(() => {
+    if (!token || !caseId || view !== "Timeline") return;
+    void getOriginAnalysis(caseId).then(setOriginData);
+  }, [caseId, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -790,7 +808,14 @@ export function CaseWorkspace({
           />
           <kbd>⌘K</kbd>
         </label>
-        <span className={styles.zone}>IST · UTC+05:30</span>
+        <label className={styles.zone}>
+          Time
+          <select value={displayZone} onChange={(event) => setDisplayZone(event.target.value as typeof displayZone)}>
+            <option value="Asia/Kolkata">IST · UTC+05:30</option>
+            <option value="UTC">UTC</option>
+            <option value="Source time">Source time</option>
+          </select>
+        </label>
         <button
           className={styles.user}
           onClick={onSignOut}
@@ -1071,10 +1096,8 @@ export function CaseWorkspace({
                 </div>
               </section>
               <p className={styles.note}>
-                Demo originals are locally bundled copies of the synthetic pack.
-                Signed-in verification requests the backend vault integrity
-                check for the matching evidence hash. Re-import and editable
-                owner/device assignments are planned.
+                A matching hash shows the file is unchanged since it was
+                sealed. It does not prove the file was truthful.
               </p>
             </>
           )}
@@ -1914,7 +1937,9 @@ export function CaseWorkspace({
                       )
                     }
                   >
-                    {time(activeEvent?.timestamp_utc)}
+                    {displayZone === "Source time" && activeEvent?.original_timestamp
+                      ? activeEvent.original_timestamp
+                      : time(activeEvent?.timestamp_utc, displayZone === "UTC" ? "UTC" : "Asia/Kolkata")}
                   </button>
                   <span className={styles.viewLabel}>
                     Demo replay · source-time sync
@@ -1948,6 +1973,43 @@ export function CaseWorkspace({
                     {mapView(activeEvent?.timestamp_utc)}
                   </section>
                 </div>,
+              )}
+              {token && originData && (
+                <>
+                  <div className={styles.twoColumns}>
+                    <section className={styles.panel}>
+                      <div className={styles.cardTitle}><h2>Clock reconciliation</h2><span className={styles.viewLabel}>{originData.clock_reconciliation.solver.method}</span></div>
+                      <p><strong>{originData.clock_reconciliation.device}</strong></p>
+                      <dl>
+                        <dt>Observed device offset</dt><dd>{originData.clock_reconciliation.observed_clock_offset_seconds}s</dd>
+                        <dt>Applied correction</dt><dd>{originData.clock_reconciliation.correction_seconds > 0 ? "+" : ""}{originData.clock_reconciliation.correction_seconds}s</dd>
+                        <dt>Supported range</dt><dd>{originData.clock_reconciliation.range_seconds[0]}s to {originData.clock_reconciliation.range_seconds[1]}s</dd>
+                        <dt>Cross-source anchors</dt><dd>{originData.clock_reconciliation.matched_anchors}</dd>
+                        <dt>Timeline</dt><dd>{originData.timeline_consistency.consistent ? "Consistent" : "Inconsistent · negative cycle detected"}</dd>
+                      </dl>
+                      <p className={styles.note}>Bounded to {originData.clock_reconciliation.solver.time_limit_seconds}s · seed {originData.clock_reconciliation.solver.seed} · fallback: {originData.clock_reconciliation.solver.fallback}.</p>
+                    </section>
+                    <section className={styles.panel}>
+                      <h2>Second-device comparison</h2>
+                      <p>{originData.second_device_comparison.primary_file} ↔ {originData.second_device_comparison.secondary_file}</p>
+                      <dl>
+                        <dt>Matched</dt><dd>{originData.second_device_comparison.matched ?? 0}</dd>
+                        <dt>Missing from second copy</dt><dd>{originData.second_device_comparison.missing.length}</dd>
+                        <dt>Edited / extra</dt><dd>{originData.second_device_comparison.edited.length}</dd>
+                        <dt>Reordered</dt><dd>{originData.second_device_comparison.reordered.length}</dd>
+                      </dl>
+                      {originData.second_device_comparison.missing.map((item) => <button key={item.event_id} className={styles.claim} onClick={() => open({ file: originData.second_device_comparison.secondary_evidence_id ?? 0, ref: item.source_reference })}>{item.content}</button>)}
+                      <p className={styles.note}>{originData.second_device_comparison.method}. A difference identifies a discrepancy; it does not establish why it occurred.</p>
+                    </section>
+                  </div>
+                  <section className={styles.panel}>
+                    <h2>Event provenance</h2>
+                    <div className={styles.tableWrap}><table><thead><tr><th>Event</th><th>Origin</th><th>Parser</th><th>Time</th><th>Unknown</th></tr></thead><tbody>
+                      {originData.provenance.slice(0, 100).map((item) => <tr key={item.event_id}><td><button onClick={() => open({ file: item.evidence_id, ref: item.source_reference })}>#{item.event_id} · {item.source_reference}</button></td><td>{item.file}<small>{item.owner} · {item.device}</small></td><td>{item.parser}</td><td>{displayZone === "Source time" ? item.original_timestamp ?? "Unknown" : time(item.timestamp_utc, displayZone)}</td><td>{item.unknown.length ? item.unknown.join(", ") : "None"}</td></tr>)}
+                    </tbody></table></div>
+                    {originData.provenance.length > 100 && <p className={styles.note}>Showing the first 100 of {originData.provenance.length} events.</p>}
+                  </section>
+                </>
               )}
               <section className={styles.panel}>
                 <h2>Source events</h2>
@@ -2075,6 +2137,7 @@ export function CaseWorkspace({
                   entries without Parakh.
                 </p>
                 <div className={styles.toolbar}>
+                  {token && caseId && <button onClick={() => void downloadVerifiedBundle(caseId)}><Download />Export verified portable ZIP</button>}
                   <button onClick={exportReport}>
                     <Download />
                     Export review bundle
@@ -2089,9 +2152,10 @@ export function CaseWorkspace({
                   /path/to/evidence
                 </code>
                 <p className={styles.warning}>
-                  Demo custody entries are explicitly simulated. Signed audit
-                  entries, backend export audit logging, a zipped evidence
-                  bundle and formatted court reports are planned.
+                  The authenticated portable ZIP contains sealed evidence,
+                  Merkle proofs, signed audit entries and a standalone
+                  verifier. Demo custody entries in the local JSON export are
+                  explicitly simulated.
                 </p>
               </section>
               <section className={styles.panel}>
@@ -2289,12 +2353,23 @@ export function CaseWorkspace({
             <p className={styles.warning}>
               {isDemo
                 ? demo.notice
-                : "Chain status comes from the backend dashboard. Full custody entries are not supplied by this endpoint; authenticated custody-log integration is planned."}
+                : integrityData?.notice ?? "Checking the sealed files and signed custody chain…"}
             </p>
-            <p>
-              Signed entries and acquisition attestations are planned. An
-              unchanged file may still contain a false claim.
-            </p>
+            {!isDemo && integrityData && <>
+              <dl>
+                <dt>Audit entries</dt><dd>{integrityData.audit.entries}</dd>
+                <dt>Ed25519-signed entries</dt><dd>{integrityData.audit.signed_entries}</dd>
+                <dt>Legacy unsigned entries</dt><dd>{integrityData.audit.unsigned_legacy_entries}</dd>
+                <dt>Merkle root ({integrityData.merkle.leaf_count} files)</dt><dd className={styles.hash}>{integrityData.merkle.root}</dd>
+              </dl>
+              <div className={styles.toolbar}>
+                <button onClick={() => caseId && void getCaseIntegrity(caseId, true).then((result) => { setIntegrityData(result); setChain(result.valid); })}>Re-hash all files</button>
+                <button onClick={() => caseId && void runTamperDemo(caseId, "file").then((result) => setTamperResult(`${result.detected ? "Detected" : "Not detected"}: ${result.failed_at}`))}>Tamper demo · file</button>
+                <button onClick={() => caseId && void runTamperDemo(caseId, "audit").then((result) => setTamperResult(`${result.detected ? "Detected" : "Not detected"}: ${result.failed_at}`))}>Tamper demo · audit row</button>
+              </div>
+              {tamperResult && <p role="status" className={styles.warning}>{tamperResult}</p>}
+              <div className={styles.auditList}>{integrityData.files.map((item) => <article key={item.evidence_id}><h3>{item.evidence_id}. {item.filename}</h3><p className={item.status === "verified" ? styles.note : styles.danger}>{item.status}</p><code>Expected: {item.expected_sha256}</code><code>Actual: {item.actual_sha256 ?? "file missing"}</code><small>Merkle proof: {item.merkle_proof.length} sibling hashes</small></article>)}</div>
+            </>}
             {!isDemo && caseAudit && (
               <div className={styles.auditList}>
                 {caseAudit.entries.map((a) => (

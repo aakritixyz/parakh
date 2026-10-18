@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./parakh.db"
     use_sqlite: bool = True
     storage_root: Path = Path("./data/storage")
+    audit_signing_key_path: Path = Path("./data/storage/keys/audit-ed25519-private.pem")
     cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:4173,http://127.0.0.1:5183"
     retention_days: int = 365
     max_upload_bytes: int = 512 * 1024 * 1024

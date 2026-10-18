@@ -238,6 +238,23 @@ export type PatternResult = {
   assumptions: Record<string, string | number>;
   fallback: string;
 };
+export type IntegrityResult = {
+  valid: boolean;
+  label: string;
+  notice: string;
+  files: { evidence_id: number; filename: string; status: string; expected_sha256: string; actual_sha256: string | null; merkle_proof: { side: string; hash: string }[] }[];
+  audit: { valid: boolean; entries: number; signed_entries: number; unsigned_legacy_entries: number; tip_hash: string };
+  merkle: { algorithm: string; root: string; leaf_count: number };
+};
+export type OriginResult = {
+  display_timezone: string;
+  provenance: { event_id: number; evidence_id: number; file: string; source_reference: string; device: string; owner: string; parser: string; extraction_time: string; timestamp_utc: string | null; original_timestamp: string | null; timezone_offset: string | null; unknown: string[] }[];
+  clock_reconciliation: { device: string; observed_clock_offset_seconds: number; correction_seconds: number; range_seconds: number[]; matched_anchors: number; solver: { method: string; complete: boolean; time_limit_seconds: number; seed: number; fallback: string } };
+  second_device_comparison: { primary_file: string | null; secondary_file: string | null; secondary_evidence_id: number | null; matched?: number; missing: { event_id: number; content: string; source_reference: string }[]; edited: { event_id: number; content: string; source_reference: string }[]; reordered: unknown[]; method: string };
+  timeline_consistency: { consistent: boolean; negative_cycle: unknown };
+  ordering_probability: { statement: string; probability: number; samples: number; seed: number };
+  order_dependent_event_ids: number[];
+};
 export type MoneySupport = {
   evidence_id: number;
   file: string;
@@ -539,3 +556,19 @@ export const unmergeAlias = (caseId: number, suggestionId: number) =>
 
 export const verifyLiveIntegrity = (id: number) =>
   sessionRequest<{ valid: boolean }>(`/api/v1/evidence/${id}/integrity`);
+export const getCaseIntegrity = (caseId: number, rehash = false) =>
+  sessionRequest<IntegrityResult>(`/api/v2/cases/${caseId}/integrity${rehash ? "/rehash" : ""}`, rehash ? { method: "POST" } : {});
+export const runTamperDemo = (caseId: number, target: "file" | "audit") =>
+  sessionRequest<{ target: string; detected: boolean; failed_at: string; detail: string }>(`/api/v2/cases/${caseId}/integrity/tamper-demo?target=${target}`, { method: "POST" });
+export const getOriginAnalysis = (caseId: number) =>
+  sessionRequest<OriginResult>(`/api/v2/cases/${caseId}/origin`);
+export async function downloadVerifiedBundle(caseId: number) {
+  if (!session) throw new Error("Sign in to continue.");
+  const send = () => fetch(`/api/v2/cases/${caseId}/integrity/export`, { method: "POST", credentials: "same-origin", headers: { Authorization: `Bearer ${session!.access_token}` } });
+  let response = await send();
+  if (response.status === 401) { await refreshSession(); response = await send(); }
+  if (!response.ok) throw await error(response);
+  const href = URL.createObjectURL(await response.blob());
+  const anchor = document.createElement("a"); anchor.href = href; anchor.download = `parakh-case-${caseId}-verified.zip`; anchor.click();
+  URL.revokeObjectURL(href);
+}
