@@ -20,6 +20,8 @@ jobs:
       - name: Check backend
         run: |
           cd backend
+          DATABASE_URL=sqlite:///./ci.db python -m app.cli migrate
+          DATABASE_URL=sqlite:///./ci.db alembic check
           ruff check .
           mypy app
           pytest -q
@@ -35,5 +37,10 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install frontend
         run: cd frontend && npm ci
-      - name: Build frontend
-        run: cd frontend && npm run build
+      - name: Check frontend
+        run: |
+          cd frontend
+          npm test
+          npm run lint
+          npm run typecheck
+          npm run build

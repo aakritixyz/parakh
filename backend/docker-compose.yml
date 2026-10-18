@@ -3,12 +3,8 @@ services:
     build: .
     ports:
       - "8000:8000"
-    environment:
-      APP_NAME: Parakh
-      DATABASE_URL: sqlite:///./parakh.db
-      USE_SQLITE: "true"
-      STORAGE_ROOT: ./data/storage
-      SECRET_KEY: change-me-in-production
+    env_file:
+      - ../.env
     volumes:
       - .:/app
 

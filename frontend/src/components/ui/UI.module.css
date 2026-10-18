@@ -81,3 +81,40 @@
   left: 0;
   width: 100%;
 }
+.loginDialog {
+  width: min(100% - var(--s8), 28rem);
+  padding: var(--s6);
+  border: var(--border-width) solid var(--line);
+  border-radius: var(--card-radius);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.loginDialog::backdrop {
+  background: var(--scrim);
+}
+.loginDialog header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+.loginDialog p {
+  color: var(--ink-2);
+  margin: var(--s4) 0;
+}
+.loginDialog form,
+.loginDialog label {
+  display: grid;
+  gap: var(--s2);
+}
+.loginDialog form {
+  gap: var(--s4);
+}
+.loginDialog [role="alert"] {
+  color: var(--danger);
+  margin: 0;
+}
+.loginDialog input {
+  width: 100%;
+}

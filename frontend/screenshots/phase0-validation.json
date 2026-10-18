@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1280,
+    "header": "passed",
+    "dialog": "passed",
+    "focus": "passed"
+  },
+  {
+    "width": 1440,
+    "header": "passed",
+    "dialog": "passed",
+    "focus": "passed"
+  },
+  {
+    "width": 1600,
+    "header": "passed",
+    "dialog": "passed",
+    "focus": "passed"
+  },
+  {
+    "width": 1920,
+    "header": "passed",
+    "dialog": "passed",
+    "focus": "passed"
+  }
+]

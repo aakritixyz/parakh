@@ -1,0 +1,3595 @@
+{
+  "files": [
+    {
+      "file": "01_whatsapp_riya_android.txt",
+      "owner": "Riya",
+      "source": "Android-style WhatsApp export",
+      "note": "30 messages and synthetic system notice. Source clock assumed accurate.",
+      "synthetic": true,
+      "bytes": 2378,
+      "sha256": "32c013515be5297510cea060f655cd903a2439f2a0f126eef584ff1942aab532",
+      "md5": "303277ac2d4210635b5bafffd90825f5",
+      "id": 1,
+      "parser": "whatsapp_text_export",
+      "records": 31,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "12/09/2026, 09:00 - SYNTHETIC DEMO ONLY. All people, messages and identifiers are fictional."
+        },
+        {
+          "ref": "line:2",
+          "text": "12/09/2026, 09:05 - Riya: Hello, I saw the investment advertisement. Is this safe?"
+        },
+        {
+          "ref": "line:3",
+          "text": "12/09/2026, 09:06 - Agent Arjun: Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today."
+        },
+        {
+          "ref": "line:4",
+          "text": "12/09/2026, 09:07 - Riya: This is my savings. I do not want a loan."
+        },
+        {
+          "ref": "line:5",
+          "text": "12/09/2026, 09:08 - Agent Arjun: No loan. Limited slots. Complete KYC: https://kyc-saffron.example/verify"
+        },
+        {
+          "ref": "line:6",
+          "text": "12/09/2026, 09:10 - Riya: The page asks for an OTP. Why?"
+        },
+        {
+          "ref": "line:7",
+          "text": "12/09/2026, 09:11 - Agent Arjun: KYC update only. OTP bhejo, jaldi."
+        },
+        {
+          "ref": "line:8",
+          "text": "12/09/2026, 09:12 - Riya: [SYNTHETIC OTP REDACTED - no usable code]"
+        },
+        {
+          "ref": "line:9",
+          "text": "12/09/2026, 09:14 - Agent Arjun: Call DEMO-PHONE-ARJUN. I will explain."
+        },
+        {
+          "ref": "line:10",
+          "text": "12/09/2026, 09:17 - Riya: You said guaranteed. Can I withdraw today?"
+        },
+        {
+          "ref": "line:11",
+          "text": "12/09/2026, 09:18 - Agent Arjun: Yes. First send INR 25,000 to arjun.collect@demo. It is our collection account."
+        },
+        {
+          "ref": "line:12",
+          "text": "12/09/2026, 09:24 - Riya: Sending INR 25,000 now."
+        },
+        {
+          "ref": "line:13",
+          "text": "12/09/2026, 09:26 - Riya: Paid INR 25,000. Reference DEMO-UPI-001."
+        },
+        {
+          "ref": "line:14",
+          "text": "12/09/2026, 09:27 - Agent Arjun: Received. One more INR 25,000 unlocks the portfolio."
+        },
+        {
+          "ref": "line:15",
+          "text": "12/09/2026, 09:28 - Riya: That was not mentioned before."
+        },
+        {
+          "ref": "line:16",
+          "text": "12/09/2026, 09:29 - Agent Arjun: Urgent payment needed before the slot closes. Return guaranteed."
+        },
+        {
+          "ref": "line:17",
+          "text": "12/09/2026, 09:32 - Riya: I will send the remaining INR 25,000, then please stop."
+        },
+        {
+          "ref": "line:18",
+          "text": "12/09/2026, 09:34 - Riya: Second payment done. Reference DEMO-UPI-002."
+        },
+        {
+          "ref": "line:19",
+          "text": "12/09/2026, 09:35 - Agent Arjun: Your portfolio is processing."
+        },
+        {
+          "ref": "line:20",
+          "text": "12/09/2026, 09:39 - Riya: The website is not opening. I want my money back."
+        },
+        {
+          "ref": "line:21",
+          "text": "12/09/2026, 09:40 - Agent Arjun: Refund approved. Do not contact the bank yet."
+        },
+        {
+          "ref": "line:22",
+          "text": "12/09/2026, 09:44 - Agent Arjun: <Media omitted>"
+        },
+        {
+          "ref": "line:23",
+          "text": "12/09/2026, 09:44 - Agent Arjun: 06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001."
+        },
+        {
+          "ref": "line:24",
+          "text": "12/09/2026, 09:46 - Riya: My bank still shows INR 32,500. No refund credit."
+        },
+        {
+          "ref": "line:25",
+          "text": "12/09/2026, 09:47 - Agent Arjun: Bank delay. Send INR 5,000 release fee."
+        },
+        {
+          "ref": "line:26",
+          "text": "12/09/2026, 09:48 - Riya: No. I am not paying another fee."
+        },
+        {
+          "ref": "line:27",
+          "text": "12/09/2026, 09:52 - Riya: I tried calling you. Please answer."
+        },
+        {
+          "ref": "line:28",
+          "text": "12/09/2026, 10:02 - Riya: I contacted the bank through its support channel."
+        },
+        {
+          "ref": "line:29",
+          "text": "12/09/2026, 10:05 - Agent Arjun: Wait until evening. Do not file a complaint."
+        },
+        {
+          "ref": "line:30",
+          "text": "12/09/2026, 10:08 - Riya: I am preserving the chats and bank records."
+        },
+        {
+          "ref": "line:31",
+          "text": "12/09/2026, 10:20 - Riya: I will report this. Do not contact me again."
+        }
+      ]
+    },
+    {
+      "file": "02_whatsapp_linked_tablet.txt",
+      "owner": "Riya linked tablet",
+      "source": "Bracketed WhatsApp export",
+      "note": "Ten repeated messages recorded 30 minutes slow. Excerpt gaps do not prove deletion.",
+      "synthetic": true,
+      "bytes": 907,
+      "sha256": "844286b37f880b10bd64aebf7fa9607b4753f68497d8416a453ebe79399fbf62",
+      "md5": "d490ea938dcbb2a5b34020c50e45d438",
+      "id": 2,
+      "parser": "whatsapp_text_export",
+      "records": 11,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "[12/09/2026, 08:30:00] SYNTHETIC DEMO ONLY. Linked-tablet excerpt; source clock not corrected."
+        },
+        {
+          "ref": "line:2",
+          "text": "[12/09/2026, 08:35:00] Riya: Hello, I saw the investment advertisement. Is this safe?"
+        },
+        {
+          "ref": "line:3",
+          "text": "[12/09/2026, 08:36:00] Agent Arjun: Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today."
+        },
+        {
+          "ref": "line:4",
+          "text": "[12/09/2026, 08:47:00] Riya: You said guaranteed. Can I withdraw today?"
+        },
+        {
+          "ref": "line:5",
+          "text": "[12/09/2026, 08:56:00] Riya: Paid INR 25,000. Reference DEMO-UPI-001."
+        },
+        {
+          "ref": "line:6",
+          "text": "[12/09/2026, 09:04:00] Riya: Second payment done. Reference DEMO-UPI-002."
+        },
+        {
+          "ref": "line:7",
+          "text": "[12/09/2026, 09:14:00] Agent Arjun: <Media omitted>"
+        },
+        {
+          "ref": "line:8",
+          "text": "[12/09/2026, 09:14:00] Agent Arjun: 06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001."
+        },
+        {
+          "ref": "line:9",
+          "text": "[12/09/2026, 09:16:00] Riya: My bank still shows INR 32,500. No refund credit."
+        },
+        {
+          "ref": "line:10",
+          "text": "[12/09/2026, 09:18:00] Riya: No. I am not paying another fee."
+        },
+        {
+          "ref": "line:11",
+          "text": "[12/09/2026, 09:38:00] Riya: I am preserving the chats and bank records."
+        }
+      ]
+    },
+    {
+      "file": "03_bank_statement_riya.csv",
+      "owner": "Riya",
+      "source": "Fictional bank CSV",
+      "note": "11-13 September; opening 85,000, closing 32,001; no refund within this window.",
+      "synthetic": true,
+      "bytes": 726,
+      "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321",
+      "md5": "3b44a92783a48e35200022699fd991e4",
+      "id": 3,
+      "parser": "csv_records",
+      "records": 5,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "timestamp,account,type,amount,currency,counterparty,utr,balance,note,synthetic"
+        },
+        {
+          "ref": "line:2",
+          "text": "2026-09-11T18:30:00+05:30,DEMO-ACCT-RIYA-001,debit,1800.00,INR,DEMO-GROCERY,DEMO-CARD-001,83200.00,Ordinary groceries,true"
+        },
+        {
+          "ref": "line:3",
+          "text": "2026-09-11T20:10:00+05:30,DEMO-ACCT-RIYA-001,debit,700.00,INR,DEMO-TRANSPORT,DEMO-UPI-LOCAL,82500.00,Ordinary transport,true"
+        },
+        {
+          "ref": "line:4",
+          "text": "2026-09-12T09:25:00+05:30,DEMO-ACCT-RIYA-001,debit,25000.00,INR,arjun.collect@demo,DEMO-UPI-001,57500.00,Investment payment 1,true"
+        },
+        {
+          "ref": "line:5",
+          "text": "2026-09-12T09:33:00+05:30,DEMO-ACCT-RIYA-001,debit,25000.00,INR,arjun.collect@demo,DEMO-UPI-002,32500.00,Investment payment 2,true"
+        },
+        {
+          "ref": "line:6",
+          "text": "2026-09-13T11:30:00+05:30,DEMO-ACCT-RIYA-001,debit,499.00,INR,DEMO-GROCERY,DEMO-CARD-002,32001.00,Ordinary household purchase,true"
+        },
+        {
+          "ref": "row:2",
+          "text": "{\"timestamp\": \"2026-09-11T18:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"1800.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-001\", \"balance\": \"83200.00\", \"note\": \"Ordinary groceries\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:3",
+          "text": "{\"timestamp\": \"2026-09-11T20:10:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"700.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-TRANSPORT\", \"utr\": \"DEMO-UPI-LOCAL\", \"balance\": \"82500.00\", \"note\": \"Ordinary transport\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:4",
+          "text": "{\"timestamp\": \"2026-09-12T09:25:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"57500.00\", \"note\": \"Investment payment 1\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:5",
+          "text": "{\"timestamp\": \"2026-09-12T09:33:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"32500.00\", \"note\": \"Investment payment 2\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:6",
+          "text": "{\"timestamp\": \"2026-09-13T11:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"499.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-002\", \"balance\": \"32001.00\", \"note\": \"Ordinary household purchase\", \"synthetic\": \"true\"}"
+        }
+      ],
+      "table": [
+        {
+          "timestamp": "2026-09-11T18:30:00+05:30",
+          "account": "DEMO-ACCT-RIYA-001",
+          "type": "debit",
+          "amount": "1800.00",
+          "currency": "INR",
+          "counterparty": "DEMO-GROCERY",
+          "utr": "DEMO-CARD-001",
+          "balance": "83200.00",
+          "note": "Ordinary groceries",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-11T20:10:00+05:30",
+          "account": "DEMO-ACCT-RIYA-001",
+          "type": "debit",
+          "amount": "700.00",
+          "currency": "INR",
+          "counterparty": "DEMO-TRANSPORT",
+          "utr": "DEMO-UPI-LOCAL",
+          "balance": "82500.00",
+          "note": "Ordinary transport",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:25:00+05:30",
+          "account": "DEMO-ACCT-RIYA-001",
+          "type": "debit",
+          "amount": "25000.00",
+          "currency": "INR",
+          "counterparty": "arjun.collect@demo",
+          "utr": "DEMO-UPI-001",
+          "balance": "57500.00",
+          "note": "Investment payment 1",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:33:00+05:30",
+          "account": "DEMO-ACCT-RIYA-001",
+          "type": "debit",
+          "amount": "25000.00",
+          "currency": "INR",
+          "counterparty": "arjun.collect@demo",
+          "utr": "DEMO-UPI-002",
+          "balance": "32500.00",
+          "note": "Investment payment 2",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-13T11:30:00+05:30",
+          "account": "DEMO-ACCT-RIYA-001",
+          "type": "debit",
+          "amount": "499.00",
+          "currency": "INR",
+          "counterparty": "DEMO-GROCERY",
+          "utr": "DEMO-CARD-002",
+          "balance": "32001.00",
+          "note": "Ordinary household purchase",
+          "synthetic": "true"
+        }
+      ]
+    },
+    {
+      "file": "04_bank_statement_riya.pdf",
+      "owner": "Riya",
+      "source": "Presentation copy of statement 03",
+      "note": "Duplicate representation, not an independent source.",
+      "synthetic": true,
+      "bytes": 3016,
+      "sha256": "9c5804e03c7b13d152b8f6509ac5ebf4b8dd8278922d755d12164e0224079c34",
+      "md5": "c9961adaf7a362a70333dbf71032f4e8",
+      "id": 4,
+      "parser": "pdf_document",
+      "records": 1,
+      "rows": [
+        {
+          "ref": "page:1",
+          "text": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nNayi Disha Demo Bank\nAccount statement\nFICTIONAL INSTITUTION | Holder: Riya (invented) | DEMO-ACCT-RIYA-001\nPeriod: 11 September 2026 00:00 IST through 13 September 2026 23:59 IST. Currency: INR.\nOpening\nTotal debits\nTotal credits\nClosing\n85,000.00\n52,999.00\n0.00\n32,001.00\nDate / time IST\nReference\nDebit INR\nCredit INR\nBalance INR\n2026-09-11\n18:30:00\nDEMO-CARD-001\n1800.00\n-\n83200.00\n2026-09-11\n20:10:00\nDEMO-UPI-LOCAL\n700.00\n-\n82500.00\n2026-09-12\n09:25:00\nDEMO-UPI-001\n25000.00\n-\n57500.00\n2026-09-12\n09:33:00\nDEMO-UPI-002\n25000.00\n-\n32500.00\n2026-09-13\n11:30:00\nDEMO-CARD-002\n499.00\n-\n32001.00\nDEMO-UPI-001 and DEMO-UPI-002 are outgoing INR 25,000 transfers to arjun.collect@demo. No incoming\ncredit appears during this statement period.\nThis PDF and 03_bank_statement_riya.csv are two representations of the SAME synthetic records. Use the CSV for\nstructured analysis. Do not count them as independent corroboration.\n"
+        }
+      ]
+    },
+    {
+      "file": "05_bank_statement_collection.csv",
+      "owner": "Collection account; legal operator unknown",
+      "source": "Fictional bank disclosure to investigator",
+      "note": "Zero opening; 50,000 incoming, 49,500 onward, 500 retained. Not obtained from victim handset.",
+      "synthetic": true,
+      "bytes": 527,
+      "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2",
+      "md5": "113eb0945a4add8f8f7feeeb88f45e37",
+      "id": 5,
+      "parser": "csv_records",
+      "records": 4,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "timestamp,account,type,amount,currency,counterparty,utr,balance,synthetic"
+        },
+        {
+          "ref": "line:2",
+          "text": "2026-09-12T09:25:05+05:30,DEMO-ACCT-COLLECT-009,credit,25000.00,INR,DEMO-ACCT-RIYA-001,DEMO-UPI-001,25000.00,true"
+        },
+        {
+          "ref": "line:3",
+          "text": "2026-09-12T09:33:05+05:30,DEMO-ACCT-COLLECT-009,credit,25000.00,INR,DEMO-ACCT-RIYA-001,DEMO-UPI-002,50000.00,true"
+        },
+        {
+          "ref": "line:4",
+          "text": "2026-09-12T09:36:00+05:30,DEMO-ACCT-COLLECT-009,debit,30000.00,INR,cashout.one@demo,DEMO-OUT-001,20000.00,true"
+        },
+        {
+          "ref": "line:5",
+          "text": "2026-09-12T09:38:00+05:30,DEMO-ACCT-COLLECT-009,debit,19500.00,INR,cashout.two@demo,DEMO-OUT-002,500.00,true"
+        },
+        {
+          "ref": "row:2",
+          "text": "{\"timestamp\": \"2026-09-12T09:25:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"25000.00\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:3",
+          "text": "{\"timestamp\": \"2026-09-12T09:33:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"50000.00\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:4",
+          "text": "{\"timestamp\": \"2026-09-12T09:36:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"30000.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.one@demo\", \"utr\": \"DEMO-OUT-001\", \"balance\": \"20000.00\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:5",
+          "text": "{\"timestamp\": \"2026-09-12T09:38:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"19500.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.two@demo\", \"utr\": \"DEMO-OUT-002\", \"balance\": \"500.00\", \"synthetic\": \"true\"}"
+        }
+      ],
+      "table": [
+        {
+          "timestamp": "2026-09-12T09:25:05+05:30",
+          "account": "DEMO-ACCT-COLLECT-009",
+          "type": "credit",
+          "amount": "25000.00",
+          "currency": "INR",
+          "counterparty": "DEMO-ACCT-RIYA-001",
+          "utr": "DEMO-UPI-001",
+          "balance": "25000.00",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:33:05+05:30",
+          "account": "DEMO-ACCT-COLLECT-009",
+          "type": "credit",
+          "amount": "25000.00",
+          "currency": "INR",
+          "counterparty": "DEMO-ACCT-RIYA-001",
+          "utr": "DEMO-UPI-002",
+          "balance": "50000.00",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:36:00+05:30",
+          "account": "DEMO-ACCT-COLLECT-009",
+          "type": "debit",
+          "amount": "30000.00",
+          "currency": "INR",
+          "counterparty": "cashout.one@demo",
+          "utr": "DEMO-OUT-001",
+          "balance": "20000.00",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:38:00+05:30",
+          "account": "DEMO-ACCT-COLLECT-009",
+          "type": "debit",
+          "amount": "19500.00",
+          "currency": "INR",
+          "counterparty": "cashout.two@demo",
+          "utr": "DEMO-OUT-002",
+          "balance": "500.00",
+          "synthetic": "true"
+        }
+      ]
+    },
+    {
+      "file": "06_refund_receipt_claim.pdf",
+      "owner": "Supplied by Agent Arjun display name",
+      "source": "Synthetic attachment in primary chat",
+      "note": "False refund claim: reuses first-debit reference with changed amount/direction. Readable PDF; no fake metadata evidence.",
+      "synthetic": true,
+      "bytes": 2625,
+      "sha256": "d87cbb0b487d246043d2261a6690de1ffbb91336d87951c9f499a5c13ddbc9c1",
+      "md5": "2572686254173c8157a7868ea44a3fed",
+      "id": 6,
+      "parser": "pdf_document",
+      "records": 1,
+      "rows": [
+        {
+          "ref": "page:1",
+          "text": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRefund confirmation\nSAFFRON GROWTH CLUB - FICTIONAL DEMO PORTAL\nClaimed field\nValue printed on the supplied receipt\nStatus\nCOMPLETED\nAmount\nINR 50,000.00\nPaid to\nRiya / DEMO-ACCT-RIYA-001\nPayment reference\nDEMO-UPI-001\nIssued at\n12 September 2026, 09:42:00 IST\nClaimed sender\nSaffron Growth Club refund desk\nYour investment refund has been successfully processed. Allow time for your balance to update.\nSynthetic prop supplied by the fictional chat contact at 09:44 IST. Status and amount are the sender's claims, not verified\nbank facts. This prop cannot be used to transfer or claim funds.\n"
+        }
+      ]
+    },
+    {
+      "file": "07_gps_location_riya.json",
+      "owner": "Riya Android",
+      "source": "Synthetic GPS export",
+      "note": "UTC timestamps. Victim location only; accuracy is simulated, not a suspect route.",
+      "synthetic": true,
+      "bytes": 2463,
+      "sha256": "027e9bbd5f53825f90d2a61cdc126a2c672279321a72ffc4a77b52d41983816e",
+      "md5": "49ca110ca792c9b8372c973969e14107",
+      "id": 7,
+      "parser": "gps_location",
+      "records": 9,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "{"
+        },
+        {
+          "ref": "line:2",
+          "text": "  \"synthetic\": true,"
+        },
+        {
+          "ref": "line:3",
+          "text": "  \"case_id\": \"PARAKH-SYN-RIYA-001\","
+        },
+        {
+          "ref": "line:4",
+          "text": "  \"notice\": \"Invented approximate points in a broad Noida area; not a real home or business address.\","
+        },
+        {
+          "ref": "line:5",
+          "text": "  \"locations\": ["
+        },
+        {
+          "ref": "line:6",
+          "text": "    {"
+        },
+        {
+          "ref": "line:7",
+          "text": "      \"timestamp\": \"2026-09-12T03:15:00Z\","
+        },
+        {
+          "ref": "line:8",
+          "text": "      \"lat\": 28.62,"
+        },
+        {
+          "ref": "line:9",
+          "text": "      \"lon\": 77.36,"
+        },
+        {
+          "ref": "line:10",
+          "text": "      \"accuracy_m\": 25,"
+        },
+        {
+          "ref": "line:11",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:12",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:13",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:14",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:15",
+          "text": "    },"
+        },
+        {
+          "ref": "line:16",
+          "text": "    {"
+        },
+        {
+          "ref": "line:17",
+          "text": "      \"timestamp\": \"2026-09-12T03:40:00Z\","
+        },
+        {
+          "ref": "line:18",
+          "text": "      \"lat\": 28.6201,"
+        },
+        {
+          "ref": "line:19",
+          "text": "      \"lon\": 77.3601,"
+        },
+        {
+          "ref": "line:20",
+          "text": "      \"accuracy_m\": 22,"
+        },
+        {
+          "ref": "line:21",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:22",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:23",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:24",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:25",
+          "text": "    },"
+        },
+        {
+          "ref": "line:26",
+          "text": "    {"
+        },
+        {
+          "ref": "line:27",
+          "text": "      \"timestamp\": \"2026-09-12T03:55:00Z\","
+        },
+        {
+          "ref": "line:28",
+          "text": "      \"lat\": 28.62,"
+        },
+        {
+          "ref": "line:29",
+          "text": "      \"lon\": 77.3602,"
+        },
+        {
+          "ref": "line:30",
+          "text": "      \"accuracy_m\": 30,"
+        },
+        {
+          "ref": "line:31",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:32",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:33",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:34",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:35",
+          "text": "    },"
+        },
+        {
+          "ref": "line:36",
+          "text": "    {"
+        },
+        {
+          "ref": "line:37",
+          "text": "      \"timestamp\": \"2026-09-12T04:03:00Z\","
+        },
+        {
+          "ref": "line:38",
+          "text": "      \"lat\": 28.6201,"
+        },
+        {
+          "ref": "line:39",
+          "text": "      \"lon\": 77.3601,"
+        },
+        {
+          "ref": "line:40",
+          "text": "      \"accuracy_m\": 24,"
+        },
+        {
+          "ref": "line:41",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:42",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:43",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:44",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:45",
+          "text": "    },"
+        },
+        {
+          "ref": "line:46",
+          "text": "    {"
+        },
+        {
+          "ref": "line:47",
+          "text": "      \"timestamp\": \"2026-09-12T04:17:00Z\","
+        },
+        {
+          "ref": "line:48",
+          "text": "      \"lat\": 28.62,"
+        },
+        {
+          "ref": "line:49",
+          "text": "      \"lon\": 77.36,"
+        },
+        {
+          "ref": "line:50",
+          "text": "      \"accuracy_m\": 28,"
+        },
+        {
+          "ref": "line:51",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:52",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:53",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:54",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:55",
+          "text": "    },"
+        },
+        {
+          "ref": "line:56",
+          "text": "    {"
+        },
+        {
+          "ref": "line:57",
+          "text": "      \"timestamp\": \"2026-09-12T04:45:00Z\","
+        },
+        {
+          "ref": "line:58",
+          "text": "      \"lat\": 28.6212,"
+        },
+        {
+          "ref": "line:59",
+          "text": "      \"lon\": 77.361,"
+        },
+        {
+          "ref": "line:60",
+          "text": "      \"accuracy_m\": 40,"
+        },
+        {
+          "ref": "line:61",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:62",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:63",
+          "text": "      \"place_label\": \"Nearby street\","
+        },
+        {
+          "ref": "line:64",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:65",
+          "text": "    },"
+        },
+        {
+          "ref": "line:66",
+          "text": "    {"
+        },
+        {
+          "ref": "line:67",
+          "text": "      \"timestamp\": \"2026-09-12T05:00:00Z\","
+        },
+        {
+          "ref": "line:68",
+          "text": "      \"lat\": 28.625,"
+        },
+        {
+          "ref": "line:69",
+          "text": "      \"lon\": 77.364,"
+        },
+        {
+          "ref": "line:70",
+          "text": "      \"accuracy_m\": 35,"
+        },
+        {
+          "ref": "line:71",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:72",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:73",
+          "text": "      \"place_label\": \"Demo support-desk vicinity\","
+        },
+        {
+          "ref": "line:74",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:75",
+          "text": "    },"
+        },
+        {
+          "ref": "line:76",
+          "text": "    {"
+        },
+        {
+          "ref": "line:77",
+          "text": "      \"timestamp\": \"2026-09-12T05:25:00Z\","
+        },
+        {
+          "ref": "line:78",
+          "text": "      \"lat\": 28.6252,"
+        },
+        {
+          "ref": "line:79",
+          "text": "      \"lon\": 77.3641,"
+        },
+        {
+          "ref": "line:80",
+          "text": "      \"accuracy_m\": 28,"
+        },
+        {
+          "ref": "line:81",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:82",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:83",
+          "text": "      \"place_label\": \"Demo support-desk vicinity\","
+        },
+        {
+          "ref": "line:84",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:85",
+          "text": "    },"
+        },
+        {
+          "ref": "line:86",
+          "text": "    {"
+        },
+        {
+          "ref": "line:87",
+          "text": "      \"timestamp\": \"2026-09-12T05:45:00Z\","
+        },
+        {
+          "ref": "line:88",
+          "text": "      \"lat\": 28.6201,"
+        },
+        {
+          "ref": "line:89",
+          "text": "      \"lon\": 77.36,"
+        },
+        {
+          "ref": "line:90",
+          "text": "      \"accuracy_m\": 30,"
+        },
+        {
+          "ref": "line:91",
+          "text": "      \"owner\": \"Riya\","
+        },
+        {
+          "ref": "line:92",
+          "text": "      \"device_id\": \"DEMO-DEVICE-RIYA-A\","
+        },
+        {
+          "ref": "line:93",
+          "text": "      \"place_label\": \"Residential area\","
+        },
+        {
+          "ref": "line:94",
+          "text": "      \"synthetic\": true"
+        },
+        {
+          "ref": "line:95",
+          "text": "    }"
+        },
+        {
+          "ref": "line:96",
+          "text": "  ]"
+        },
+        {
+          "ref": "line:97",
+          "text": "}"
+        },
+        {
+          "ref": "location:1",
+          "text": "{\n  \"timestamp\": \"2026-09-12T03:15:00Z\",\n  \"lat\": 28.62,\n  \"lon\": 77.36,\n  \"accuracy_m\": 25,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:2",
+          "text": "{\n  \"timestamp\": \"2026-09-12T03:40:00Z\",\n  \"lat\": 28.6201,\n  \"lon\": 77.3601,\n  \"accuracy_m\": 22,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:3",
+          "text": "{\n  \"timestamp\": \"2026-09-12T03:55:00Z\",\n  \"lat\": 28.62,\n  \"lon\": 77.3602,\n  \"accuracy_m\": 30,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:4",
+          "text": "{\n  \"timestamp\": \"2026-09-12T04:03:00Z\",\n  \"lat\": 28.6201,\n  \"lon\": 77.3601,\n  \"accuracy_m\": 24,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:5",
+          "text": "{\n  \"timestamp\": \"2026-09-12T04:17:00Z\",\n  \"lat\": 28.62,\n  \"lon\": 77.36,\n  \"accuracy_m\": 28,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:6",
+          "text": "{\n  \"timestamp\": \"2026-09-12T04:45:00Z\",\n  \"lat\": 28.6212,\n  \"lon\": 77.361,\n  \"accuracy_m\": 40,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Nearby street\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:7",
+          "text": "{\n  \"timestamp\": \"2026-09-12T05:00:00Z\",\n  \"lat\": 28.625,\n  \"lon\": 77.364,\n  \"accuracy_m\": 35,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Demo support-desk vicinity\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:8",
+          "text": "{\n  \"timestamp\": \"2026-09-12T05:25:00Z\",\n  \"lat\": 28.6252,\n  \"lon\": 77.3641,\n  \"accuracy_m\": 28,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Demo support-desk vicinity\",\n  \"synthetic\": true\n}"
+        },
+        {
+          "ref": "location:9",
+          "text": "{\n  \"timestamp\": \"2026-09-12T05:45:00Z\",\n  \"lat\": 28.6201,\n  \"lon\": 77.36,\n  \"accuracy_m\": 30,\n  \"owner\": \"Riya\",\n  \"device_id\": \"DEMO-DEVICE-RIYA-A\",\n  \"place_label\": \"Residential area\",\n  \"synthetic\": true\n}"
+        }
+      ]
+    },
+    {
+      "file": "08_call_records_riya.csv",
+      "owner": "Riya handset",
+      "source": "Synthetic call export",
+      "note": "Non-dialable DEMO tokens. No audio or transcript. Seven calls.",
+      "synthetic": true,
+      "bytes": 820,
+      "sha256": "6cfc960c774009712bc17df7998ee70d86b50b89f108aa9400ac185646b07531",
+      "md5": "13886670a00094c66fbec14e0e55ec86",
+      "id": 8,
+      "parser": "csv_records",
+      "records": 7,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "timestamp,caller,called,duration_sec,direction,status,owner,record_id,synthetic"
+        },
+        {
+          "ref": "line:2",
+          "text": "2026-09-12T09:14:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,152,outgoing,answered,Riya,DEMO-CALL-001,true"
+        },
+        {
+          "ref": "line:3",
+          "text": "2026-09-12T09:22:00+05:30,DEMO-PHONE-ARJUN,DEMO-PHONE-RIYA,95,incoming,answered,Riya,DEMO-CALL-002,true"
+        },
+        {
+          "ref": "line:4",
+          "text": "2026-09-12T09:31:00+05:30,DEMO-PHONE-ARJUN,DEMO-PHONE-RIYA,48,incoming,answered,Riya,DEMO-CALL-003,true"
+        },
+        {
+          "ref": "line:5",
+          "text": "2026-09-12T09:50:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,0,outgoing,unanswered,Riya,DEMO-CALL-004,true"
+        },
+        {
+          "ref": "line:6",
+          "text": "2026-09-12T09:52:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,0,outgoing,unanswered,Riya,DEMO-CALL-005,true"
+        },
+        {
+          "ref": "line:7",
+          "text": "2026-09-12T10:00:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-BANK,210,outgoing,answered,Riya,DEMO-CALL-006,true"
+        },
+        {
+          "ref": "line:8",
+          "text": "2026-09-12T10:12:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-FRIEND,88,outgoing,answered,Riya,DEMO-CALL-007,true"
+        },
+        {
+          "ref": "row:2",
+          "text": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"152\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-001\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:3",
+          "text": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"95\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-002\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:4",
+          "text": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"48\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-003\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:5",
+          "text": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-004\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:6",
+          "text": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-005\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:7",
+          "text": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"duration_sec\": \"210\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-006\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:8",
+          "text": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"duration_sec\": \"88\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-007\", \"synthetic\": \"true\"}"
+        }
+      ],
+      "table": [
+        {
+          "timestamp": "2026-09-12T09:14:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "duration_sec": "152",
+          "direction": "outgoing",
+          "status": "answered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-001",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:22:00+05:30",
+          "caller": "DEMO-PHONE-ARJUN",
+          "called": "DEMO-PHONE-RIYA",
+          "duration_sec": "95",
+          "direction": "incoming",
+          "status": "answered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-002",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:31:00+05:30",
+          "caller": "DEMO-PHONE-ARJUN",
+          "called": "DEMO-PHONE-RIYA",
+          "duration_sec": "48",
+          "direction": "incoming",
+          "status": "answered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-003",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:50:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "duration_sec": "0",
+          "direction": "outgoing",
+          "status": "unanswered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-004",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:52:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "duration_sec": "0",
+          "direction": "outgoing",
+          "status": "unanswered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-005",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T10:00:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-BANK",
+          "duration_sec": "210",
+          "direction": "outgoing",
+          "status": "answered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-006",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T10:12:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-FRIEND",
+          "duration_sec": "88",
+          "direction": "outgoing",
+          "status": "answered",
+          "owner": "Riya",
+          "record_id": "DEMO-CALL-007",
+          "synthetic": "true"
+        }
+      ]
+    },
+    {
+      "file": "09_cdr_tower_context.csv",
+      "owner": "Riya SIM",
+      "source": "Separate fictional telecom disclosure",
+      "note": "Coarse 1.5 km tower circles. No suspect cells; no basis for asserting co-location.",
+      "synthetic": true,
+      "bytes": 1009,
+      "sha256": "98bb38f38a1b4055328ed7c0450b1be061b611fa6aa39cb93040b67e2cafdbbf",
+      "md5": "41ebd9a0e23e2743de0f93b3df4a83ad",
+      "id": 9,
+      "parser": "csv_records",
+      "records": 7,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "timestamp,caller,called,cell_id,lac,duration_sec,tower_lat,tower_lon,coverage_radius_m,subject,synthetic"
+        },
+        {
+          "ref": "line:2",
+          "text": "2026-09-12T09:14:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,DEMO-TOWER-N01,DEMO-LAC-001,152,28.621,77.361,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:3",
+          "text": "2026-09-12T09:22:00+05:30,DEMO-PHONE-ARJUN,DEMO-PHONE-RIYA,DEMO-TOWER-N01,DEMO-LAC-001,95,28.621,77.361,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:4",
+          "text": "2026-09-12T09:31:00+05:30,DEMO-PHONE-ARJUN,DEMO-PHONE-RIYA,DEMO-TOWER-N01,DEMO-LAC-001,48,28.621,77.361,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:5",
+          "text": "2026-09-12T09:50:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,DEMO-TOWER-N01,DEMO-LAC-001,0,28.621,77.361,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:6",
+          "text": "2026-09-12T09:52:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-ARJUN,DEMO-TOWER-N01,DEMO-LAC-001,0,28.621,77.361,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:7",
+          "text": "2026-09-12T10:00:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-BANK,DEMO-TOWER-N02,DEMO-LAC-001,210,28.624,77.364,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "line:8",
+          "text": "2026-09-12T10:12:00+05:30,DEMO-PHONE-RIYA,DEMO-PHONE-FRIEND,DEMO-TOWER-N02,DEMO-LAC-001,88,28.624,77.364,1500,Riya SIM only,true"
+        },
+        {
+          "ref": "row:2",
+          "text": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"152\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:3",
+          "text": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"95\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:4",
+          "text": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"48\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:5",
+          "text": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:6",
+          "text": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:7",
+          "text": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"210\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        },
+        {
+          "ref": "row:8",
+          "text": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"88\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+        }
+      ],
+      "table": [
+        {
+          "timestamp": "2026-09-12T09:14:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "cell_id": "DEMO-TOWER-N01",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "152",
+          "tower_lat": "28.621",
+          "tower_lon": "77.361",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:22:00+05:30",
+          "caller": "DEMO-PHONE-ARJUN",
+          "called": "DEMO-PHONE-RIYA",
+          "cell_id": "DEMO-TOWER-N01",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "95",
+          "tower_lat": "28.621",
+          "tower_lon": "77.361",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:31:00+05:30",
+          "caller": "DEMO-PHONE-ARJUN",
+          "called": "DEMO-PHONE-RIYA",
+          "cell_id": "DEMO-TOWER-N01",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "48",
+          "tower_lat": "28.621",
+          "tower_lon": "77.361",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:50:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "cell_id": "DEMO-TOWER-N01",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "0",
+          "tower_lat": "28.621",
+          "tower_lon": "77.361",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T09:52:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-ARJUN",
+          "cell_id": "DEMO-TOWER-N01",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "0",
+          "tower_lat": "28.621",
+          "tower_lon": "77.361",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T10:00:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-BANK",
+          "cell_id": "DEMO-TOWER-N02",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "210",
+          "tower_lat": "28.624",
+          "tower_lon": "77.364",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        },
+        {
+          "timestamp": "2026-09-12T10:12:00+05:30",
+          "caller": "DEMO-PHONE-RIYA",
+          "called": "DEMO-PHONE-FRIEND",
+          "cell_id": "DEMO-TOWER-N02",
+          "lac": "DEMO-LAC-001",
+          "duration_sec": "88",
+          "tower_lat": "28.624",
+          "tower_lon": "77.364",
+          "coverage_radius_m": "1500",
+          "subject": "Riya SIM only",
+          "synthetic": "true"
+        }
+      ]
+    },
+    {
+      "file": "10_email_investment_pitch.eml",
+      "owner": "Riya mailbox",
+      "source": "Fictional received email",
+      "note": "Reserved domain; no validated SPF/DKIM claims.",
+      "synthetic": true,
+      "bytes": 573,
+      "sha256": "a6d7f55c29e1e23501cf0e4af681968991f3616e21198bd17ac113c4de2282d0",
+      "md5": "ff897c57daffef752deedab3e4da5bc9",
+      "id": 10,
+      "parser": "email_archive",
+      "records": 1,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "From: Saffron Growth <desk@saffron-growth.example>"
+        },
+        {
+          "ref": "line:2",
+          "text": "To: Riya <riya@parakh-demo.example>"
+        },
+        {
+          "ref": "line:3",
+          "text": "Subject: Synthetic portfolio activation"
+        },
+        {
+          "ref": "line:4",
+          "text": "Date: Sat, 12 Sep 2026 09:09:00 +0530"
+        },
+        {
+          "ref": "line:5",
+          "text": "Message-ID: <pitch-001@parakh-demo.example>"
+        },
+        {
+          "ref": "line:6",
+          "text": "X-Parakh-Synthetic: true"
+        },
+        {
+          "ref": "line:7",
+          "text": "Content-Type: text/plain; charset=\"utf-8\""
+        },
+        {
+          "ref": "line:8",
+          "text": "Content-Transfer-Encoding: quoted-printable"
+        },
+        {
+          "ref": "line:9",
+          "text": "MIME-Version: 1.0"
+        },
+        {
+          "ref": "line:10",
+          "text": ""
+        },
+        {
+          "ref": "line:11",
+          "text": "SYNTHETIC DEMO ONLY - all identities and messages are invented."
+        },
+        {
+          "ref": "line:12",
+          "text": ""
+        },
+        {
+          "ref": "line:13",
+          "text": "Your DEMO portfolio is reserved. Contact Agent Arjun in the existing chat. De="
+        },
+        {
+          "ref": "line:14",
+          "text": "mo link: https://kyc-saffron.example/verify"
+        },
+        {
+          "ref": "line:15",
+          "text": "Do not enter real credentials."
+        },
+        {
+          "ref": "message:1",
+          "text": "Subject: Synthetic portfolio activation\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nYour DEMO portfolio is reserved. Contact Agent Arjun in the existing chat. Demo link: https://kyc-saffron.example/verify\r\nDo not enter real credentials.\r\n"
+        }
+      ]
+    },
+    {
+      "file": "11_email_bank_support.eml",
+      "owner": "Riya mailbox",
+      "source": "Fictional support response",
+      "note": "Explicit review cutoff; no conclusion about all future credits.",
+      "synthetic": true,
+      "bytes": 753,
+      "sha256": "0d395f79dbbd840778bb426c7815433c24e371ee00dfc5ceccfca9b0e935ef5d",
+      "md5": "699af2ab5d3015b80190f06e118d41f4",
+      "id": 11,
+      "parser": "email_archive",
+      "records": 1,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "From: Demo Bank Support <support@nayi-disha-bank.example>"
+        },
+        {
+          "ref": "line:2",
+          "text": "To: Riya <riya@parakh-demo.example>"
+        },
+        {
+          "ref": "line:3",
+          "text": "Subject: Demo transaction-reference review"
+        },
+        {
+          "ref": "line:4",
+          "text": "Date: Sun, 13 Sep 2026 12:00:00 +0530"
+        },
+        {
+          "ref": "line:5",
+          "text": "Message-ID: <bank-001@parakh-demo.example>"
+        },
+        {
+          "ref": "line:6",
+          "text": "X-Parakh-Synthetic: true"
+        },
+        {
+          "ref": "line:7",
+          "text": "Content-Type: text/plain; charset=\"utf-8\""
+        },
+        {
+          "ref": "line:8",
+          "text": "Content-Transfer-Encoding: quoted-printable"
+        },
+        {
+          "ref": "line:9",
+          "text": "MIME-Version: 1.0"
+        },
+        {
+          "ref": "line:10",
+          "text": ""
+        },
+        {
+          "ref": "line:11",
+          "text": "SYNTHETIC DEMO ONLY - all identities and messages are invented."
+        },
+        {
+          "ref": "line:12",
+          "text": ""
+        },
+        {
+          "ref": "line:13",
+          "text": "Synthetic support reference DEMO-SUPPORT-014. In the account records reviewed="
+        },
+        {
+          "ref": "line:14",
+          "text": " through 13 September 2026 11:59 IST, DEMO-UPI-001 and DEMO-UPI-002 are outgo="
+        },
+        {
+          "ref": "line:15",
+          "text": "ing debits of INR 25,000 each. No incoming credit of INR 50,000 is present in="
+        },
+        {
+          "ref": "line:16",
+          "text": " this reviewed window. This is a fictional bank response, not a recovery guar="
+        },
+        {
+          "ref": "line:17",
+          "text": "antee."
+        },
+        {
+          "ref": "message:1",
+          "text": "Subject: Demo transaction-reference review\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nSynthetic support reference DEMO-SUPPORT-014. In the account records reviewed through 13 September 2026 11:59 IST, DEMO-UPI-001 and DEMO-UPI-002 are outgoing debits of INR 25,000 each. No incoming credit of INR 50,000 is present in this reviewed window. This is a fictional bank response, not a recovery guarantee.\r\n"
+        }
+      ]
+    },
+    {
+      "file": "12_browser_history_riya.sqlite",
+      "owner": "Riya browser",
+      "source": "Minimal synthetic SQLite urls export",
+      "note": "Four visits. Current prototype extracts titles/URLs but ignores visit_time_utc. Visits do not prove submission of credentials.",
+      "synthetic": true,
+      "bytes": 8192,
+      "sha256": "983c7c0c63aaa934f2be2ab74ca445a218b3a8d98332fbec5733e8d45edefcf8",
+      "md5": "d88aceb818992abcb5c12bddc5f3fffc",
+      "id": 12,
+      "parser": "browser_sqlite",
+      "records": 4,
+      "rows": [
+        {
+          "ref": "row:1",
+          "text": "{\"id\": 1, \"url\": \"https://saffron-growth.example\", \"title\": \"Synthetic investment ad\", \"visit_time_utc\": \"2026-09-12T03:32:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "row:2",
+          "text": "{\"id\": 2, \"url\": \"https://kyc-saffron.example/verify\", \"title\": \"Synthetic KYC page\", \"visit_time_utc\": \"2026-09-12T03:39:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "row:3",
+          "text": "{\"id\": 3, \"url\": \"https://saffron-growth.example/portfolio\", \"title\": \"Synthetic portfolio page\", \"visit_time_utc\": \"2026-09-12T04:08:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "row:4",
+          "text": "{\"id\": 4, \"url\": \"https://nayi-disha-bank.example/support\", \"title\": \"Synthetic bank support\", \"visit_time_utc\": \"2026-09-12T04:29:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "urls:1",
+          "text": "{\"id\": 1, \"url\": \"https://saffron-growth.example\", \"title\": \"Synthetic investment ad\", \"visit_time_utc\": \"2026-09-12T03:32:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "urls:2",
+          "text": "{\"id\": 2, \"url\": \"https://kyc-saffron.example/verify\", \"title\": \"Synthetic KYC page\", \"visit_time_utc\": \"2026-09-12T03:39:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "urls:3",
+          "text": "{\"id\": 3, \"url\": \"https://saffron-growth.example/portfolio\", \"title\": \"Synthetic portfolio page\", \"visit_time_utc\": \"2026-09-12T04:08:00Z\", \"synthetic\": 1}"
+        },
+        {
+          "ref": "urls:4",
+          "text": "{\"id\": 4, \"url\": \"https://nayi-disha-bank.example/support\", \"title\": \"Synthetic bank support\", \"visit_time_utc\": \"2026-09-12T04:29:00Z\", \"synthetic\": 1}"
+        }
+      ]
+    },
+    {
+      "file": "13_device_clock_observation.txt",
+      "owner": "Riya devices",
+      "source": "Synthetic operator observation",
+      "note": "Clock assumption explicit; not an independent timing attestation.",
+      "synthetic": true,
+      "bytes": 561,
+      "sha256": "07c4668cd64aecf29aabab05e68140606051df07eb048853f67c9e773772f0bf",
+      "md5": "32f85412ff85738a638bd33a5dbf8dd2",
+      "id": 13,
+      "parser": "generic_log",
+      "records": 12,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "SYNTHETIC DEMO ONLY"
+        },
+        {
+          "ref": "line:2",
+          "text": "Case: PARAKH-SYN-RIYA-001"
+        },
+        {
+          "ref": "line:3",
+          "text": "Observer: DEMO-ANALYST"
+        },
+        {
+          "ref": "line:4",
+          "text": "Source: controlled synthetic observation, not a real signed NTP capture."
+        },
+        {
+          "ref": "line:5",
+          "text": "Reference: 2026-09-12T09:50:00+05:30"
+        },
+        {
+          "ref": "line:6",
+          "text": "Android display: 2026-09-12T09:50:00+05:30"
+        },
+        {
+          "ref": "line:7",
+          "text": "Tablet display BEFORE sync: 2026-09-12T09:20:00+05:30"
+        },
+        {
+          "ref": "line:8",
+          "text": "Tablet display AFTER sync: 2026-09-12T09:50:00+05:30"
+        },
+        {
+          "ref": "line:9",
+          "text": "Observed tablet offset: -1800 seconds"
+        },
+        {
+          "ref": "line:10",
+          "text": "Simulation assumption: this fixed offset applied earlier that morning."
+        },
+        {
+          "ref": "line:11",
+          "text": "A single observation alone does not establish historical clock stability."
+        },
+        {
+          "ref": "line:12",
+          "text": "Raw chat files retain their recorded timestamps."
+        }
+      ]
+    },
+    {
+      "file": "14_acquisition_context.txt",
+      "owner": "Investigator",
+      "source": "Synthetic provenance note",
+      "note": "Separates phone exports, alleged attachment and additional disclosures.",
+      "synthetic": true,
+      "bytes": 916,
+      "sha256": "82335b903a876b5ebd8cbfc843ea29d06428e9c097db4672c7fd152fff71466e",
+      "md5": "2bf4c2f0ee7c2c8a3916247151a2a932",
+      "id": 14,
+      "parser": "generic_log",
+      "records": 13,
+      "rows": [
+        {
+          "ref": "line:1",
+          "text": "SYNTHETIC DEMO ONLY - INVENTED ACQUISITION CONTEXT"
+        },
+        {
+          "ref": "line:2",
+          "text": "Case: PARAKH-SYN-RIYA-001"
+        },
+        {
+          "ref": "line:3",
+          "text": "Received: 2026-09-14T10:00:00+05:30"
+        },
+        {
+          "ref": "line:4",
+          "text": "One investigator interface. No real person, subscriber, device, institution or case exists."
+        },
+        {
+          "ref": "line:5",
+          "text": "Android exports: primary chats, GPS, call records and browser history."
+        },
+        {
+          "ref": "line:6",
+          "text": "Tablet export: selected ten messages only, uncorrected clock."
+        },
+        {
+          "ref": "line:7",
+          "text": "Victim statement CSV and PDF: same fictional disclosure, not independent sources."
+        },
+        {
+          "ref": "line:8",
+          "text": "Collection statement and tower records: separate fictional responses provided to investigator, not recovered from victim phone."
+        },
+        {
+          "ref": "line:9",
+          "text": "Refund receipt: supplied by chat contact."
+        },
+        {
+          "ref": "line:10",
+          "text": "Scenario mapping: arjun.collect@demo -> DEMO-ACCT-COLLECT-009."
+        },
+        {
+          "ref": "line:11",
+          "text": "Agent Arjun is a display name; legal identity and downstream account control are unresolved."
+        },
+        {
+          "ref": "line:12",
+          "text": "No source was edited after generation. No pre-import digital signature or chain of custody is claimed."
+        },
+        {
+          "ref": "line:13",
+          "text": "Never upload demo-guide/ or its ground truth as original evidence."
+        }
+      ]
+    },
+    {
+      "file": "15_riya_incident_account.pdf",
+      "owner": "Riya",
+      "source": "Fictional complainant narrative",
+      "note": "Not an official legal form or certificate.",
+      "synthetic": true,
+      "bytes": 2884,
+      "sha256": "ecb592c921ef436cd5a77f810645c02bdc2202689f9854e918ff6d27f4287a7d",
+      "md5": "0ba0be91fa400747a371edf03e5de74f",
+      "id": 15,
+      "parser": "pdf_document",
+      "records": 1,
+      "rows": [
+        {
+          "ref": "page:1",
+          "text": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRiya - incident account\nSYNTHETIC FIRST-PERSON ACCOUNT | Not an official complaint or police form\nRecorded: 13 September 2026, 15:00 IST. Case: PARAKH-SYN-RIYA-001\nI am Riya, a fictional person. On 12 September I contacted someone using the display name Agent Arjun after\nseeing an investment advertisement. They promised guaranteed returns, sent a KYC link and persuaded me to\nmake two INR 25,000 payments to arjun.collect@demo.\nWhen I asked for a refund, the contact sent a receipt claiming INR 50,000 had been returned. I did not see that\ncredit in my supplied statement through 13 September. I refused a further INR 5,000 release-fee request.\nI used an Android phone and an older linked tablet. The tablet clock was 30 minutes slow before a manual sync\nat 09:50 IST. The tablet chat file is an excerpt; missing messages in that excerpt do not establish deletion.\nI provide chats, my account statement, the received receipt, location history, call export, browser history and\nemails. I do not know the legal identity of the contact. The investigator separately obtained the collection account\nand tower records in this synthetic scenario.\nThis fictional account is a source assertion to compare against the records, not independent proof of every statement. No real\naddress, signature, Aadhaar, PAN, OTP or phone number is included.\n"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:30:00Z",
+      "original_timestamp": "12/09/2026, 09:00",
+      "actor_entities": [],
+      "action": "system_message",
+      "content": "SYNTHETIC DEMO ONLY. All people, messages and identifiers are fictional.",
+      "location": null,
+      "raw_ref": "line:1",
+      "confidence": 0.85,
+      "id": "E01-001",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "SYNTHETIC DEMO ONLY. All people, messages and identifiers are fictional."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:35:00Z",
+      "original_timestamp": "12/09/2026, 09:05",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Hello, I saw the investment advertisement. Is this safe?",
+      "location": null,
+      "raw_ref": "line:2",
+      "confidence": 0.95,
+      "id": "E01-002",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Hello, I saw the investment advertisement. Is this safe?"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:36:00Z",
+      "original_timestamp": "12/09/2026, 09:06",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today.",
+      "location": null,
+      "raw_ref": "line:3",
+      "confidence": 0.95,
+      "id": "E01-003",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:37:00Z",
+      "original_timestamp": "12/09/2026, 09:07",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "This is my savings. I do not want a loan.",
+      "location": null,
+      "raw_ref": "line:4",
+      "confidence": 0.95,
+      "id": "E01-004",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "This is my savings. I do not want a loan."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:38:00Z",
+      "original_timestamp": "12/09/2026, 09:08",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "No loan. Limited slots. Complete KYC: https://kyc-saffron.example/verify",
+      "location": null,
+      "raw_ref": "line:5",
+      "confidence": 0.95,
+      "id": "E01-005",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "No loan. Limited slots. Complete KYC: https://kyc-saffron.example/verify"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:40:00Z",
+      "original_timestamp": "12/09/2026, 09:10",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "The page asks for an OTP. Why?",
+      "location": null,
+      "raw_ref": "line:6",
+      "confidence": 0.95,
+      "id": "E01-006",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "The page asks for an OTP. Why?"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:41:00Z",
+      "original_timestamp": "12/09/2026, 09:11",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "KYC update only. OTP bhejo, jaldi.",
+      "location": null,
+      "raw_ref": "line:7",
+      "confidence": 0.95,
+      "id": "E01-007",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "KYC update only. OTP bhejo, jaldi."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:42:00Z",
+      "original_timestamp": "12/09/2026, 09:12",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "[SYNTHETIC OTP REDACTED - no usable code]",
+      "location": null,
+      "raw_ref": "line:8",
+      "confidence": 0.95,
+      "id": "E01-008",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "[SYNTHETIC OTP REDACTED - no usable code]"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:44:00Z",
+      "original_timestamp": "12/09/2026, 09:14",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Call DEMO-PHONE-ARJUN. I will explain.",
+      "location": null,
+      "raw_ref": "line:9",
+      "confidence": 0.95,
+      "id": "E01-009",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Call DEMO-PHONE-ARJUN. I will explain."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:47:00Z",
+      "original_timestamp": "12/09/2026, 09:17",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "You said guaranteed. Can I withdraw today?",
+      "location": null,
+      "raw_ref": "line:10",
+      "confidence": 0.95,
+      "id": "E01-010",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "You said guaranteed. Can I withdraw today?"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:48:00Z",
+      "original_timestamp": "12/09/2026, 09:18",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Yes. First send INR 25,000 to arjun.collect@demo. It is our collection account.",
+      "location": null,
+      "raw_ref": "line:11",
+      "confidence": 0.95,
+      "id": "E01-011",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Yes. First send INR 25,000 to arjun.collect@demo. It is our collection account."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:54:00Z",
+      "original_timestamp": "12/09/2026, 09:24",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Sending INR 25,000 now.",
+      "location": null,
+      "raw_ref": "line:12",
+      "confidence": 0.95,
+      "id": "E01-012",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Sending INR 25,000 now."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:56:00Z",
+      "original_timestamp": "12/09/2026, 09:26",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Paid INR 25,000. Reference DEMO-UPI-001.",
+      "location": null,
+      "raw_ref": "line:13",
+      "confidence": 0.95,
+      "id": "E01-013",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Paid INR 25,000. Reference DEMO-UPI-001."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:57:00Z",
+      "original_timestamp": "12/09/2026, 09:27",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Received. One more INR 25,000 unlocks the portfolio.",
+      "location": null,
+      "raw_ref": "line:14",
+      "confidence": 0.95,
+      "id": "E01-014",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Received. One more INR 25,000 unlocks the portfolio."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:58:00Z",
+      "original_timestamp": "12/09/2026, 09:28",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "That was not mentioned before.",
+      "location": null,
+      "raw_ref": "line:15",
+      "confidence": 0.95,
+      "id": "E01-015",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "That was not mentioned before."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:59:00Z",
+      "original_timestamp": "12/09/2026, 09:29",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Urgent payment needed before the slot closes. Return guaranteed.",
+      "location": null,
+      "raw_ref": "line:16",
+      "confidence": 0.95,
+      "id": "E01-016",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Urgent payment needed before the slot closes. Return guaranteed."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:02:00Z",
+      "original_timestamp": "12/09/2026, 09:32",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I will send the remaining INR 25,000, then please stop.",
+      "location": null,
+      "raw_ref": "line:17",
+      "confidence": 0.95,
+      "id": "E01-017",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "I will send the remaining INR 25,000, then please stop."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:04:00Z",
+      "original_timestamp": "12/09/2026, 09:34",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Second payment done. Reference DEMO-UPI-002.",
+      "location": null,
+      "raw_ref": "line:18",
+      "confidence": 0.95,
+      "id": "E01-018",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Second payment done. Reference DEMO-UPI-002."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:05:00Z",
+      "original_timestamp": "12/09/2026, 09:35",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Your portfolio is processing.",
+      "location": null,
+      "raw_ref": "line:19",
+      "confidence": 0.95,
+      "id": "E01-019",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Your portfolio is processing."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:09:00Z",
+      "original_timestamp": "12/09/2026, 09:39",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "The website is not opening. I want my money back.",
+      "location": null,
+      "raw_ref": "line:20",
+      "confidence": 0.95,
+      "id": "E01-020",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "The website is not opening. I want my money back."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:10:00Z",
+      "original_timestamp": "12/09/2026, 09:40",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Refund approved. Do not contact the bank yet.",
+      "location": null,
+      "raw_ref": "line:21",
+      "confidence": 0.95,
+      "id": "E01-021",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Refund approved. Do not contact the bank yet."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:14:00Z",
+      "original_timestamp": "12/09/2026, 09:44",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "media_omitted",
+      "content": "<Media omitted>",
+      "location": null,
+      "raw_ref": "line:22",
+      "confidence": 0.95,
+      "id": "E01-022",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "<Media omitted>"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:14:00Z",
+      "original_timestamp": "12/09/2026, 09:44",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001.",
+      "location": null,
+      "raw_ref": "line:23",
+      "confidence": 0.95,
+      "id": "E01-023",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:16:00Z",
+      "original_timestamp": "12/09/2026, 09:46",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "My bank still shows INR 32,500. No refund credit.",
+      "location": null,
+      "raw_ref": "line:24",
+      "confidence": 0.95,
+      "id": "E01-024",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "My bank still shows INR 32,500. No refund credit."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:17:00Z",
+      "original_timestamp": "12/09/2026, 09:47",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Bank delay. Send INR 5,000 release fee.",
+      "location": null,
+      "raw_ref": "line:25",
+      "confidence": 0.95,
+      "id": "E01-025",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Bank delay. Send INR 5,000 release fee."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:18:00Z",
+      "original_timestamp": "12/09/2026, 09:48",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "No. I am not paying another fee.",
+      "location": null,
+      "raw_ref": "line:26",
+      "confidence": 0.95,
+      "id": "E01-026",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "No. I am not paying another fee."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:22:00Z",
+      "original_timestamp": "12/09/2026, 09:52",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I tried calling you. Please answer.",
+      "location": null,
+      "raw_ref": "line:27",
+      "confidence": 0.95,
+      "id": "E01-027",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "I tried calling you. Please answer."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:32:00Z",
+      "original_timestamp": "12/09/2026, 10:02",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I contacted the bank through its support channel.",
+      "location": null,
+      "raw_ref": "line:28",
+      "confidence": 0.95,
+      "id": "E01-028",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "I contacted the bank through its support channel."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:35:00Z",
+      "original_timestamp": "12/09/2026, 10:05",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Wait until evening. Do not file a complaint.",
+      "location": null,
+      "raw_ref": "line:29",
+      "confidence": 0.95,
+      "id": "E01-029",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "Wait until evening. Do not file a complaint."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:38:00Z",
+      "original_timestamp": "12/09/2026, 10:08",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I am preserving the chats and bank records.",
+      "location": null,
+      "raw_ref": "line:30",
+      "confidence": 0.95,
+      "id": "E01-030",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "I am preserving the chats and bank records."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 1,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:50:00Z",
+      "original_timestamp": "12/09/2026, 10:20",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I will report this. Do not contact me again.",
+      "location": null,
+      "raw_ref": "line:31",
+      "confidence": 0.95,
+      "id": "E01-031",
+      "file": "01_whatsapp_riya_android.txt",
+      "label": "I will report this. Do not contact me again."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:00:00Z",
+      "original_timestamp": "12/09/2026, 08:30:00",
+      "actor_entities": [],
+      "action": "system_message",
+      "content": "SYNTHETIC DEMO ONLY. Linked-tablet excerpt; source clock not corrected.",
+      "location": null,
+      "raw_ref": "line:1",
+      "confidence": 0.85,
+      "id": "E02-001",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "SYNTHETIC DEMO ONLY. Linked-tablet excerpt; source clock not corrected."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:05:00Z",
+      "original_timestamp": "12/09/2026, 08:35:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Hello, I saw the investment advertisement. Is this safe?",
+      "location": null,
+      "raw_ref": "line:2",
+      "confidence": 0.95,
+      "id": "E02-002",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "Hello, I saw the investment advertisement. Is this safe?"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:06:00Z",
+      "original_timestamp": "12/09/2026, 08:36:00",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today.",
+      "location": null,
+      "raw_ref": "line:3",
+      "confidence": 0.95,
+      "id": "E02-003",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:17:00Z",
+      "original_timestamp": "12/09/2026, 08:47:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "You said guaranteed. Can I withdraw today?",
+      "location": null,
+      "raw_ref": "line:4",
+      "confidence": 0.95,
+      "id": "E02-004",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "You said guaranteed. Can I withdraw today?"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:26:00Z",
+      "original_timestamp": "12/09/2026, 08:56:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Paid INR 25,000. Reference DEMO-UPI-001.",
+      "location": null,
+      "raw_ref": "line:5",
+      "confidence": 0.95,
+      "id": "E02-005",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "Paid INR 25,000. Reference DEMO-UPI-001."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:34:00Z",
+      "original_timestamp": "12/09/2026, 09:04:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "Second payment done. Reference DEMO-UPI-002.",
+      "location": null,
+      "raw_ref": "line:6",
+      "confidence": 0.95,
+      "id": "E02-006",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "Second payment done. Reference DEMO-UPI-002."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:44:00Z",
+      "original_timestamp": "12/09/2026, 09:14:00",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "media_omitted",
+      "content": "<Media omitted>",
+      "location": null,
+      "raw_ref": "line:7",
+      "confidence": 0.95,
+      "id": "E02-007",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "<Media omitted>"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:44:00Z",
+      "original_timestamp": "12/09/2026, 09:14:00",
+      "actor_entities": [
+        "Agent Arjun"
+      ],
+      "action": "message",
+      "content": "06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001.",
+      "location": null,
+      "raw_ref": "line:8",
+      "confidence": 0.95,
+      "id": "E02-008",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:46:00Z",
+      "original_timestamp": "12/09/2026, 09:16:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "My bank still shows INR 32,500. No refund credit.",
+      "location": null,
+      "raw_ref": "line:9",
+      "confidence": 0.95,
+      "id": "E02-009",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "My bank still shows INR 32,500. No refund credit."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T03:48:00Z",
+      "original_timestamp": "12/09/2026, 09:18:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "No. I am not paying another fee.",
+      "location": null,
+      "raw_ref": "line:10",
+      "confidence": 0.95,
+      "id": "E02-010",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "No. I am not paying another fee."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 2,
+      "source_type": "whatsapp_chat",
+      "timestamp_utc": "2026-09-12T04:08:00Z",
+      "original_timestamp": "12/09/2026, 09:38:00",
+      "actor_entities": [
+        "Riya"
+      ],
+      "action": "message",
+      "content": "I am preserving the chats and bank records.",
+      "location": null,
+      "raw_ref": "line:11",
+      "confidence": 0.95,
+      "id": "E02-011",
+      "file": "02_whatsapp_linked_tablet.txt",
+      "label": "I am preserving the chats and bank records."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 3,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-11T13:00:00Z",
+      "original_timestamp": "2026-09-11T18:30:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-RIYA-001"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-11T18:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"1800.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-001\", \"balance\": \"83200.00\", \"note\": \"Ordinary groceries\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:2",
+      "confidence": 1.0,
+      "id": "E03-001",
+      "file": "03_bank_statement_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-11T18:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"1800.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-001\", \"balance\": \"83200.00\", \"note\": \"Ordinary groceries\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 3,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-11T14:40:00Z",
+      "original_timestamp": "2026-09-11T20:10:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-RIYA-001"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-11T20:10:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"700.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-TRANSPORT\", \"utr\": \"DEMO-UPI-LOCAL\", \"balance\": \"82500.00\", \"note\": \"Ordinary transport\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:3",
+      "confidence": 1.0,
+      "id": "E03-002",
+      "file": "03_bank_statement_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-11T20:10:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"700.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-TRANSPORT\", \"utr\": \"DEMO-UPI-LOCAL\", \"balance\": \"82500.00\", \"note\": \"Ordinary transport\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 3,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T03:55:00Z",
+      "original_timestamp": "2026-09-12T09:25:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-RIYA-001"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-12T09:25:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"57500.00\", \"note\": \"Investment payment 1\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:4",
+      "confidence": 1.0,
+      "id": "E03-003",
+      "file": "03_bank_statement_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:25:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"57500.00\", \"note\": \"Investment payment 1\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 3,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T04:03:00Z",
+      "original_timestamp": "2026-09-12T09:33:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-RIYA-001"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-12T09:33:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"32500.00\", \"note\": \"Investment payment 2\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:5",
+      "confidence": 1.0,
+      "id": "E03-004",
+      "file": "03_bank_statement_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:33:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"arjun.collect@demo\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"32500.00\", \"note\": \"Investment payment 2\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 3,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-13T06:00:00Z",
+      "original_timestamp": "2026-09-13T11:30:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-RIYA-001"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-13T11:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"499.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-002\", \"balance\": \"32001.00\", \"note\": \"Ordinary household purchase\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:6",
+      "confidence": 1.0,
+      "id": "E03-005",
+      "file": "03_bank_statement_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-13T11:30:00+05:30\", \"account\": \"DEMO-ACCT-RIYA-001\", \"type\": \"debit\", \"amount\": \"499.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-GROCERY\", \"utr\": \"DEMO-CARD-002\", \"balance\": \"32001.00\", \"note\": \"Ordinary household purchase\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 4,
+      "source_type": "pdf",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "pdf_text",
+      "content": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nNayi Disha Demo Bank\nAccount statement\nFICTIONAL INSTITUTION | Holder: Riya (invented) | DEMO-ACCT-RIYA-001\nPeriod: 11 September 2026 00:00 IST through 13 September 2026 23:59 IST. Currency: INR.\nOpening\nTotal debits\nTotal credits\nClosing\n85,000.00\n52,999.00\n0.00\n32,001.00\nDate / time IST\nReference\nDebit INR\nCredit INR\nBalance INR\n2026-09-11\n18:30:00\nDEMO-CARD-001\n1800.00\n-\n83200.00\n2026-09-11\n20:10:00\nDEMO-UPI-LOCAL\n700.00\n-\n82500.00\n2026-09-12\n09:25:00\nDEMO-UPI-001\n25000.00\n-\n57500.00\n2026-09-12\n09:33:00\nDEMO-UPI-002\n25000.00\n-\n32500.00\n2026-09-13\n11:30:00\nDEMO-CARD-002\n499.00\n-\n32001.00\nDEMO-UPI-001 and DEMO-UPI-002 are outgoing INR 25,000 transfers to arjun.collect@demo. No incoming\ncredit appears during this statement period.\nThis PDF and 03_bank_statement_riya.csv are two representations of the SAME synthetic records. Use the CSV for\nstructured analysis. Do not count them as independent corroboration.\n",
+      "location": null,
+      "raw_ref": "page:1",
+      "confidence": 1.0,
+      "id": "E04-001",
+      "file": "04_bank_statement_riya.pdf",
+      "label": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nNayi Disha Demo Bank\nAccount statement\nFICTIONAL INSTITUTION | Holder: Riya (invented) | DEMO-ACCT-RIYA-001\nPeriod: 11 September 2026 00:00 IST through 13 September 2026 23:59 IST. Currency: INR.\nOpening\nTotal debits\nTotal credits\nClosing\n85,000.00\n52,999.00\n0.00\n32,001.00\nDate / time IST\nReference\nDebit INR\nCredit INR\nBalance INR\n2026-09-11\n18:30:00\nDEMO-CARD-001\n1800.00\n-\n83200.00\n2026-09-11\n20:10:00\nDEMO-UPI-LOCAL\n700.00\n-\n82500.00\n2026-09-12\n09:25:00\nDEMO-UPI-001\n25000.00\n-\n57500.00\n2026-09-12\n09:33:00\nDEMO-UPI-002\n25000.00\n-\n32500.00\n2026-09-13\n11:30:00\nDEMO-CARD-002\n499.00\n-\n32001.00\nDEMO-UPI-001 and DEMO-UPI-002 are outgoing INR 25,000 transfers to arjun.collect@demo. No incoming\ncredit appears during this statement period.\nThis PDF and 03_bank_statement_riya.csv are two representations of the SAME synthetic records. Use the CSV for\nstructured analysis. Do not count them as independent corroboration.\n"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 5,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T03:55:05Z",
+      "original_timestamp": "2026-09-12T09:25:05+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-COLLECT-009"
+      ],
+      "action": "credit",
+      "content": "{\"timestamp\": \"2026-09-12T09:25:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"25000.00\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:2",
+      "confidence": 1.0,
+      "id": "E05-001",
+      "file": "05_bank_statement_collection.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:25:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-001\", \"balance\": \"25000.00\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 5,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T04:03:05Z",
+      "original_timestamp": "2026-09-12T09:33:05+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-COLLECT-009"
+      ],
+      "action": "credit",
+      "content": "{\"timestamp\": \"2026-09-12T09:33:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"50000.00\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:3",
+      "confidence": 1.0,
+      "id": "E05-002",
+      "file": "05_bank_statement_collection.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:33:05+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"credit\", \"amount\": \"25000.00\", \"currency\": \"INR\", \"counterparty\": \"DEMO-ACCT-RIYA-001\", \"utr\": \"DEMO-UPI-002\", \"balance\": \"50000.00\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 5,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T04:06:00Z",
+      "original_timestamp": "2026-09-12T09:36:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-COLLECT-009"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-12T09:36:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"30000.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.one@demo\", \"utr\": \"DEMO-OUT-001\", \"balance\": \"20000.00\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:4",
+      "confidence": 1.0,
+      "id": "E05-003",
+      "file": "05_bank_statement_collection.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:36:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"30000.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.one@demo\", \"utr\": \"DEMO-OUT-001\", \"balance\": \"20000.00\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 5,
+      "source_type": "bank_upi_statement",
+      "timestamp_utc": "2026-09-12T04:08:00Z",
+      "original_timestamp": "2026-09-12T09:38:00+05:30",
+      "actor_entities": [
+        "DEMO-ACCT-COLLECT-009"
+      ],
+      "action": "debit",
+      "content": "{\"timestamp\": \"2026-09-12T09:38:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"19500.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.two@demo\", \"utr\": \"DEMO-OUT-002\", \"balance\": \"500.00\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:5",
+      "confidence": 1.0,
+      "id": "E05-004",
+      "file": "05_bank_statement_collection.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:38:00+05:30\", \"account\": \"DEMO-ACCT-COLLECT-009\", \"type\": \"debit\", \"amount\": \"19500.00\", \"currency\": \"INR\", \"counterparty\": \"cashout.two@demo\", \"utr\": \"DEMO-OUT-002\", \"balance\": \"500.00\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 6,
+      "source_type": "pdf",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "pdf_text",
+      "content": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRefund confirmation\nSAFFRON GROWTH CLUB - FICTIONAL DEMO PORTAL\nClaimed field\nValue printed on the supplied receipt\nStatus\nCOMPLETED\nAmount\nINR 50,000.00\nPaid to\nRiya / DEMO-ACCT-RIYA-001\nPayment reference\nDEMO-UPI-001\nIssued at\n12 September 2026, 09:42:00 IST\nClaimed sender\nSaffron Growth Club refund desk\nYour investment refund has been successfully processed. Allow time for your balance to update.\nSynthetic prop supplied by the fictional chat contact at 09:44 IST. Status and amount are the sender's claims, not verified\nbank facts. This prop cannot be used to transfer or claim funds.\n",
+      "location": null,
+      "raw_ref": "page:1",
+      "confidence": 1.0,
+      "id": "E06-001",
+      "file": "06_refund_receipt_claim.pdf",
+      "label": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRefund confirmation\nSAFFRON GROWTH CLUB - FICTIONAL DEMO PORTAL\nClaimed field\nValue printed on the supplied receipt\nStatus\nCOMPLETED\nAmount\nINR 50,000.00\nPaid to\nRiya / DEMO-ACCT-RIYA-001\nPayment reference\nDEMO-UPI-001\nIssued at\n12 September 2026, 09:42:00 IST\nClaimed sender\nSaffron Growth Club refund desk\nYour investment refund has been successfully processed. Allow time for your balance to update.\nSynthetic prop supplied by the fictional chat contact at 09:44 IST. Status and amount are the sender's claims, not verified\nbank facts. This prop cannot be used to transfer or claim funds.\n"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T03:15:00Z",
+      "original_timestamp": "2026-09-12T03:15:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.62, \"lon\": 77.36}",
+      "location": {
+        "lat": 28.62,
+        "lon": 77.36
+      },
+      "raw_ref": "location:1",
+      "confidence": 1.0,
+      "id": "E07-001",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T03:40:00Z",
+      "original_timestamp": "2026-09-12T03:40:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.6201, \"lon\": 77.3601}",
+      "location": {
+        "lat": 28.6201,
+        "lon": 77.3601
+      },
+      "raw_ref": "location:2",
+      "confidence": 1.0,
+      "id": "E07-002",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T03:55:00Z",
+      "original_timestamp": "2026-09-12T03:55:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.62, \"lon\": 77.3602}",
+      "location": {
+        "lat": 28.62,
+        "lon": 77.3602
+      },
+      "raw_ref": "location:3",
+      "confidence": 1.0,
+      "id": "E07-003",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T04:03:00Z",
+      "original_timestamp": "2026-09-12T04:03:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.6201, \"lon\": 77.3601}",
+      "location": {
+        "lat": 28.6201,
+        "lon": 77.3601
+      },
+      "raw_ref": "location:4",
+      "confidence": 1.0,
+      "id": "E07-004",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T04:17:00Z",
+      "original_timestamp": "2026-09-12T04:17:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.62, \"lon\": 77.36}",
+      "location": {
+        "lat": 28.62,
+        "lon": 77.36
+      },
+      "raw_ref": "location:5",
+      "confidence": 1.0,
+      "id": "E07-005",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T04:45:00Z",
+      "original_timestamp": "2026-09-12T04:45:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.6212, \"lon\": 77.361}",
+      "location": {
+        "lat": 28.6212,
+        "lon": 77.361
+      },
+      "raw_ref": "location:6",
+      "confidence": 1.0,
+      "id": "E07-006",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T05:00:00Z",
+      "original_timestamp": "2026-09-12T05:00:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.625, \"lon\": 77.364}",
+      "location": {
+        "lat": 28.625,
+        "lon": 77.364
+      },
+      "raw_ref": "location:7",
+      "confidence": 1.0,
+      "id": "E07-007",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T05:25:00Z",
+      "original_timestamp": "2026-09-12T05:25:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.6252, \"lon\": 77.3641}",
+      "location": {
+        "lat": 28.6252,
+        "lon": 77.3641
+      },
+      "raw_ref": "location:8",
+      "confidence": 1.0,
+      "id": "E07-008",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 7,
+      "source_type": "gps",
+      "timestamp_utc": "2026-09-12T05:45:00Z",
+      "original_timestamp": "2026-09-12T05:45:00Z",
+      "actor_entities": [],
+      "action": "location",
+      "content": "{\"lat\": 28.6201, \"lon\": 77.36}",
+      "location": {
+        "lat": 28.6201,
+        "lon": 77.36
+      },
+      "raw_ref": "location:9",
+      "confidence": 1.0,
+      "id": "E07-009",
+      "file": "07_gps_location_riya.json",
+      "label": ""
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T03:44:00Z",
+      "original_timestamp": "2026-09-12T09:14:00+05:30",
+      "actor_entities": [],
+      "action": "outgoing",
+      "content": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"152\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-001\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:2",
+      "confidence": 1.0,
+      "id": "E08-001",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"152\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-001\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T03:52:00Z",
+      "original_timestamp": "2026-09-12T09:22:00+05:30",
+      "actor_entities": [],
+      "action": "incoming",
+      "content": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"95\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-002\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:3",
+      "confidence": 1.0,
+      "id": "E08-002",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"95\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-002\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:01:00Z",
+      "original_timestamp": "2026-09-12T09:31:00+05:30",
+      "actor_entities": [],
+      "action": "incoming",
+      "content": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"48\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-003\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:4",
+      "confidence": 1.0,
+      "id": "E08-003",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"duration_sec\": \"48\", \"direction\": \"incoming\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-003\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:20:00Z",
+      "original_timestamp": "2026-09-12T09:50:00+05:30",
+      "actor_entities": [],
+      "action": "outgoing",
+      "content": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-004\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:5",
+      "confidence": 1.0,
+      "id": "E08-004",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-004\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:22:00Z",
+      "original_timestamp": "2026-09-12T09:52:00+05:30",
+      "actor_entities": [],
+      "action": "outgoing",
+      "content": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-005\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:6",
+      "confidence": 1.0,
+      "id": "E08-005",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"duration_sec\": \"0\", \"direction\": \"outgoing\", \"status\": \"unanswered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-005\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:30:00Z",
+      "original_timestamp": "2026-09-12T10:00:00+05:30",
+      "actor_entities": [],
+      "action": "outgoing",
+      "content": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"duration_sec\": \"210\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-006\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:7",
+      "confidence": 1.0,
+      "id": "E08-006",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"duration_sec\": \"210\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-006\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 8,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:42:00Z",
+      "original_timestamp": "2026-09-12T10:12:00+05:30",
+      "actor_entities": [],
+      "action": "outgoing",
+      "content": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"duration_sec\": \"88\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-007\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:8",
+      "confidence": 1.0,
+      "id": "E08-007",
+      "file": "08_call_records_riya.csv",
+      "label": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"duration_sec\": \"88\", \"direction\": \"outgoing\", \"status\": \"answered\", \"owner\": \"Riya\", \"record_id\": \"DEMO-CALL-007\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T03:44:00Z",
+      "original_timestamp": "2026-09-12T09:14:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"152\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:2",
+      "confidence": 1.0,
+      "id": "E09-001",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:14:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"152\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T03:52:00Z",
+      "original_timestamp": "2026-09-12T09:22:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"95\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:3",
+      "confidence": 1.0,
+      "id": "E09-002",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:22:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"95\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:01:00Z",
+      "original_timestamp": "2026-09-12T09:31:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"48\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:4",
+      "confidence": 1.0,
+      "id": "E09-003",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:31:00+05:30\", \"caller\": \"DEMO-PHONE-ARJUN\", \"called\": \"DEMO-PHONE-RIYA\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"48\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:20:00Z",
+      "original_timestamp": "2026-09-12T09:50:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:5",
+      "confidence": 1.0,
+      "id": "E09-004",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:50:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:22:00Z",
+      "original_timestamp": "2026-09-12T09:52:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:6",
+      "confidence": 1.0,
+      "id": "E09-005",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T09:52:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-ARJUN\", \"cell_id\": \"DEMO-TOWER-N01\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"0\", \"tower_lat\": \"28.621\", \"tower_lon\": \"77.361\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:30:00Z",
+      "original_timestamp": "2026-09-12T10:00:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"210\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:7",
+      "confidence": 1.0,
+      "id": "E09-006",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T10:00:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-BANK\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"210\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 9,
+      "source_type": "cdr_ipdr",
+      "timestamp_utc": "2026-09-12T04:42:00Z",
+      "original_timestamp": "2026-09-12T10:12:00+05:30",
+      "actor_entities": [],
+      "action": "record",
+      "content": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"88\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}",
+      "location": null,
+      "raw_ref": "row:8",
+      "confidence": 1.0,
+      "id": "E09-007",
+      "file": "09_cdr_tower_context.csv",
+      "label": "{\"timestamp\": \"2026-09-12T10:12:00+05:30\", \"caller\": \"DEMO-PHONE-RIYA\", \"called\": \"DEMO-PHONE-FRIEND\", \"cell_id\": \"DEMO-TOWER-N02\", \"lac\": \"DEMO-LAC-001\", \"duration_sec\": \"88\", \"tower_lat\": \"28.624\", \"tower_lon\": \"77.364\", \"coverage_radius_m\": \"1500\", \"subject\": \"Riya SIM only\", \"synthetic\": \"true\"}"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 10,
+      "source_type": "email",
+      "timestamp_utc": "2026-09-12T03:39:00Z",
+      "original_timestamp": "Sat, 12 Sep 2026 09:09:00 +0530",
+      "actor_entities": [
+        "Saffron Growth <desk@saffron-growth.example>",
+        "Riya <riya@parakh-demo.example>"
+      ],
+      "action": "email",
+      "content": "Subject: Synthetic portfolio activation\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nYour DEMO portfolio is reserved. Contact Agent Arjun in the existing chat. Demo link: https://kyc-saffron.example/verify\r\nDo not enter real credentials.\r\n",
+      "location": null,
+      "raw_ref": "message:1",
+      "confidence": 1.0,
+      "id": "E10-001",
+      "file": "10_email_investment_pitch.eml",
+      "label": "Subject: Synthetic portfolio activation\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nYour DEMO portfolio is reserved. Contact Agent Arjun in the existing chat. Demo link: https://kyc-saffron.example/verify\r\nDo not enter real credentials.\r\n"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 11,
+      "source_type": "email",
+      "timestamp_utc": "2026-09-13T06:30:00Z",
+      "original_timestamp": "Sun, 13 Sep 2026 12:00:00 +0530",
+      "actor_entities": [
+        "Demo Bank Support <support@nayi-disha-bank.example>",
+        "Riya <riya@parakh-demo.example>"
+      ],
+      "action": "email",
+      "content": "Subject: Demo transaction-reference review\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nSynthetic support reference DEMO-SUPPORT-014. In the account records reviewed through 13 September 2026 11:59 IST, DEMO-UPI-001 and DEMO-UPI-002 are outgoing debits of INR 25,000 each. No incoming credit of INR 50,000 is present in this reviewed window. This is a fictional bank response, not a recovery guarantee.\r\n",
+      "location": null,
+      "raw_ref": "message:1",
+      "confidence": 1.0,
+      "id": "E11-001",
+      "file": "11_email_bank_support.eml",
+      "label": "Subject: Demo transaction-reference review\nSYNTHETIC DEMO ONLY - all identities and messages are invented.\r\n\r\nSynthetic support reference DEMO-SUPPORT-014. In the account records reviewed through 13 September 2026 11:59 IST, DEMO-UPI-001 and DEMO-UPI-002 are outgoing debits of INR 25,000 each. No incoming credit of INR 50,000 is present in this reviewed window. This is a fictional bank response, not a recovery guarantee.\r\n"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 12,
+      "source_type": "browser_history",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "visited_url",
+      "content": "Synthetic investment ad https://saffron-growth.example",
+      "location": null,
+      "raw_ref": "urls:1",
+      "confidence": 1.0,
+      "id": "E12-001",
+      "file": "12_browser_history_riya.sqlite",
+      "label": "Synthetic investment ad https://saffron-growth.example"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 12,
+      "source_type": "browser_history",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "visited_url",
+      "content": "Synthetic KYC page https://kyc-saffron.example/verify",
+      "location": null,
+      "raw_ref": "urls:2",
+      "confidence": 1.0,
+      "id": "E12-002",
+      "file": "12_browser_history_riya.sqlite",
+      "label": "Synthetic KYC page https://kyc-saffron.example/verify"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 12,
+      "source_type": "browser_history",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "visited_url",
+      "content": "Synthetic portfolio page https://saffron-growth.example/portfolio",
+      "location": null,
+      "raw_ref": "urls:3",
+      "confidence": 1.0,
+      "id": "E12-003",
+      "file": "12_browser_history_riya.sqlite",
+      "label": "Synthetic portfolio page https://saffron-growth.example/portfolio"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 12,
+      "source_type": "browser_history",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "visited_url",
+      "content": "Synthetic bank support https://nayi-disha-bank.example/support",
+      "location": null,
+      "raw_ref": "urls:4",
+      "confidence": 1.0,
+      "id": "E12-004",
+      "file": "12_browser_history_riya.sqlite",
+      "label": "Synthetic bank support https://nayi-disha-bank.example/support"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "SYNTHETIC DEMO ONLY",
+      "location": null,
+      "raw_ref": "line:1",
+      "confidence": 1.0,
+      "id": "E13-001",
+      "file": "13_device_clock_observation.txt",
+      "label": "SYNTHETIC DEMO ONLY"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Case: PARAKH-SYN-RIYA-001",
+      "location": null,
+      "raw_ref": "line:2",
+      "confidence": 1.0,
+      "id": "E13-002",
+      "file": "13_device_clock_observation.txt",
+      "label": "Case: PARAKH-SYN-RIYA-001"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Observer: DEMO-ANALYST",
+      "location": null,
+      "raw_ref": "line:3",
+      "confidence": 1.0,
+      "id": "E13-003",
+      "file": "13_device_clock_observation.txt",
+      "label": "Observer: DEMO-ANALYST"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Source: controlled synthetic observation, not a real signed NTP capture.",
+      "location": null,
+      "raw_ref": "line:4",
+      "confidence": 1.0,
+      "id": "E13-004",
+      "file": "13_device_clock_observation.txt",
+      "label": "Source: controlled synthetic observation, not a real signed NTP capture."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Reference: 2026-09-12T09:50:00+05:30",
+      "location": null,
+      "raw_ref": "line:5",
+      "confidence": 1.0,
+      "id": "E13-005",
+      "file": "13_device_clock_observation.txt",
+      "label": "Reference: 2026-09-12T09:50:00+05:30"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Android display: 2026-09-12T09:50:00+05:30",
+      "location": null,
+      "raw_ref": "line:6",
+      "confidence": 1.0,
+      "id": "E13-006",
+      "file": "13_device_clock_observation.txt",
+      "label": "Android display: 2026-09-12T09:50:00+05:30"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Tablet display BEFORE sync: 2026-09-12T09:20:00+05:30",
+      "location": null,
+      "raw_ref": "line:7",
+      "confidence": 1.0,
+      "id": "E13-007",
+      "file": "13_device_clock_observation.txt",
+      "label": "Tablet display BEFORE sync: 2026-09-12T09:20:00+05:30"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Tablet display AFTER sync: 2026-09-12T09:50:00+05:30",
+      "location": null,
+      "raw_ref": "line:8",
+      "confidence": 1.0,
+      "id": "E13-008",
+      "file": "13_device_clock_observation.txt",
+      "label": "Tablet display AFTER sync: 2026-09-12T09:50:00+05:30"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Observed tablet offset: -1800 seconds",
+      "location": null,
+      "raw_ref": "line:9",
+      "confidence": 1.0,
+      "id": "E13-009",
+      "file": "13_device_clock_observation.txt",
+      "label": "Observed tablet offset: -1800 seconds"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Simulation assumption: this fixed offset applied earlier that morning.",
+      "location": null,
+      "raw_ref": "line:10",
+      "confidence": 1.0,
+      "id": "E13-010",
+      "file": "13_device_clock_observation.txt",
+      "label": "Simulation assumption: this fixed offset applied earlier that morning."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "A single observation alone does not establish historical clock stability.",
+      "location": null,
+      "raw_ref": "line:11",
+      "confidence": 1.0,
+      "id": "E13-011",
+      "file": "13_device_clock_observation.txt",
+      "label": "A single observation alone does not establish historical clock stability."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 13,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Raw chat files retain their recorded timestamps.",
+      "location": null,
+      "raw_ref": "line:12",
+      "confidence": 1.0,
+      "id": "E13-012",
+      "file": "13_device_clock_observation.txt",
+      "label": "Raw chat files retain their recorded timestamps."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "SYNTHETIC DEMO ONLY - INVENTED ACQUISITION CONTEXT",
+      "location": null,
+      "raw_ref": "line:1",
+      "confidence": 1.0,
+      "id": "E14-001",
+      "file": "14_acquisition_context.txt",
+      "label": "SYNTHETIC DEMO ONLY - INVENTED ACQUISITION CONTEXT"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Case: PARAKH-SYN-RIYA-001",
+      "location": null,
+      "raw_ref": "line:2",
+      "confidence": 1.0,
+      "id": "E14-002",
+      "file": "14_acquisition_context.txt",
+      "label": "Case: PARAKH-SYN-RIYA-001"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Received: 2026-09-14T10:00:00+05:30",
+      "location": null,
+      "raw_ref": "line:3",
+      "confidence": 1.0,
+      "id": "E14-003",
+      "file": "14_acquisition_context.txt",
+      "label": "Received: 2026-09-14T10:00:00+05:30"
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "One investigator interface. No real person, subscriber, device, institution or case exists.",
+      "location": null,
+      "raw_ref": "line:4",
+      "confidence": 1.0,
+      "id": "E14-004",
+      "file": "14_acquisition_context.txt",
+      "label": "One investigator interface. No real person, subscriber, device, institution or case exists."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Android exports: primary chats, GPS, call records and browser history.",
+      "location": null,
+      "raw_ref": "line:5",
+      "confidence": 1.0,
+      "id": "E14-005",
+      "file": "14_acquisition_context.txt",
+      "label": "Android exports: primary chats, GPS, call records and browser history."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Tablet export: selected ten messages only, uncorrected clock.",
+      "location": null,
+      "raw_ref": "line:6",
+      "confidence": 1.0,
+      "id": "E14-006",
+      "file": "14_acquisition_context.txt",
+      "label": "Tablet export: selected ten messages only, uncorrected clock."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Victim statement CSV and PDF: same fictional disclosure, not independent sources.",
+      "location": null,
+      "raw_ref": "line:7",
+      "confidence": 1.0,
+      "id": "E14-007",
+      "file": "14_acquisition_context.txt",
+      "label": "Victim statement CSV and PDF: same fictional disclosure, not independent sources."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Collection statement and tower records: separate fictional responses provided to investigator, not recovered from victim phone.",
+      "location": null,
+      "raw_ref": "line:8",
+      "confidence": 1.0,
+      "id": "E14-008",
+      "file": "14_acquisition_context.txt",
+      "label": "Collection statement and tower records: separate fictional responses provided to investigator, not recovered from victim phone."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Refund receipt: supplied by chat contact.",
+      "location": null,
+      "raw_ref": "line:9",
+      "confidence": 1.0,
+      "id": "E14-009",
+      "file": "14_acquisition_context.txt",
+      "label": "Refund receipt: supplied by chat contact."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Scenario mapping: arjun.collect@demo -> DEMO-ACCT-COLLECT-009.",
+      "location": null,
+      "raw_ref": "line:10",
+      "confidence": 1.0,
+      "id": "E14-010",
+      "file": "14_acquisition_context.txt",
+      "label": "Scenario mapping: arjun.collect@demo -> DEMO-ACCT-COLLECT-009."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Agent Arjun is a display name; legal identity and downstream account control are unresolved.",
+      "location": null,
+      "raw_ref": "line:11",
+      "confidence": 1.0,
+      "id": "E14-011",
+      "file": "14_acquisition_context.txt",
+      "label": "Agent Arjun is a display name; legal identity and downstream account control are unresolved."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "No source was edited after generation. No pre-import digital signature or chain of custody is claimed.",
+      "location": null,
+      "raw_ref": "line:12",
+      "confidence": 1.0,
+      "id": "E14-012",
+      "file": "14_acquisition_context.txt",
+      "label": "No source was edited after generation. No pre-import digital signature or chain of custody is claimed."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 14,
+      "source_type": "generic_log",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "log_line",
+      "content": "Never upload demo-guide/ or its ground truth as original evidence.",
+      "location": null,
+      "raw_ref": "line:13",
+      "confidence": 1.0,
+      "id": "E14-013",
+      "file": "14_acquisition_context.txt",
+      "label": "Never upload demo-guide/ or its ground truth as original evidence."
+    },
+    {
+      "case_id": 1,
+      "evidence_id": 15,
+      "source_type": "pdf",
+      "timestamp_utc": null,
+      "original_timestamp": null,
+      "actor_entities": [],
+      "action": "pdf_text",
+      "content": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRiya - incident account\nSYNTHETIC FIRST-PERSON ACCOUNT | Not an official complaint or police form\nRecorded: 13 September 2026, 15:00 IST. Case: PARAKH-SYN-RIYA-001\nI am Riya, a fictional person. On 12 September I contacted someone using the display name Agent Arjun after\nseeing an investment advertisement. They promised guaranteed returns, sent a KYC link and persuaded me to\nmake two INR 25,000 payments to arjun.collect@demo.\nWhen I asked for a refund, the contact sent a receipt claiming INR 50,000 had been returned. I did not see that\ncredit in my supplied statement through 13 September. I refused a further INR 5,000 release-fee request.\nI used an Android phone and an older linked tablet. The tablet clock was 30 minutes slow before a manual sync\nat 09:50 IST. The tablet chat file is an excerpt; missing messages in that excerpt do not establish deletion.\nI provide chats, my account statement, the received receipt, location history, call export, browser history and\nemails. I do not know the legal identity of the contact. The investigator separately obtained the collection account\nand tower records in this synthetic scenario.\nThis fictional account is a source assertion to compare against the records, not independent proof of every statement. No real\naddress, signature, Aadhaar, PAN, OTP or phone number is included.\n",
+      "location": null,
+      "raw_ref": "page:1",
+      "confidence": 1.0,
+      "id": "E15-001",
+      "file": "15_riya_incident_account.pdf",
+      "label": "SYNTHETIC DEMO ONLY - NOT A VALID FINANCIAL OR LEGAL DOCUMENT\nPARAKH-SYN-RIYA-001 | All identities and institutions are fictional\nPage 1\nRiya - incident account\nSYNTHETIC FIRST-PERSON ACCOUNT | Not an official complaint or police form\nRecorded: 13 September 2026, 15:00 IST. Case: PARAKH-SYN-RIYA-001\nI am Riya, a fictional person. On 12 September I contacted someone using the display name Agent Arjun after\nseeing an investment advertisement. They promised guaranteed returns, sent a KYC link and persuaded me to\nmake two INR 25,000 payments to arjun.collect@demo.\nWhen I asked for a refund, the contact sent a receipt claiming INR 50,000 had been returned. I did not see that\ncredit in my supplied statement through 13 September. I refused a further INR 5,000 release-fee request.\nI used an Android phone and an older linked tablet. The tablet clock was 30 minutes slow before a manual sync\nat 09:50 IST. The tablet chat file is an excerpt; missing messages in that excerpt do not establish deletion.\nI provide chats, my account statement, the received receipt, location history, call export, browser history and\nemails. I do not know the legal identity of the contact. The investigator separately obtained the collection account\nand tower records in this synthetic scenario.\nThis fictional account is a source assertion to compare against the records, not independent proof of every statement. No real\naddress, signature, Aadhaar, PAN, OTP or phone number is included.\n"
+    }
+  ],
+  "audit": [
+    {
+      "sequence": 1,
+      "action": "Synthetic baseline registered",
+      "filename": "01_whatsapp_riya_android.txt",
+      "sha256": "32c013515be5297510cea060f655cd903a2439f2a0f126eef584ff1942aab532",
+      "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "04b0cb51eae3278db20e20cd4bf009cb8eb6033924d72ee881e94e221cff887d"
+    },
+    {
+      "sequence": 2,
+      "action": "Synthetic baseline registered",
+      "filename": "02_whatsapp_linked_tablet.txt",
+      "sha256": "844286b37f880b10bd64aebf7fa9607b4753f68497d8416a453ebe79399fbf62",
+      "previous_hash": "04b0cb51eae3278db20e20cd4bf009cb8eb6033924d72ee881e94e221cff887d",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "e21589e608dfd6ecaee4e5cf61207d487c5ac8a86f4bc0478c192405d95c84c5"
+    },
+    {
+      "sequence": 3,
+      "action": "Synthetic baseline registered",
+      "filename": "03_bank_statement_riya.csv",
+      "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321",
+      "previous_hash": "e21589e608dfd6ecaee4e5cf61207d487c5ac8a86f4bc0478c192405d95c84c5",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "01c1c25065c47a4b4a9e1b5b90387d5c6b97ba892b7ac8b0fcd8d142427bb7f2"
+    },
+    {
+      "sequence": 4,
+      "action": "Synthetic baseline registered",
+      "filename": "04_bank_statement_riya.pdf",
+      "sha256": "9c5804e03c7b13d152b8f6509ac5ebf4b8dd8278922d755d12164e0224079c34",
+      "previous_hash": "01c1c25065c47a4b4a9e1b5b90387d5c6b97ba892b7ac8b0fcd8d142427bb7f2",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "344be7f9162404c108d4447c4618705849c4dfee99ca1c3888992e128545bd81"
+    },
+    {
+      "sequence": 5,
+      "action": "Synthetic baseline registered",
+      "filename": "05_bank_statement_collection.csv",
+      "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2",
+      "previous_hash": "344be7f9162404c108d4447c4618705849c4dfee99ca1c3888992e128545bd81",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "172f464c4cb2487eee7d62188141c92462108423136df51cbae56a32810e1789"
+    },
+    {
+      "sequence": 6,
+      "action": "Synthetic baseline registered",
+      "filename": "06_refund_receipt_claim.pdf",
+      "sha256": "d87cbb0b487d246043d2261a6690de1ffbb91336d87951c9f499a5c13ddbc9c1",
+      "previous_hash": "172f464c4cb2487eee7d62188141c92462108423136df51cbae56a32810e1789",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "75ba238bc1d58f7dbbf870ecacfcbf15b7a2d267c665c60e9006a8d40f75f46c"
+    },
+    {
+      "sequence": 7,
+      "action": "Synthetic baseline registered",
+      "filename": "07_gps_location_riya.json",
+      "sha256": "027e9bbd5f53825f90d2a61cdc126a2c672279321a72ffc4a77b52d41983816e",
+      "previous_hash": "75ba238bc1d58f7dbbf870ecacfcbf15b7a2d267c665c60e9006a8d40f75f46c",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "77fe5734b95902be1617e3a877171185d825c3e0cebc6e2b493aecaac0dd3af0"
+    },
+    {
+      "sequence": 8,
+      "action": "Synthetic baseline registered",
+      "filename": "08_call_records_riya.csv",
+      "sha256": "6cfc960c774009712bc17df7998ee70d86b50b89f108aa9400ac185646b07531",
+      "previous_hash": "77fe5734b95902be1617e3a877171185d825c3e0cebc6e2b493aecaac0dd3af0",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "0df653305c1286c3bbb7bcd3ccb04b94f897cb697555ccf6bb3c9ec4a507284d"
+    },
+    {
+      "sequence": 9,
+      "action": "Synthetic baseline registered",
+      "filename": "09_cdr_tower_context.csv",
+      "sha256": "98bb38f38a1b4055328ed7c0450b1be061b611fa6aa39cb93040b67e2cafdbbf",
+      "previous_hash": "0df653305c1286c3bbb7bcd3ccb04b94f897cb697555ccf6bb3c9ec4a507284d",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "d087bc2706aa203008568ed1c6014f71de1e9b7eabbd23e26e4caddf2f90b286"
+    },
+    {
+      "sequence": 10,
+      "action": "Synthetic baseline registered",
+      "filename": "10_email_investment_pitch.eml",
+      "sha256": "a6d7f55c29e1e23501cf0e4af681968991f3616e21198bd17ac113c4de2282d0",
+      "previous_hash": "d087bc2706aa203008568ed1c6014f71de1e9b7eabbd23e26e4caddf2f90b286",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "ed051a404f5e785b3c900d0ddd8c2c00706de28bf442f057f3f0ca7e628e0ccb"
+    },
+    {
+      "sequence": 11,
+      "action": "Synthetic baseline registered",
+      "filename": "11_email_bank_support.eml",
+      "sha256": "0d395f79dbbd840778bb426c7815433c24e371ee00dfc5ceccfca9b0e935ef5d",
+      "previous_hash": "ed051a404f5e785b3c900d0ddd8c2c00706de28bf442f057f3f0ca7e628e0ccb",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "ed24289726afb23cbb06ce950fa9adabc9801e4a33f0400fd7d5c79fc7e0e231"
+    },
+    {
+      "sequence": 12,
+      "action": "Synthetic baseline registered",
+      "filename": "12_browser_history_riya.sqlite",
+      "sha256": "983c7c0c63aaa934f2be2ab74ca445a218b3a8d98332fbec5733e8d45edefcf8",
+      "previous_hash": "ed24289726afb23cbb06ce950fa9adabc9801e4a33f0400fd7d5c79fc7e0e231",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "470459800df1cc6079b7e72a7e4f4ca43501bfb55834b75f06d880bec8643f02"
+    },
+    {
+      "sequence": 13,
+      "action": "Synthetic baseline registered",
+      "filename": "13_device_clock_observation.txt",
+      "sha256": "07c4668cd64aecf29aabab05e68140606051df07eb048853f67c9e773772f0bf",
+      "previous_hash": "470459800df1cc6079b7e72a7e4f4ca43501bfb55834b75f06d880bec8643f02",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "955db76d763269dc525207915e9fcc67aad2246a411fdafa935074beec3d9868"
+    },
+    {
+      "sequence": 14,
+      "action": "Synthetic baseline registered",
+      "filename": "14_acquisition_context.txt",
+      "sha256": "82335b903a876b5ebd8cbfc843ea29d06428e9c097db4672c7fd152fff71466e",
+      "previous_hash": "955db76d763269dc525207915e9fcc67aad2246a411fdafa935074beec3d9868",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "92c253c3c70f18c60db0751e2c2bf710c860badcf8039397d7eba45778e78b6b"
+    },
+    {
+      "sequence": 15,
+      "action": "Synthetic baseline registered",
+      "filename": "15_riya_incident_account.pdf",
+      "sha256": "ecb592c921ef436cd5a77f810645c02bdc2202689f9854e918ff6d27f4287a7d",
+      "previous_hash": "92c253c3c70f18c60db0751e2c2bf710c860badcf8039397d7eba45778e78b6b",
+      "actor": "Demo fixture generator",
+      "timestamp": "2026-10-18T00:00:00Z",
+      "entry_hash": "80c1dd0e391ada111707adf682a5a2cfefaaea6d2f46f6b6cf401d1429dcb42a"
+    }
+  ],
+  "notice": "Synthetic demo chain generated from the fixture inventory. Not a signed acquisition or real investigation log."
+}

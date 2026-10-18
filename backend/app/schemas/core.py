@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 from app.schemas.common import ORMModel
 
@@ -14,6 +14,13 @@ class UserCreate(BaseModel):
     username: str
     password: str
     role: str = "investigator"
+
+    @field_validator("password")
+    @classmethod
+    def password_length(cls, value: str) -> str:
+        if not 1 <= len(value.encode("utf-8")) <= 72:
+            raise ValueError("Passwords must contain between 1 and 72 UTF-8 bytes.")
+        return value
 
 
 class CaseCreate(BaseModel):

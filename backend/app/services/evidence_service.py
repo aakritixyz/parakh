@@ -18,7 +18,9 @@ class EvidenceService:
         self.db = db
         self.storage = storage or ContentAddressedStorage()
 
-    async def ingest(self, case_id: int, upload: UploadFile, actor: str, idempotency_key: str | None) -> Evidence:
+    async def ingest(
+        self, case_id: int, upload: UploadFile, actor: str, idempotency_key: str | None
+    ) -> Evidence:
         if idempotency_key:
             existing = self.db.scalar(
                 select(Evidence).where(
@@ -51,7 +53,10 @@ class EvidenceService:
             type="ingest_extraction",
             status="running",
             progress=35,
-            logs=[f"Stored evidence {evidence.filename}", f"Detected parser {parser.__class__.__name__}"],
+            logs=[
+                f"Stored evidence {evidence.filename}",
+                f"Detected parser {parser.__class__.__name__}",
+            ],
         )
         self.db.add(job)
         self.db.flush()
@@ -75,10 +80,15 @@ class EvidenceService:
             event_data["parser_version"] = getattr(parser, "version", "1")
             event_data["dedupe_hash"] = _dedupe_hash(event_data)
             self.db.add(Event(**event_data))
-        extraction.parse_status = "complete"
+        extraction.warnings = list(getattr(parser, "warnings", []))
+        extraction.parse_status = "needs_review" if extraction.warnings else "complete"
+        extraction.parser_name = parser.__class__.__name__
+        extraction.parser_version = getattr(parser, "version", "1")
+        if extraction.warnings:
+            evidence.metadata_json = {**evidence.metadata_json, "warnings": extraction.warnings}
         job.status = "completed"
         job.progress = 100
-        job.logs = [*job.logs, "Parsed events and completed extraction"]
+        job.logs = [*job.logs, "Extraction completed", *extraction.warnings]
         AuditService(self.db).log(
             action="evidence.uploaded",
             actor=actor,
@@ -102,7 +112,9 @@ class EvidenceService:
         stored_path = Path(evidence.storage_path)
         parser = ParserRegistry.detect(evidence.filename, evidence.content_type, stored_path)
         extraction = self.db.scalar(
-            select(Extraction).where(Extraction.evidence_id == evidence.id).order_by(Extraction.id.desc())
+            select(Extraction)
+            .where(Extraction.evidence_id == evidence.id)
+            .order_by(Extraction.id.desc())
         )
         if not extraction:
             extraction = Extraction(
@@ -133,7 +145,12 @@ class EvidenceService:
             event_data["dedupe_hash"] = _dedupe_hash(event_data)
             self.db.add(Event(**event_data))
             inserted += 1
-        extraction.parse_status = "complete"
+        extraction.warnings = list(getattr(parser, "warnings", []))
+        extraction.parse_status = "needs_review" if extraction.warnings else "complete"
+        extraction.parser_name = parser.__class__.__name__
+        extraction.parser_version = getattr(parser, "version", "1")
+        if extraction.warnings:
+            evidence.metadata_json = {**evidence.metadata_json, "warnings": extraction.warnings}
         self.db.flush()
         AuditService(self.db).log(
             action="evidence.reparsed",
@@ -141,9 +158,18 @@ class EvidenceService:
             case_id=evidence.case_id,
             target_type="evidence",
             target_id=str(evidence.id),
-            payload={"extraction_id": extraction.id, "deleted_events": deleted, "inserted_events": inserted},
+            payload={
+                "extraction_id": extraction.id,
+                "deleted_events": deleted,
+                "inserted_events": inserted,
+            },
         )
-        return {"evidence_id": evidence.id, "extraction_id": extraction.id, "deleted": deleted, "inserted": inserted}
+        return {
+            "evidence_id": evidence.id,
+            "extraction_id": extraction.id,
+            "deleted": deleted,
+            "inserted": inserted,
+        }
 
     def verify_integrity(self, evidence: Evidence) -> dict:
         ok = self.storage.verify(evidence.storage_path, evidence.sha256)

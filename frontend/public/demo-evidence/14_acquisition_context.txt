@@ -1,0 +1,13 @@
+SYNTHETIC DEMO ONLY - INVENTED ACQUISITION CONTEXT
+Case: PARAKH-SYN-RIYA-001
+Received: 2026-09-14T10:00:00+05:30
+One investigator interface. No real person, subscriber, device, institution or case exists.
+Android exports: primary chats, GPS, call records and browser history.
+Tablet export: selected ten messages only, uncorrected clock.
+Victim statement CSV and PDF: same fictional disclosure, not independent sources.
+Collection statement and tower records: separate fictional responses provided to investigator, not recovered from victim phone.
+Refund receipt: supplied by chat contact.
+Scenario mapping: arjun.collect@demo -> DEMO-ACCT-COLLECT-009.
+Agent Arjun is a display name; legal identity and downstream account control are unresolved.
+No source was edited after generation. No pre-import digital signature or chain of custody is claimed.
+Never upload demo-guide/ or its ground truth as original evidence.

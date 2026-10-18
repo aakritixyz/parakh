@@ -1,0 +1,11 @@
+[12/09/2026, 08:30:00] SYNTHETIC DEMO ONLY. Linked-tablet excerpt; source clock not corrected.
+[12/09/2026, 08:35:00] Riya: Hello, I saw the investment advertisement. Is this safe?
+[12/09/2026, 08:36:00] Agent Arjun: Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today.
+[12/09/2026, 08:47:00] Riya: You said guaranteed. Can I withdraw today?
+[12/09/2026, 08:56:00] Riya: Paid INR 25,000. Reference DEMO-UPI-001.
+[12/09/2026, 09:04:00] Riya: Second payment done. Reference DEMO-UPI-002.
+[12/09/2026, 09:14:00] Agent Arjun: <Media omitted>
+[12/09/2026, 09:14:00] Agent Arjun: 06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001.
+[12/09/2026, 09:16:00] Riya: My bank still shows INR 32,500. No refund credit.
+[12/09/2026, 09:18:00] Riya: No. I am not paying another fee.
+[12/09/2026, 09:38:00] Riya: I am preserving the chats and bank records.

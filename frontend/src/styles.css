@@ -1,2 +1,18 @@
 @import "./styles/tokens.css";
 @import "./styles/base.css";
+
+.evidence-workflow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.evidence-workflow strong {
+  color: var(--ink);
+}

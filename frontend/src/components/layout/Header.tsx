@@ -14,6 +14,7 @@ export function Header({
   onProfile,
   query,
   onQuery,
+  onConnect,
 }: {
   title: string;
   online: boolean;
@@ -22,6 +23,7 @@ export function Header({
   onProfile: () => void;
   query: string;
   onQuery: (query: string) => void;
+  onConnect: () => void;
 }) {
   useEffect(() => {
     const handle = (event: KeyboardEvent) => {
@@ -66,6 +68,11 @@ export function Header({
         />
         <kbd>⌘K</kbd>
       </label>
+      {!online && (
+        <button className="connect-button" onClick={onConnect}>
+          Connect backend
+        </button>
+      )}
       <span className={`chain-status ${verified ? "" : "chain-warning"}`}>
         {verified ? <ShieldCheck /> : <ShieldAlert />}
         {verified ? "Chain verified" : "Chain needs review"}

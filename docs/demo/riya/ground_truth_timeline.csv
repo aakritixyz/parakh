@@ -1,0 +1,58 @@
+timestamp_ist,timestamp_utc,kind,description,source_file,raw_reference
+2026-09-11T18:30:00+05:30,2026-09-11T13:00:00Z,bank,DEMO-ACCT-RIYA-001 debit INR 1800.00 / DEMO-CARD-001,03_bank_statement_riya.csv,row:2
+2026-09-11T20:10:00+05:30,2026-09-11T14:40:00Z,bank,DEMO-ACCT-RIYA-001 debit INR 700.00 / DEMO-UPI-LOCAL,03_bank_statement_riya.csv,row:3
+2026-09-12T08:45:00+05:30,2026-09-12T03:15:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:1
+2026-09-12T09:05:00+05:30,2026-09-12T03:35:00Z,chat,"Riya: Hello, I saw the investment advertisement. Is this safe?",01_whatsapp_riya_android.txt,line:2
+2026-09-12T09:06:00+05:30,2026-09-12T03:36:00Z,chat,"Agent Arjun: Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today.",01_whatsapp_riya_android.txt,line:3
+2026-09-12T09:07:00+05:30,2026-09-12T03:37:00Z,chat,Riya: This is my savings. I do not want a loan.,01_whatsapp_riya_android.txt,line:4
+2026-09-12T09:08:00+05:30,2026-09-12T03:38:00Z,chat,Agent Arjun: No loan. Limited slots. Complete KYC: https://kyc-saffron.example/verify,01_whatsapp_riya_android.txt,line:5
+2026-09-12T09:09:00+05:30,2026-09-12T03:39:00Z,email,Synthetic portfolio activation,10_email_investment_pitch.eml,message:1
+2026-09-12T09:10:00+05:30,2026-09-12T03:40:00Z,chat,Riya: The page asks for an OTP. Why?,01_whatsapp_riya_android.txt,line:6
+2026-09-12T09:10:00+05:30,2026-09-12T03:40:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:2
+2026-09-12T09:11:00+05:30,2026-09-12T03:41:00Z,chat,"Agent Arjun: KYC update only. OTP bhejo, jaldi.",01_whatsapp_riya_android.txt,line:7
+2026-09-12T09:12:00+05:30,2026-09-12T03:42:00Z,chat,Riya: [SYNTHETIC OTP REDACTED - no usable code],01_whatsapp_riya_android.txt,line:8
+2026-09-12T09:14:00+05:30,2026-09-12T03:44:00Z,chat,Agent Arjun: Call DEMO-PHONE-ARJUN. I will explain.,01_whatsapp_riya_android.txt,line:9
+2026-09-12T09:14:00+05:30,2026-09-12T03:44:00Z,call,outgoing answered 152 sec,08_call_records_riya.csv,row:2
+2026-09-12T09:17:00+05:30,2026-09-12T03:47:00Z,chat,Riya: You said guaranteed. Can I withdraw today?,01_whatsapp_riya_android.txt,line:10
+2026-09-12T09:18:00+05:30,2026-09-12T03:48:00Z,chat,"Agent Arjun: Yes. First send INR 25,000 to arjun.collect@demo. It is our collection account.",01_whatsapp_riya_android.txt,line:11
+2026-09-12T09:22:00+05:30,2026-09-12T03:52:00Z,call,incoming answered 95 sec,08_call_records_riya.csv,row:3
+2026-09-12T09:24:00+05:30,2026-09-12T03:54:00Z,chat,"Riya: Sending INR 25,000 now.",01_whatsapp_riya_android.txt,line:12
+2026-09-12T09:25:00+05:30,2026-09-12T03:55:00Z,bank,DEMO-ACCT-RIYA-001 debit INR 25000.00 / DEMO-UPI-001,03_bank_statement_riya.csv,row:4
+2026-09-12T09:25:00+05:30,2026-09-12T03:55:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:3
+2026-09-12T09:25:05+05:30,2026-09-12T03:55:05Z,bank,DEMO-ACCT-COLLECT-009 credit INR 25000.00 / DEMO-UPI-001,05_bank_statement_collection.csv,row:2
+2026-09-12T09:26:00+05:30,2026-09-12T03:56:00Z,chat,"Riya: Paid INR 25,000. Reference DEMO-UPI-001.",01_whatsapp_riya_android.txt,line:13
+2026-09-12T09:27:00+05:30,2026-09-12T03:57:00Z,chat,"Agent Arjun: Received. One more INR 25,000 unlocks the portfolio.",01_whatsapp_riya_android.txt,line:14
+2026-09-12T09:28:00+05:30,2026-09-12T03:58:00Z,chat,Riya: That was not mentioned before.,01_whatsapp_riya_android.txt,line:15
+2026-09-12T09:29:00+05:30,2026-09-12T03:59:00Z,chat,Agent Arjun: Urgent payment needed before the slot closes. Return guaranteed.,01_whatsapp_riya_android.txt,line:16
+2026-09-12T09:31:00+05:30,2026-09-12T04:01:00Z,call,incoming answered 48 sec,08_call_records_riya.csv,row:4
+2026-09-12T09:32:00+05:30,2026-09-12T04:02:00Z,chat,"Riya: I will send the remaining INR 25,000, then please stop.",01_whatsapp_riya_android.txt,line:17
+2026-09-12T09:33:00+05:30,2026-09-12T04:03:00Z,bank,DEMO-ACCT-RIYA-001 debit INR 25000.00 / DEMO-UPI-002,03_bank_statement_riya.csv,row:5
+2026-09-12T09:33:00+05:30,2026-09-12T04:03:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:4
+2026-09-12T09:33:05+05:30,2026-09-12T04:03:05Z,bank,DEMO-ACCT-COLLECT-009 credit INR 25000.00 / DEMO-UPI-002,05_bank_statement_collection.csv,row:3
+2026-09-12T09:34:00+05:30,2026-09-12T04:04:00Z,chat,Riya: Second payment done. Reference DEMO-UPI-002.,01_whatsapp_riya_android.txt,line:18
+2026-09-12T09:35:00+05:30,2026-09-12T04:05:00Z,chat,Agent Arjun: Your portfolio is processing.,01_whatsapp_riya_android.txt,line:19
+2026-09-12T09:36:00+05:30,2026-09-12T04:06:00Z,bank,DEMO-ACCT-COLLECT-009 debit INR 30000.00 / DEMO-OUT-001,05_bank_statement_collection.csv,row:4
+2026-09-12T09:38:00+05:30,2026-09-12T04:08:00Z,bank,DEMO-ACCT-COLLECT-009 debit INR 19500.00 / DEMO-OUT-002,05_bank_statement_collection.csv,row:5
+2026-09-12T09:39:00+05:30,2026-09-12T04:09:00Z,chat,Riya: The website is not opening. I want my money back.,01_whatsapp_riya_android.txt,line:20
+2026-09-12T09:40:00+05:30,2026-09-12T04:10:00Z,chat,Agent Arjun: Refund approved. Do not contact the bank yet.,01_whatsapp_riya_android.txt,line:21
+2026-09-12T09:44:00+05:30,2026-09-12T04:14:00Z,chat,Agent Arjun: <Media omitted>,01_whatsapp_riya_android.txt,line:22
+2026-09-12T09:44:00+05:30,2026-09-12T04:14:00Z,chat,"Agent Arjun: 06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001.",01_whatsapp_riya_android.txt,line:23
+2026-09-12T09:46:00+05:30,2026-09-12T04:16:00Z,chat,"Riya: My bank still shows INR 32,500. No refund credit.",01_whatsapp_riya_android.txt,line:24
+2026-09-12T09:47:00+05:30,2026-09-12T04:17:00Z,chat,"Agent Arjun: Bank delay. Send INR 5,000 release fee.",01_whatsapp_riya_android.txt,line:25
+2026-09-12T09:47:00+05:30,2026-09-12T04:17:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:5
+2026-09-12T09:48:00+05:30,2026-09-12T04:18:00Z,chat,Riya: No. I am not paying another fee.,01_whatsapp_riya_android.txt,line:26
+2026-09-12T09:50:00+05:30,2026-09-12T04:20:00Z,call,outgoing unanswered 0 sec,08_call_records_riya.csv,row:5
+2026-09-12T09:52:00+05:30,2026-09-12T04:22:00Z,chat,Riya: I tried calling you. Please answer.,01_whatsapp_riya_android.txt,line:27
+2026-09-12T09:52:00+05:30,2026-09-12T04:22:00Z,call,outgoing unanswered 0 sec,08_call_records_riya.csv,row:6
+2026-09-12T10:00:00+05:30,2026-09-12T04:30:00Z,call,outgoing answered 210 sec,08_call_records_riya.csv,row:7
+2026-09-12T10:02:00+05:30,2026-09-12T04:32:00Z,chat,Riya: I contacted the bank through its support channel.,01_whatsapp_riya_android.txt,line:28
+2026-09-12T10:05:00+05:30,2026-09-12T04:35:00Z,chat,Agent Arjun: Wait until evening. Do not file a complaint.,01_whatsapp_riya_android.txt,line:29
+2026-09-12T10:08:00+05:30,2026-09-12T04:38:00Z,chat,Riya: I am preserving the chats and bank records.,01_whatsapp_riya_android.txt,line:30
+2026-09-12T10:12:00+05:30,2026-09-12T04:42:00Z,call,outgoing answered 88 sec,08_call_records_riya.csv,row:8
+2026-09-12T10:15:00+05:30,2026-09-12T04:45:00Z,location,Nearby street (invented point),07_gps_location_riya.json,location:6
+2026-09-12T10:20:00+05:30,2026-09-12T04:50:00Z,chat,Riya: I will report this. Do not contact me again.,01_whatsapp_riya_android.txt,line:31
+2026-09-12T10:30:00+05:30,2026-09-12T05:00:00Z,location,Demo support-desk vicinity (invented point),07_gps_location_riya.json,location:7
+2026-09-12T10:55:00+05:30,2026-09-12T05:25:00Z,location,Demo support-desk vicinity (invented point),07_gps_location_riya.json,location:8
+2026-09-12T11:15:00+05:30,2026-09-12T05:45:00Z,location,Residential area (invented point),07_gps_location_riya.json,location:9
+2026-09-13T11:30:00+05:30,2026-09-13T06:00:00Z,bank,DEMO-ACCT-RIYA-001 debit INR 499.00 / DEMO-CARD-002,03_bank_statement_riya.csv,row:6
+2026-09-13T12:00:00+05:30,2026-09-13T06:30:00Z,email,Demo transaction-reference review,11_email_bank_support.eml,message:1

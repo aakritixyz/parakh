@@ -415,3 +415,9 @@
     max-width: var(--lead-metric-width);
   }
 }
+
+:global(.suite-topbar .connect-button) {
+  white-space: nowrap;
+  border: var(--border-width) solid var(--navy-700);
+  font-size: var(--s3);
+}

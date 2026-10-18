@@ -14,6 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.core.types import UTCDateTime
 
 
 class Evidence(Base):
@@ -53,7 +54,7 @@ class Event(Base):
     source_app: Mapped[str] = mapped_column(String(80), default="unknown", index=True)
     source_type: Mapped[str] = mapped_column(String(80), index=True)
     event_type: Mapped[str] = mapped_column(String(40), default="other", index=True)
-    timestamp_utc: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, index=True)
+    timestamp_utc: Mapped[datetime | None] = mapped_column(UTCDateTime(), nullable=True, index=True)
     original_timestamp: Mapped[str | None] = mapped_column(String(120), nullable=True)
     timezone_offset: Mapped[str | None] = mapped_column(String(16), nullable=True)
     direction: Mapped[str] = mapped_column(String(16), default="unknown")

@@ -1,0 +1,31 @@
+12/09/2026, 09:00 - SYNTHETIC DEMO ONLY. All people, messages and identifiers are fictional.
+12/09/2026, 09:05 - Riya: Hello, I saw the investment advertisement. Is this safe?
+12/09/2026, 09:06 - Agent Arjun: Welcome to Saffron Growth Club. Guaranteed return: INR 50,000 becomes INR 75,000 today.
+12/09/2026, 09:07 - Riya: This is my savings. I do not want a loan.
+12/09/2026, 09:08 - Agent Arjun: No loan. Limited slots. Complete KYC: https://kyc-saffron.example/verify
+12/09/2026, 09:10 - Riya: The page asks for an OTP. Why?
+12/09/2026, 09:11 - Agent Arjun: KYC update only. OTP bhejo, jaldi.
+12/09/2026, 09:12 - Riya: [SYNTHETIC OTP REDACTED - no usable code]
+12/09/2026, 09:14 - Agent Arjun: Call DEMO-PHONE-ARJUN. I will explain.
+12/09/2026, 09:17 - Riya: You said guaranteed. Can I withdraw today?
+12/09/2026, 09:18 - Agent Arjun: Yes. First send INR 25,000 to arjun.collect@demo. It is our collection account.
+12/09/2026, 09:24 - Riya: Sending INR 25,000 now.
+12/09/2026, 09:26 - Riya: Paid INR 25,000. Reference DEMO-UPI-001.
+12/09/2026, 09:27 - Agent Arjun: Received. One more INR 25,000 unlocks the portfolio.
+12/09/2026, 09:28 - Riya: That was not mentioned before.
+12/09/2026, 09:29 - Agent Arjun: Urgent payment needed before the slot closes. Return guaranteed.
+12/09/2026, 09:32 - Riya: I will send the remaining INR 25,000, then please stop.
+12/09/2026, 09:34 - Riya: Second payment done. Reference DEMO-UPI-002.
+12/09/2026, 09:35 - Agent Arjun: Your portfolio is processing.
+12/09/2026, 09:39 - Riya: The website is not opening. I want my money back.
+12/09/2026, 09:40 - Agent Arjun: Refund approved. Do not contact the bank yet.
+12/09/2026, 09:44 - Agent Arjun: <Media omitted>
+12/09/2026, 09:44 - Agent Arjun: 06_refund_receipt_claim.pdf - INR 50,000 returned at 09:42. Reference DEMO-UPI-001.
+12/09/2026, 09:46 - Riya: My bank still shows INR 32,500. No refund credit.
+12/09/2026, 09:47 - Agent Arjun: Bank delay. Send INR 5,000 release fee.
+12/09/2026, 09:48 - Riya: No. I am not paying another fee.
+12/09/2026, 09:52 - Riya: I tried calling you. Please answer.
+12/09/2026, 10:02 - Riya: I contacted the bank through its support channel.
+12/09/2026, 10:05 - Agent Arjun: Wait until evening. Do not file a complaint.
+12/09/2026, 10:08 - Riya: I am preserving the chats and bank records.
+12/09/2026, 10:20 - Riya: I will report this. Do not contact me again.

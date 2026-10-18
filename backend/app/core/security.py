@@ -5,15 +5,12 @@ import json
 from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 
+import bcrypt
+
 try:
     from jose import jwt
 except ModuleNotFoundError:  # pragma: no cover - lightweight fallback
     jwt = None
-
-try:
-    from passlib.context import CryptContext
-except ModuleNotFoundError:  # pragma: no cover - lightweight fallback
-    CryptContext = None
 
 from app.core.config import get_settings
 
@@ -25,20 +22,21 @@ class Role(StrEnum):
     prosecutor = "prosecutor"
 
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") if CryptContext else None
-
-
 def hash_password(password: str) -> str:
-    if pwd_context:
-        return pwd_context.hash(password)
-    salt = "parakh-dev"
-    return "sha256$" + hashlib.sha256(f"{salt}:{password}".encode()).hexdigest()
+    encoded = password.encode("utf-8")
+    if not encoded or len(encoded) > 72:
+        raise ValueError("Passwords must contain between 1 and 72 UTF-8 bytes.")
+    return bcrypt.hashpw(encoded, bcrypt.gensalt()).decode("ascii")
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    if pwd_context:
-        return pwd_context.verify(password, hashed)
-    return hmac.compare_digest(hash_password(password), hashed)
+    encoded = password.encode("utf-8")
+    if not encoded or len(encoded) > 72:
+        return False
+    try:
+        return bcrypt.checkpw(encoded, hashed.encode("ascii"))
+    except (ValueError, UnicodeError):
+        return False
 
 
 def create_access_token(subject: str, role: Role) -> str:

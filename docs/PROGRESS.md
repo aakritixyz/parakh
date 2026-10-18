@@ -145,3 +145,9 @@ Verification:
 
 - Backend: `19 passed`, `ruff check .` clean, `mypy app` clean.
 - Frontend: `npm run build` passed.
+
+## 2026-10-15 · Blueprint Phase 0 completion
+
+Implemented frozen Alembic baseline DDL, migration-first CLI/API/Docker startup, validated adoption for matching unversioned schemas, configurable credentials with runtime frontend sign-in, direct bcrypt compatibility, expanded WhatsApp/CSV parsing, UTC persistence, and unreadable demo-PDF handling. Environment variants and runtime artifacts are ignored; no tracked secrets or live databases needed removal.
+
+Validation: 60 backend tests and six frontend API tests passed; Ruff, mypy, frontend lint/typecheck/build passed. A source-only checkout migrated and seeded an empty database; fresh npm installation passed all frontend checks. Browser tests confirmed configured/incorrect credentials, correct IST event display, and sign-in layout/keyboard behavior at four widths. The user's existing database and vault were left unchanged. Full procedures and limitations are in PHASE0.md.

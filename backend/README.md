@@ -49,6 +49,9 @@ cd ~/Desktop/parakh/backend
 python3.11 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+# First copy the repository-root .env.example to .env and configure credentials.
+python -m app.cli migrate
+alembic check
 python -m app.cli generate-demo-data
 python -m app.cli seed-demo
 uvicorn app.main:app --reload
@@ -59,10 +62,12 @@ Open:
 - API docs: http://127.0.0.1:8000/api/docs
 - Placeholder UI: http://127.0.0.1:8000/
 
-Default dev seeded user:
+Configured demo account (enter via **Connect backend** in the frontend):
 
-- username: `admin`
-- password: comes from `DEMO_ADMIN_PASSWORD`; dev fallback is `admin123`, production refuses defaults.
+- username: `DEMO_ADMIN_USERNAME` (default `admin`)
+- password: `DEMO_ADMIN_PASSWORD`, required explicitly; production refuses known defaults.
+
+API startup, admin creation, and seeding require an up-to-date migrated schema. Existing unversioned databases require a backup and schema-validated adoption. See [Phase 0](../docs/PHASE0.md) for the full procedure.
 
 ## Demo Walkthrough
 
@@ -119,3 +124,13 @@ Routes are versioned under `/api/v1` and grouped as:
 - Originals are treated as immutable.
 - Audit actions are hash-chained and verifiable.
 - Aadhaar-like values are masked when extracted.
+
+## Local demo investigator account
+
+To create a non-admin investigator after applying migrations, run:
+
+```bash
+python -m app.cli create-investigator --username demo-investigator
+```
+
+Enter the chosen password at the prompt. This command hashes it and refuses to overwrite an existing account. Each checkout must provision its own account; passwords, `.env` files, SQLite databases and vault contents are not committed. Sign-in uses the normal token endpoint and opens evidence intake.

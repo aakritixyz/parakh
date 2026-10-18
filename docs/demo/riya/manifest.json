@@ -1,0 +1,158 @@
+{
+  "case_id": "PARAKH-SYN-RIYA-001",
+  "synthetic": true,
+  "timezone": "Asia/Kolkata",
+  "warning": "Generated baseline only, not a signed audit chain or legal attestation.",
+  "evidence": [
+    {
+      "file": "01_whatsapp_riya_android.txt",
+      "owner": "Riya",
+      "source": "Android-style WhatsApp export",
+      "note": "30 messages and synthetic system notice. Source clock assumed accurate.",
+      "synthetic": true,
+      "bytes": 2378,
+      "sha256": "32c013515be5297510cea060f655cd903a2439f2a0f126eef584ff1942aab532",
+      "md5": "303277ac2d4210635b5bafffd90825f5"
+    },
+    {
+      "file": "02_whatsapp_linked_tablet.txt",
+      "owner": "Riya linked tablet",
+      "source": "Bracketed WhatsApp export",
+      "note": "Ten repeated messages recorded 30 minutes slow. Excerpt gaps do not prove deletion.",
+      "synthetic": true,
+      "bytes": 907,
+      "sha256": "844286b37f880b10bd64aebf7fa9607b4753f68497d8416a453ebe79399fbf62",
+      "md5": "d490ea938dcbb2a5b34020c50e45d438"
+    },
+    {
+      "file": "03_bank_statement_riya.csv",
+      "owner": "Riya",
+      "source": "Fictional bank CSV",
+      "note": "11-13 September; opening 85,000, closing 32,001; no refund within this window.",
+      "synthetic": true,
+      "bytes": 726,
+      "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321",
+      "md5": "3b44a92783a48e35200022699fd991e4"
+    },
+    {
+      "file": "04_bank_statement_riya.pdf",
+      "owner": "Riya",
+      "source": "Presentation copy of statement 03",
+      "note": "Duplicate representation, not an independent source.",
+      "synthetic": true,
+      "bytes": 3016,
+      "sha256": "9c5804e03c7b13d152b8f6509ac5ebf4b8dd8278922d755d12164e0224079c34",
+      "md5": "c9961adaf7a362a70333dbf71032f4e8"
+    },
+    {
+      "file": "05_bank_statement_collection.csv",
+      "owner": "Collection account; legal operator unknown",
+      "source": "Fictional bank disclosure to investigator",
+      "note": "Zero opening; 50,000 incoming, 49,500 onward, 500 retained. Not obtained from victim handset.",
+      "synthetic": true,
+      "bytes": 527,
+      "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2",
+      "md5": "113eb0945a4add8f8f7feeeb88f45e37"
+    },
+    {
+      "file": "06_refund_receipt_claim.pdf",
+      "owner": "Supplied by Agent Arjun display name",
+      "source": "Synthetic attachment in primary chat",
+      "note": "False refund claim: reuses first-debit reference with changed amount/direction. Readable PDF; no fake metadata evidence.",
+      "synthetic": true,
+      "bytes": 2625,
+      "sha256": "d87cbb0b487d246043d2261a6690de1ffbb91336d87951c9f499a5c13ddbc9c1",
+      "md5": "2572686254173c8157a7868ea44a3fed"
+    },
+    {
+      "file": "07_gps_location_riya.json",
+      "owner": "Riya Android",
+      "source": "Synthetic GPS export",
+      "note": "UTC timestamps. Victim location only; accuracy is simulated, not a suspect route.",
+      "synthetic": true,
+      "bytes": 2463,
+      "sha256": "027e9bbd5f53825f90d2a61cdc126a2c672279321a72ffc4a77b52d41983816e",
+      "md5": "49ca110ca792c9b8372c973969e14107"
+    },
+    {
+      "file": "08_call_records_riya.csv",
+      "owner": "Riya handset",
+      "source": "Synthetic call export",
+      "note": "Non-dialable DEMO tokens. No audio or transcript. Seven calls.",
+      "synthetic": true,
+      "bytes": 820,
+      "sha256": "6cfc960c774009712bc17df7998ee70d86b50b89f108aa9400ac185646b07531",
+      "md5": "13886670a00094c66fbec14e0e55ec86"
+    },
+    {
+      "file": "09_cdr_tower_context.csv",
+      "owner": "Riya SIM",
+      "source": "Separate fictional telecom disclosure",
+      "note": "Coarse 1.5 km tower circles. No suspect cells; no basis for asserting co-location.",
+      "synthetic": true,
+      "bytes": 1009,
+      "sha256": "98bb38f38a1b4055328ed7c0450b1be061b611fa6aa39cb93040b67e2cafdbbf",
+      "md5": "41ebd9a0e23e2743de0f93b3df4a83ad"
+    },
+    {
+      "file": "10_email_investment_pitch.eml",
+      "owner": "Riya mailbox",
+      "source": "Fictional received email",
+      "note": "Reserved domain; no validated SPF/DKIM claims.",
+      "synthetic": true,
+      "bytes": 573,
+      "sha256": "a6d7f55c29e1e23501cf0e4af681968991f3616e21198bd17ac113c4de2282d0",
+      "md5": "ff897c57daffef752deedab3e4da5bc9"
+    },
+    {
+      "file": "11_email_bank_support.eml",
+      "owner": "Riya mailbox",
+      "source": "Fictional support response",
+      "note": "Explicit review cutoff; no conclusion about all future credits.",
+      "synthetic": true,
+      "bytes": 753,
+      "sha256": "0d395f79dbbd840778bb426c7815433c24e371ee00dfc5ceccfca9b0e935ef5d",
+      "md5": "699af2ab5d3015b80190f06e118d41f4"
+    },
+    {
+      "file": "12_browser_history_riya.sqlite",
+      "owner": "Riya browser",
+      "source": "Minimal synthetic SQLite urls export",
+      "note": "Four visits. Current prototype extracts titles/URLs but ignores visit_time_utc. Visits do not prove submission of credentials.",
+      "synthetic": true,
+      "bytes": 8192,
+      "sha256": "983c7c0c63aaa934f2be2ab74ca445a218b3a8d98332fbec5733e8d45edefcf8",
+      "md5": "d88aceb818992abcb5c12bddc5f3fffc"
+    },
+    {
+      "file": "13_device_clock_observation.txt",
+      "owner": "Riya devices",
+      "source": "Synthetic operator observation",
+      "note": "Clock assumption explicit; not an independent timing attestation.",
+      "synthetic": true,
+      "bytes": 561,
+      "sha256": "07c4668cd64aecf29aabab05e68140606051df07eb048853f67c9e773772f0bf",
+      "md5": "32f85412ff85738a638bd33a5dbf8dd2"
+    },
+    {
+      "file": "14_acquisition_context.txt",
+      "owner": "Investigator",
+      "source": "Synthetic provenance note",
+      "note": "Separates phone exports, alleged attachment and additional disclosures.",
+      "synthetic": true,
+      "bytes": 916,
+      "sha256": "82335b903a876b5ebd8cbfc843ea29d06428e9c097db4672c7fd152fff71466e",
+      "md5": "2bf4c2f0ee7c2c8a3916247151a2a932"
+    },
+    {
+      "file": "15_riya_incident_account.pdf",
+      "owner": "Riya",
+      "source": "Fictional complainant narrative",
+      "note": "Not an official legal form or certificate.",
+      "synthetic": true,
+      "bytes": 2884,
+      "sha256": "ecb592c921ef436cd5a77f810645c02bdc2202689f9854e918ff6d27f4287a7d",
+      "md5": "0ba0be91fa400747a371edf03e5de74f"
+    }
+  ]
+}

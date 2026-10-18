@@ -7,13 +7,14 @@ export default defineConfig({
     rollupOptions: {
       input: {
         landing: "index.html",
+        signin: "signin.html",
         dashboard: "dashboard.html",
       },
     },
   },
   server: {
     proxy: {
-      "/api": "http://127.0.0.1:8000"
-    }
-  }
+      "/api": "http://127.0.0.1:8000",
+    },
+  },
 });

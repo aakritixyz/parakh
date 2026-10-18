@@ -1,0 +1,97 @@
+{
+  "synthetic": true,
+  "case_id": "PARAKH-SYN-RIYA-001",
+  "notice": "Invented approximate points in a broad Noida area; not a real home or business address.",
+  "locations": [
+    {
+      "timestamp": "2026-09-12T03:15:00Z",
+      "lat": 28.62,
+      "lon": 77.36,
+      "accuracy_m": 25,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T03:40:00Z",
+      "lat": 28.6201,
+      "lon": 77.3601,
+      "accuracy_m": 22,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T03:55:00Z",
+      "lat": 28.62,
+      "lon": 77.3602,
+      "accuracy_m": 30,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T04:03:00Z",
+      "lat": 28.6201,
+      "lon": 77.3601,
+      "accuracy_m": 24,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T04:17:00Z",
+      "lat": 28.62,
+      "lon": 77.36,
+      "accuracy_m": 28,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T04:45:00Z",
+      "lat": 28.6212,
+      "lon": 77.361,
+      "accuracy_m": 40,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Nearby street",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T05:00:00Z",
+      "lat": 28.625,
+      "lon": 77.364,
+      "accuracy_m": 35,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Demo support-desk vicinity",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T05:25:00Z",
+      "lat": 28.6252,
+      "lon": 77.3641,
+      "accuracy_m": 28,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Demo support-desk vicinity",
+      "synthetic": true
+    },
+    {
+      "timestamp": "2026-09-12T05:45:00Z",
+      "lat": 28.6201,
+      "lon": 77.36,
+      "accuracy_m": 30,
+      "owner": "Riya",
+      "device_id": "DEMO-DEVICE-RIYA-A",
+      "place_label": "Residential area",
+      "synthetic": true
+    }
+  ]
+}

@@ -15,9 +15,14 @@ venv/
 
 # Env/secrets/local databases
 .env
+.env.*
+!.env.example
 *.db
 *.sqlite
 *.sqlite3
+*.db-*
+*.sqlite-*
+*.sqlite3-*
 
 # Evidence/object storage and generated reports
 backend/data/storage/
@@ -31,7 +36,16 @@ backend/data/tmp/
 # Frontend
 frontend/node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
 
 # Build scratch
 work/doc_render*/
 *.log
+
+# Intentionally fictional demo evidence, including the browser history fixture.
+!evidence/*.sqlite
+
+# Local investigator demo vault; only fictional source fixtures are tracked.
+backend/data/demo-vault/
+!frontend/public/demo-evidence/*.sqlite

@@ -1,0 +1,12 @@
+SYNTHETIC DEMO ONLY
+Case: PARAKH-SYN-RIYA-001
+Observer: DEMO-ANALYST
+Source: controlled synthetic observation, not a real signed NTP capture.
+Reference: 2026-09-12T09:50:00+05:30
+Android display: 2026-09-12T09:50:00+05:30
+Tablet display BEFORE sync: 2026-09-12T09:20:00+05:30
+Tablet display AFTER sync: 2026-09-12T09:50:00+05:30
+Observed tablet offset: -1800 seconds
+Simulation assumption: this fixed offset applied earlier that morning.
+A single observation alone does not establish historical clock stability.
+Raw chat files retain their recorded timestamps.

@@ -10,29 +10,50 @@ from pathlib import Path
 from sqlalchemy import select
 
 from app.core.config import get_settings
-from app.core.database import Base, SessionLocal, engine
+from app.core.database import SessionLocal, engine
+from app.core.migrations import migrate_database, require_current_schema
 from app.core.security import Role, hash_password
 from app.models.user import User
 from app.services.audit_service import AuditService
 
 
-def create_admin(args: argparse.Namespace) -> None:
+def _create_user(args: argparse.Namespace, role: Role) -> None:
     settings = get_settings()
-    username = args.username or input("Admin username: ").strip()
-    password = args.password or getpass("Admin password: ")
+    username = args.username or input(f"{role.value.title()} username: ").strip()
+    password = args.password or getpass(f"{role.value.title()} password: ")
+    if not username.strip() or not 1 <= len(password.encode("utf-8")) <= 72:
+        raise SystemExit("Username is required; password must contain 1 to 72 UTF-8 bytes.")
     if settings.is_production and password in {"admin", "admin123", "password", "changeme"}:
         raise SystemExit("Refusing weak/default admin password in production.")
 
-    Base.metadata.create_all(bind=engine)
+    require_current_schema(engine)
     db = SessionLocal()
     try:
         if db.scalar(select(User).where(User.username == username)):
             raise SystemExit(f"User already exists: {username}")
-        db.add(User(username=username, hashed_password=hash_password(password), role=Role.admin.value))
+        db.add(
+            User(username=username, hashed_password=hash_password(password), role=role.value)
+        )
         db.commit()
-        print(f"Created admin user: {username}")
+        print(f"Created {role.value} user: {username}")
     finally:
         db.close()
+
+
+def create_admin(args: argparse.Namespace) -> None:
+    _create_user(args, Role.admin)
+
+
+def create_investigator(args: argparse.Namespace) -> None:
+    _create_user(args, Role.investigator)
+
+
+def migrate(args: argparse.Namespace) -> None:
+    try:
+        migrate_database(engine, adopt_existing=args.adopt_existing)
+    except RuntimeError as exc:
+        raise SystemExit(str(exc)) from exc
+    print("Database migrations complete.")
 
 
 def seed_demo(_: argparse.Namespace) -> None:
@@ -69,10 +90,23 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="python -m app.cli", description="Parakh operator CLI")
     sub = parser.add_subparsers(dest="command", required=True)
 
+    migrate_parser = sub.add_parser("migrate", help="Apply Alembic schema migrations")
+    migrate_parser.add_argument(
+        "--adopt-existing",
+        action="store_true",
+        help="Validate and stamp an unversioned prototype schema; back up the database first",
+    )
+    migrate_parser.set_defaults(func=migrate)
+
     create_admin_parser = sub.add_parser("create-admin", help="Create the first admin user")
     create_admin_parser.add_argument("--username")
     create_admin_parser.add_argument("--password")
     create_admin_parser.set_defaults(func=create_admin)
+
+    investigator_parser = sub.add_parser("create-investigator", help="Create an investigator account")
+    investigator_parser.add_argument("--username")
+    investigator_parser.add_argument("--password")
+    investigator_parser.set_defaults(func=create_investigator)
 
     sub.add_parser("seed-demo", help="Seed the synthetic demo case").set_defaults(func=seed_demo)
     sub.add_parser("generate-demo-data", help="Generate synthetic demo files").set_defaults(

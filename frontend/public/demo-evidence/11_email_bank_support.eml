@@ -1,0 +1,17 @@
+From: Demo Bank Support <support@nayi-disha-bank.example>
+To: Riya <riya@parakh-demo.example>
+Subject: Demo transaction-reference review
+Date: Sun, 13 Sep 2026 12:00:00 +0530
+Message-ID: <bank-001@parakh-demo.example>
+X-Parakh-Synthetic: true
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+SYNTHETIC DEMO ONLY - all identities and messages are invented.
+
+Synthetic support reference DEMO-SUPPORT-014. In the account records reviewed=
+ through 13 September 2026 11:59 IST, DEMO-UPI-001 and DEMO-UPI-002 are outgo=
+ing debits of INR 25,000 each. No incoming credit of INR 50,000 is present in=
+ this reviewed window. This is a fictional bank response, not a recovery guar=
+antee.

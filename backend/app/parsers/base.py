@@ -1,7 +1,9 @@
+import re
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from dateutil import parser as dt_parser  # type: ignore[import-untyped]
 from pydantic import BaseModel, Field
@@ -36,17 +38,26 @@ class Parser(ABC):
         return {"parser": self.source_type, "size": path.stat().st_size}
 
     @abstractmethod
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent] | Iterator[ParsedEvent]:
+    def parse(
+        self, path: Path, *, case_id: int, evidence_id: int
+    ) -> list[ParsedEvent] | Iterator[ParsedEvent]:
         raise NotImplementedError
 
 
-def parse_datetime(value: str | None) -> datetime | None:
+def parse_datetime(
+    value: str | None, *, default_timezone: str = "UTC", dayfirst: bool = True, fuzzy: bool = True
+) -> datetime | None:
     if not value:
         return None
     try:
-        parsed = dt_parser.parse(value, dayfirst=True, fuzzy=True)
+        parsed = dt_parser.parse(
+            value,
+            dayfirst=dayfirst and not bool(re.match(r"^\d{4}[-/.]", value)),
+            fuzzy=fuzzy,
+            tzinfos={"IST": ZoneInfo("Asia/Kolkata")},
+        )
     except (ValueError, TypeError):
         return None
     if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=UTC)
+        parsed = parsed.replace(tzinfo=ZoneInfo(default_timezone))
     return parsed.astimezone(UTC)

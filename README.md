@@ -5,6 +5,10 @@ Project layout:
 - `backend/` - FastAPI forensic investigation API
 - `frontend/` - Investigator dashboard UI
 
+## First setup
+
+Copy `.env.example` to a private `.env` and set `DEMO_ADMIN_USERNAME`, `DEMO_ADMIN_PASSWORD`, and `SECRET_KEY`. There is no default demo password. From an activated backend environment, run `make backend-migrate` before starting or seeding the API. Full clean-checkout and existing-database instructions are in [Phase 0](docs/PHASE0.md).
+
 ## Run Backend
 
 From the project root:
@@ -71,10 +75,10 @@ make backend-demo
 make backend-seed
 ```
 
-Dev demo login comes from `.env`:
+Demo login comes from the private `.env`. Choose **Connect backend** in the frontend and enter these values:
 
 - username: `DEMO_ADMIN_USERNAME` (default `admin`)
-- password: `DEMO_ADMIN_PASSWORD` (dev fallback `admin123`; production requires an explicit value)
+- password: `DEMO_ADMIN_PASSWORD` (required explicitly in every environment)
 
 Create a real admin manually:
 

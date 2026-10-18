@@ -1,16 +1,18 @@
 import logging
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from sqlalchemy import select
 
 from app.api.v1 import api_router
 from app.core.config import get_settings
-from app.core.database import Base, SessionLocal, engine
+from app.core.database import SessionLocal, engine
 from app.core.errors import install_error_handlers
+from app.core.migrations import require_current_schema
 from app.core.rbac import can_access_case
 from app.core.security import decode_access_token
 from app.models.evidence import Evidence
@@ -25,8 +27,14 @@ def create_app() -> FastAPI:
         level=getattr(logging, settings.log_level.upper(), logging.INFO),
         format='{"level":"%(levelname)s","logger":"%(name)s","message":"%(message)s"}',
     )
-    Base.metadata.create_all(bind=engine)
+
+    @asynccontextmanager
+    async def lifespan(_app: FastAPI):
+        require_current_schema(engine)
+        yield
+
     app = FastAPI(
+        lifespan=lifespan,
         title=settings.app_name,
         version="0.1.0",
         description="Offline-capable AI-powered indigenous digital forensics investigation framework.",
@@ -70,12 +78,17 @@ def create_app() -> FastAPI:
         return Health(name=settings.app_name, status="ok", time=datetime.now(UTC))
 
     @app.get("/readyz", tags=["system"])
-    def readyz() -> dict:
+    def readyz():
         try:
+            require_current_schema(engine)
             with engine.connect() as connection:
                 connection.exec_driver_sql("select 1")
         except Exception as exc:  # pragma: no cover - defensive readiness guard
-            return {"status": "not_ready", "database": str(exc)}
+            logging.getLogger(__name__).warning("Database readiness check failed: %s", exc)
+            return JSONResponse(
+                status_code=503,
+                content={"status": "not_ready", "database": "unavailable or migration required"},
+            )
         return {"status": "ready", "database": "ok"}
 
     return app

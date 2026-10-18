@@ -1,0 +1,6 @@
+timestamp,account,type,amount,currency,counterparty,utr,balance,note,synthetic
+2026-09-11T18:30:00+05:30,DEMO-ACCT-RIYA-001,debit,1800.00,INR,DEMO-GROCERY,DEMO-CARD-001,83200.00,Ordinary groceries,true
+2026-09-11T20:10:00+05:30,DEMO-ACCT-RIYA-001,debit,700.00,INR,DEMO-TRANSPORT,DEMO-UPI-LOCAL,82500.00,Ordinary transport,true
+2026-09-12T09:25:00+05:30,DEMO-ACCT-RIYA-001,debit,25000.00,INR,arjun.collect@demo,DEMO-UPI-001,57500.00,Investment payment 1,true
+2026-09-12T09:33:00+05:30,DEMO-ACCT-RIYA-001,debit,25000.00,INR,arjun.collect@demo,DEMO-UPI-002,32500.00,Investment payment 2,true
+2026-09-13T11:30:00+05:30,DEMO-ACCT-RIYA-001,debit,499.00,INR,DEMO-GROCERY,DEMO-CARD-002,32001.00,Ordinary household purchase,true

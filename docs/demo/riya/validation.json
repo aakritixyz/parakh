@@ -1,0 +1,69 @@
+{
+  "hashes": "15/15 passed",
+  "balance_reconciliation": "passed",
+  "tablet_clock_offset_seconds": -1800,
+  "pdfs": "3 readable single-page documents, visually reviewed",
+  "parser_smoke_check": {
+    "01_whatsapp_riya_android.txt": {
+      "parser": "whatsapp_text_export",
+      "records": 31
+    },
+    "02_whatsapp_linked_tablet.txt": {
+      "parser": "whatsapp_text_export",
+      "records": 11
+    },
+    "03_bank_statement_riya.csv": {
+      "parser": "csv_records",
+      "records": 5
+    },
+    "04_bank_statement_riya.pdf": {
+      "parser": "pdf_document",
+      "records": 1
+    },
+    "05_bank_statement_collection.csv": {
+      "parser": "csv_records",
+      "records": 4
+    },
+    "06_refund_receipt_claim.pdf": {
+      "parser": "pdf_document",
+      "records": 1
+    },
+    "07_gps_location_riya.json": {
+      "parser": "gps_location",
+      "records": 9
+    },
+    "08_call_records_riya.csv": {
+      "parser": "csv_records",
+      "records": 7
+    },
+    "09_cdr_tower_context.csv": {
+      "parser": "csv_records",
+      "records": 7
+    },
+    "10_email_investment_pitch.eml": {
+      "parser": "email_archive",
+      "records": 1
+    },
+    "11_email_bank_support.eml": {
+      "parser": "email_archive",
+      "records": 1
+    },
+    "12_browser_history_riya.sqlite": {
+      "parser": "browser_sqlite",
+      "records": 4
+    },
+    "13_device_clock_observation.txt": {
+      "parser": "generic_log",
+      "records": 12
+    },
+    "14_acquisition_context.txt": {
+      "parser": "generic_log",
+      "records": 13
+    },
+    "15_riya_incident_account.pdf": {
+      "parser": "pdf_document",
+      "records": 1
+    }
+  },
+  "note": "Parse only, no existing database/vault touched. Generic parser counts include synthetic notices and provenance text; they are not independent investigative events."
+}
