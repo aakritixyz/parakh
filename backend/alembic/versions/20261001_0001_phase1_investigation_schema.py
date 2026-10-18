@@ -8,7 +8,6 @@ at this revision retain their version; later schema changes need new revisions.
 """
 
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261001_0001"

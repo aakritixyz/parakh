@@ -1,7 +1,6 @@
 """Auditable alias suggestions and reversible investigator decisions."""
 
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261018_0005"

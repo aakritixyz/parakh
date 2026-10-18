@@ -1,7 +1,6 @@
 """Model registry and auditable model cards."""
 
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261018_0006"

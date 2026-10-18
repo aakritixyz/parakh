@@ -1,6 +1,5 @@
 """Evidence intake metadata, exact dedupe and background job state."""
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261018_0003"

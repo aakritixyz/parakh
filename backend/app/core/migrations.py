@@ -2,13 +2,13 @@
 
 from pathlib import Path
 
-from sqlalchemy import Engine, inspect
-
 from alembic import command
 from alembic.autogenerate import compare_metadata
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.script import ScriptDirectory
+from sqlalchemy import Engine, inspect
+
 from app.core.database import Base
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]

@@ -1,6 +1,5 @@
 """Unified event parties and document extraction receipts."""
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261018_0004"

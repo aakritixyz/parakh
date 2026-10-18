@@ -5,11 +5,11 @@ import sys
 from pathlib import Path
 
 import pytest
-from sqlalchemy import Column, Integer, Table, create_engine, inspect, text
-
 from alembic import command
 from alembic.autogenerate import compare_metadata
 from alembic.migration import MigrationContext
+from sqlalchemy import Column, Integer, Table, create_engine, inspect, text
+
 from app.core.database import Base
 from app.core.migrations import migrate_database, migration_config, require_current_schema
 

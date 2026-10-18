@@ -1,6 +1,5 @@
 """Case administration and revocable refresh sessions."""
 import sqlalchemy as sa
-
 from alembic import op
 
 revision = "20261018_0002"
