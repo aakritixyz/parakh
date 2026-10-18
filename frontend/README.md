@@ -71,3 +71,11 @@ Each citation opens a source receipt with original text, line/row/page reference
 Replay synchronizes the source-time cursor with the latest chat, recorded bank rows and GPS plot. Translations, aliases and assistant answers are curated demo interactions. The assistant refuses unsupported questions. Findings and grouping are session-local. Persisted finding review, signed entries, ZIP exports and the Section 63 certificate workflow remain labelled planned. Per-case team access and authenticated audit-log retrieval are implemented in Step 1. Arbitrary uploaded cases receive no synthetic scenario findings; their supplied records remain inspectable in Evidence and Explore.
 
 `npm test` checks API behavior, all 15 source hashes, source reference resolution, uncertainty statuses, and tamper rejection for the simulated chain. `npm run test:screenshots` checks all 11 views at mobile, tablet and desktop sizes, exact receipts, adjacent events, hash verification and assistant refusal. When standalone Chromium is unavailable under the desktop sandbox, those UI flows can be verified through the app browser instead.
+
+## Landing page and home-screen installation
+
+The landing page includes a real photo, a clearly synthetic clickable relationship map, Evidence/Timeline interface previews, and a synthetic event timeline. These public examples do not read case data.
+
+The production build includes a web app manifest, app icons, and a service worker for supported browsers' home-screen installation. Serve `dist/` over HTTPS (localhost works for desktop review). On iPhone, use Safari → Share → Add to Home Screen; on supported Android browsers, use Install app / Add to Home screen. Browser support and install prompts vary. Installation on a physical phone still needs verification against the deployed HTTPS site.
+
+The service worker deliberately does not cache investigation pages, evidence, authenticated API responses, or offline case data. Home-screen installation does not provide offline investigations. The preview server is local to the development computer.
