@@ -10,7 +10,7 @@
     "lint": "eslint . && node scripts/check-styles.mjs",
     "typecheck": "tsc --noEmit",
     "test:screenshots": "node scripts/screenshots.mjs",
-    "test": "node --test scripts/api.test.mjs scripts/casework.test.mjs"
+    "test": "node --test scripts/api.test.mjs scripts/casework.test.mjs scripts/session.test.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.19",

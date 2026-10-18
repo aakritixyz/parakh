@@ -30,10 +30,13 @@ from app.models.investigation import (
     WatchListEntry,
 )
 from app.models.report import Report
+from app.models.session import AuditHead, AuthSession
 from app.models.user import User
 
 __all__ = [
     "Artifact",
+    "AuthSession",
+    "AuditHead",
     "AuditLog",
     "AuditCheckpoint",
     "AuthenticityFinding",

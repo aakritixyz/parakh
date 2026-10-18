@@ -21,8 +21,12 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./parakh.db"
     use_sqlite: bool = True
     storage_root: Path = Path("./data/storage")
-    cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173"
+    cors_origins: str = "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:4173,http://127.0.0.1:5183"
     retention_days: int = 365
+    max_upload_bytes: int = 512 * 1024 * 1024
+    max_zip_members: int = 1000
+    max_zip_uncompressed_bytes: int = 1024 * 1024 * 1024
+    max_zip_ratio: int = 100
     access_token_expire_minutes: int = 480
     local_llm_provider: str = "stub"
     embedding_provider: str = "local-hash"

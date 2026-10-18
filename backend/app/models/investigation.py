@@ -231,9 +231,13 @@ class Job(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     case_id: Mapped[int | None] = mapped_column(ForeignKey("cases.id"), nullable=True, index=True)
+    evidence_id: Mapped[int | None] = mapped_column(ForeignKey("evidence.id"), nullable=True, index=True)
     type: Mapped[str] = mapped_column(String(80), index=True)
     status: Mapped[str] = mapped_column(String(32), default="queued", index=True)
     progress: Mapped[int] = mapped_column(Integer, default=0)
+    stage: Mapped[str] = mapped_column(String(32), default="Hashing", server_default="Hashing")
+    cancel_requested: Mapped[bool] = mapped_column(default=False, server_default="0")
+    attempt: Mapped[int] = mapped_column(Integer, default=1, server_default="1")
     logs: Mapped[list] = mapped_column(JSON, default=list)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

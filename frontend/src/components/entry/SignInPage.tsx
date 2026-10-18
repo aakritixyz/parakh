@@ -13,9 +13,11 @@ import styles from "./Entry.module.css";
 export function SignInPage({
   onSignIn,
   onDemo,
+  notice,
 }: {
   onSignIn: (credentials: LoginCredentials) => Promise<void>;
   onDemo: () => void;
+  notice?: string;
 }) {
   const [username, setUsername] = useState(""),
     [password, setPassword] = useState(""),
@@ -65,6 +67,11 @@ export function SignInPage({
             Sign in to your investigation server, or take a look around with the
             sample case.
           </p>
+          {notice && (
+            <p className={styles.authError} role="alert">
+              {notice}
+            </p>
+          )}
           <form
             onSubmit={submit}
             className={styles.authForm}

@@ -8,7 +8,7 @@ It is inspired by investigator workflows such as evidence collection, multi-devi
 
 ```mermaid
 flowchart LR
-  UI[Future Frontend] --> API[FastAPI /api/v1]
+  UI[Investigator Frontend] --> API[FastAPI /api/v1 + /api/v2]
   API --> Services[Services Layer]
   Services --> Storage[Content Addressed Storage]
   Services --> DB[(PostgreSQL or SQLite)]
@@ -23,9 +23,10 @@ flowchart LR
 
 ## What Works Now
 
-- JWT auth with RBAC roles: admin, investigator, analyst, prosecutor.
-- Case creation and membership-ready schema.
+- Argon2 password hashing; revocable JWT access sessions with rotating refresh cookies; per-case RBAC for admin, investigator, analyst and read-only prosecutor.
+- Case creation, active case listing, lead investigator and enforced team membership management.
 - Evidence upload with SHA-256, MD5, immutable local content-addressed storage, and idempotency key support.
+- Acquisition owners/devices/notes, streaming seals, exact-hash deduplication, safe ZIP child evidence, magic-byte warnings, and cancellable/retryable intake jobs.
 - Parser plugin registry with default parsers for WhatsApp exports, CSV logs/statements, browser SQLite, EML/MBOX, images, PDFs, generic logs, and GPS JSON.
 - Unified `Event` schema across sources.
 - Hash-chained chain-of-custody audit log with verification endpoint.
@@ -62,12 +63,17 @@ Open:
 - API docs: http://127.0.0.1:8000/api/docs
 - Placeholder UI: http://127.0.0.1:8000/
 
-Configured demo account (enter via **Connect backend** in the frontend):
+First-run account creation (no default password):
 
-- username: `DEMO_ADMIN_USERNAME` (default `admin`)
-- password: `DEMO_ADMIN_PASSWORD`, required explicitly; production refuses known defaults.
+```bash
+python -m app.cli create-admin
+python -m app.cli create-user --role investigator --username your-investigator
+```
+
+Passwords are prompted and stored as Argon2 hashes. Admins can provision team accounts in the UI. The no-login frontend demo does not require seeding or an account. See [Step 1](../docs/STEP1.md) for session, membership and verification details.
 
 API startup, admin creation, and seeding require an up-to-date migrated schema. Existing unversioned databases require a backup and schema-validated adoption. See [Phase 0](../docs/PHASE0.md) for the full procedure.
+Step 2 intake setup, limits and verification are documented in [Step 2](../docs/STEP2.md).
 
 ## Demo Walkthrough
 
@@ -133,4 +139,4 @@ To create a non-admin investigator after applying migrations, run:
 python -m app.cli create-investigator --username demo-investigator
 ```
 
-Enter the chosen password at the prompt. This command hashes it and refuses to overwrite an existing account. Each checkout must provision its own account; passwords, `.env` files, SQLite databases and vault contents are not committed. Sign-in uses the normal token endpoint and opens evidence intake.
+Enter the chosen password at the prompt. This command hashes it and refuses to overwrite an existing account. Each checkout must provision its own account; passwords, `.env` files, SQLite databases and vault contents are not committed. Sign-in uses the versioned session API and opens Active Cases. Create a case, assign its team and then upload evidence.

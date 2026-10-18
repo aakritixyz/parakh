@@ -1,105 +1,187 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { fallbackDashboard, type DashboardData } from "./api";
 import {
-  fallbackDashboard,
-  authenticate,
-  loadCaseDashboard,
-  type DashboardData,
-} from "./api";
+  caseDashboard,
+  getCase,
+  getAudit,
+  type Audit,
+  forgetSession,
+  refreshSession,
+  signIn,
+  signOut,
+  subscribeSession,
+  type CaseInfo,
+  type Session,
+} from "./caseApi";
 import { SignInPage } from "./components/entry/SignInPage";
+import { ActiveCases } from "./components/cases/ActiveCases";
 import { EvidenceIntake } from "./components/intake/EvidenceIntake";
 import { CaseWorkspace } from "./components/casework/CaseWorkspace";
 import "./styles.css";
 function App() {
-  const [data, setData] = useState<DashboardData>(fallbackDashboard);
-  const [caseId, setCaseId] = useState<number | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [intake, setIntake] = useState(true);
-  const [caseTitle, setCaseTitle] = useState("Sample investigation");
-  const [screen, setScreen] = useState<"signin" | "workspace">(() =>
-    new URLSearchParams(window.location.search).get("mode") === "demo" &&
-    window.location.pathname.endsWith("dashboard.html")
-      ? "workspace"
-      : "signin",
+  const [signOutNotice, setSignOutNotice] = useState("");
+  const params = new URLSearchParams(window.location.search);
+  const [mode, setMode] = useState<"signin" | "demo" | "signed">(
+    params.get("mode") === "demo" ? "demo" : "signin",
+  );
+  const [session, setSession] = useState<Session | null>(null),
+    [view, setView] = useState<"cases" | "upload" | "case">("cases"),
+    [item, setItem] = useState<CaseInfo | null>(null),
+    [caseAudit, setCaseAudit] = useState<Audit | null>(null),
+    [data, setData] = useState<DashboardData>(fallbackDashboard),
+    [restoring, setRestoring] = useState(params.get("mode") === "investigator");
+  useEffect(
+    () =>
+      subscribeSession((value) => {
+        setSession(value);
+        if (!value)
+          setMode((current) => (current === "signed" ? "signin" : current));
+      }),
+    [],
   );
   useEffect(() => {
-    const pop = () =>
-      setScreen(
-        new URLSearchParams(window.location.search).get("mode") === "demo" &&
-          window.location.pathname.endsWith("dashboard.html")
-          ? "workspace"
-          : "signin",
-      );
-    window.addEventListener("popstate", pop);
-    return () => window.removeEventListener("popstate", pop);
+    if (
+      new URLSearchParams(window.location.search).get("mode") !== "investigator"
+    )
+      return;
+    let active = true;
+    refreshSession()
+      .then((value) => {
+        if (active) {
+          setSession(value);
+          setMode("signed");
+        }
+      })
+      .catch(() => {
+        if (active) setMode("signin");
+      })
+      .finally(() => {
+        if (active) setRestoring(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
-  function enter(mode: "demo" | "investigator", next: DashboardData) {
-    setData(next);
-    const params = new URLSearchParams(window.location.search);
-    params.set("mode", mode);
+  useEffect(() => {
+    document.title =
+      mode === "signin"
+        ? "Investigator sign-in | Parakh"
+        : view === "cases"
+          ? "Active Cases | Parakh"
+          : view === "upload"
+            ? "Upload evidence | Parakh"
+            : `${item?.title ?? "Case workspace"} | Parakh`;
+  }, [mode, view, item?.title]);
+  async function logout() {
+    if (mode === "demo") {
+      forgetSession();
+      setSignOutNotice("");
+      setMode("signin");
+      setView("cases");
+      setItem(null);
+      window.history.replaceState(null, "", "./signin.html");
+      return;
+    }
+    try {
+      await signOut();
+      setSignOutNotice("");
+    } catch {
+      forgetSession();
+      setSignOutNotice(
+        "Signed out of this page. The server could not confirm session revocation; sign in again and retry signing out when connected.",
+      );
+    }
+    setMode("signin");
+    setView("cases");
+    setItem(null);
+    window.history.replaceState(null, "", "./signin.html");
+  }
+  function enter(next: "demo" | "signed") {
+    setSignOutNotice("");
+    setMode(next);
+    setView("cases");
     window.history.replaceState(
       null,
       "",
-      "./dashboard.html?" + params.toString(),
+      `./dashboard.html?mode=${next === "demo" ? "demo" : "investigator"}`,
     );
-    document.title =
-      mode === "demo"
-        ? "Demo workspace | Parakh"
-        : "Investigator workspace | Parakh";
-    setScreen("workspace");
   }
-  if (screen === "signin")
+  async function openCase(selected: CaseInfo) {
+    if (mode === "demo") {
+      setData(fallbackDashboard);
+      setItem(selected);
+      setCaseAudit(null);
+    } else {
+      const [fresh, dashboard, audit] = await Promise.all([
+        getCase(selected.id),
+        caseDashboard(selected.id),
+        getAudit(selected.id),
+      ]);
+      setItem(fresh);
+      setData({ ...dashboard, online: true });
+      setCaseAudit(audit);
+    }
+    setView("case");
+  }
+  if (restoring)
+    return (
+      <main style={{ padding: 32 }} role="status">
+        Restoring your session…
+      </main>
+    );
+  if (mode === "signin")
     return (
       <SignInPage
+        notice={signOutNotice}
         onDemo={() => {
-          setToken(null);
-          setIntake(true);
-          enter("demo", fallbackDashboard);
+          forgetSession();
+          enter("demo");
         }}
         onSignIn={async (credentials) => {
-          setToken(await authenticate(credentials));
-          setIntake(true);
-          enter("investigator", fallbackDashboard);
+          setSession(await signIn(credentials));
+          enter("signed");
         }}
       />
     );
-  if (intake)
+  if (view === "upload" && item && session)
     return (
       <EvidenceIntake
-        token={token}
-        onBack={() => {
-          setToken(null);
-          window.history.pushState(null, "", "./signin.html");
-          setScreen("signin");
-        }}
-        onReview={async (caseId, title) => {
-          setData(
-            token && caseId
-              ? await loadCaseDashboard(caseId, token)
-              : fallbackDashboard,
-          );
-          setCaseId(caseId);
-          setCaseTitle(title);
-          setIntake(false);
-        }}
+        key={item.id}
+        token={session.access_token}
+        existingCaseId={item.id}
+        initialTitle={item.title}
+        backLabel="Back to Active Cases"
+        onBack={() => setView("cases")}
+        onReview={async () => openCase(item)}
+      />
+    );
+  if (view === "case" && item)
+    return (
+      <CaseWorkspace
+        data={data}
+        caseAudit={caseAudit}
+        title={item.title}
+        token={session?.access_token ?? null}
+        caseId={item.id}
+        readOnly={mode === "demo" || !item.can_edit}
+        onNew={() => setView("cases")}
+        onSignOut={logout}
       />
     );
   return (
-    <CaseWorkspace
-      data={data}
-      title={caseTitle}
-      token={token}
-      caseId={caseId}
-      onNew={() => setIntake(true)}
-      onSignOut={() => {
-        setToken(null);
-        window.history.pushState(null, "", "./signin.html");
-        setScreen("signin");
+    <ActiveCases
+      key={`${mode}-${view}`}
+      user={session?.user ?? null}
+      onLogout={logout}
+      onOpen={openCase}
+      onUpload={(selected) => {
+        setItem(selected);
+        setView("upload");
       }}
     />
   );
 }
-
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />

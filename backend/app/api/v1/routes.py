@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.authorization import authorize_request
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.models.audit import Comment, Lead
@@ -20,7 +21,7 @@ from app.services.evidence_service import EvidenceService
 from app.services.intelligence_service import IntelligenceService
 from app.services.report_service import ReportService
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(authorize_request)])
 
 
 class FilterPayload(BaseModel):

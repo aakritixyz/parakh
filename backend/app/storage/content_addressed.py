@@ -1,5 +1,7 @@
 import hashlib
+import os
 import shutil
+import tempfile
 from pathlib import Path
 from typing import BinaryIO
 
@@ -19,16 +21,21 @@ class ContentAddressedStorage:
         self.root = root or get_settings().storage_root
         self.root.mkdir(parents=True, exist_ok=True)
 
-    def put_fileobj(self, fileobj: BinaryIO) -> StoredBlob:
+    def put_fileobj(self, fileobj: BinaryIO, max_bytes: int | None = None) -> StoredBlob:
         sha256 = hashlib.sha256()
         md5 = hashlib.md5()  # noqa: S324 - recorded for legacy forensic compatibility only.
         size = 0
         temp_path = self.root / ".incoming"
         temp_path.mkdir(exist_ok=True)
-        work_path = temp_path / next_temp_name()
-        with work_path.open("wb") as out:
+        descriptor, raw_path = tempfile.mkstemp(prefix="seal-", dir=temp_path)
+        work_path = Path(raw_path)
+        with os.fdopen(descriptor, "wb") as out:
             while chunk := fileobj.read(1024 * 1024):
                 size += len(chunk)
+                if max_bytes is not None and size > max_bytes:
+                    out.close()
+                    work_path.unlink(missing_ok=True)
+                    raise ValueError(f"File exceeds the {max_bytes}-byte upload limit")
                 sha256.update(chunk)
                 md5.update(chunk)
                 out.write(chunk)
@@ -43,9 +50,11 @@ class ContentAddressedStorage:
         return StoredBlob(digest, md5.hexdigest(), size, final)
 
     def verify(self, path: str | Path, expected_sha256: str) -> bool:
-        actual = hashlib.sha256(Path(path).read_bytes()).hexdigest()
-        return actual == expected_sha256
-
-
-def next_temp_name() -> str:
-    return hashlib.sha256(str(Path.cwd()).encode() + str(id(object())).encode()).hexdigest()
+        actual = hashlib.sha256()
+        try:
+            with Path(path).open("rb") as source:
+                while chunk := source.read(1024 * 1024):
+                    actual.update(chunk)
+        except OSError:
+            return False
+        return actual.hexdigest() == expected_sha256

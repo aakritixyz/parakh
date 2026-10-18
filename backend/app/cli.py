@@ -29,11 +29,14 @@ def _create_user(args: argparse.Namespace, role: Role) -> None:
     require_current_schema(engine)
     db = SessionLocal()
     try:
+        if role == Role.admin and db.scalar(select(User).where(User.role == "admin")):
+            raise SystemExit("An admin already exists; create-admin is for first-run setup only.")
         if db.scalar(select(User).where(User.username == username)):
             raise SystemExit(f"User already exists: {username}")
         db.add(
             User(username=username, hashed_password=hash_password(password), role=role.value)
         )
+        AuditService(db).log(action="user.created", actor="operator-cli", target_type="user", target_id=username, payload={"role": role.value})
         db.commit()
         print(f"Created {role.value} user: {username}")
     finally:
@@ -42,6 +45,10 @@ def _create_user(args: argparse.Namespace, role: Role) -> None:
 
 def create_admin(args: argparse.Namespace) -> None:
     _create_user(args, Role.admin)
+
+
+def create_user(args: argparse.Namespace) -> None:
+    _create_user(args, Role(args.role))
 
 
 def create_investigator(args: argparse.Namespace) -> None:
@@ -107,6 +114,12 @@ def build_parser() -> argparse.ArgumentParser:
     investigator_parser.add_argument("--username")
     investigator_parser.add_argument("--password")
     investigator_parser.set_defaults(func=create_investigator)
+
+    account_parser = sub.add_parser("create-user", help="Provision a non-admin team account")
+    account_parser.add_argument("--username")
+    account_parser.add_argument("--password")
+    account_parser.add_argument("--role", choices=["investigator", "analyst", "prosecutor"], required=True)
+    account_parser.set_defaults(func=create_user)
 
     sub.add_parser("seed-demo", help="Seed the synthetic demo case").set_defaults(func=seed_demo)
     sub.add_parser("generate-demo-data", help="Generate synthetic demo files").set_defaults(

@@ -1,3 +1,4 @@
+import { verifyLiveIntegrity, type Audit } from "../../caseApi";
 import {
   useCallback,
   useEffect,
@@ -22,7 +23,7 @@ import {
   Sparkles,
   X,
 } from "lucide-react";
-import { verifyEvidenceIntegrity, type DashboardData } from "../../api";
+import type { DashboardData } from "../../api";
 import {
   demo,
   findings,
@@ -60,6 +61,8 @@ type Detail = {
   citations?: Citation[];
 };
 type Props = {
+  caseAudit?: Audit | null;
+  readOnly?: boolean;
   data: DashboardData;
   title: string;
   token: string | null;
@@ -111,6 +114,8 @@ export function CaseWorkspace({
   caseId,
   onNew,
   onSignOut,
+  readOnly = false,
+  caseAudit,
 }: Props) {
   const isDemo = !token;
   const isScenario =
@@ -170,7 +175,10 @@ export function CaseWorkspace({
   const [chain, setChain] = useState<boolean | null>(
     isDemo
       ? null
-      : (data.audit?.valid ?? data.summary?.audit_chain_valid ?? null),
+      : (caseAudit?.chain_verified ??
+          data.audit?.valid ??
+          data.summary?.audit_chain_valid ??
+          null),
   );
   const [checks, setChecks] = useState<Record<number, string>>({}),
     [english, setEnglish] = useState(false),
@@ -311,9 +319,8 @@ export function CaseWorkspace({
           [f.id]: valid ? "Hash matches" : "HASH MISMATCH",
         }));
       } else {
-        const result = await verifyEvidenceIntegrity(
+        const result = await verifyLiveIntegrity(
           data.evidence.find((e) => e.sha256 === f.sha256)?.id ?? f.id,
-          token!,
         );
         setChecks((c) => ({
           ...c,
@@ -706,7 +713,7 @@ export function CaseWorkspace({
           ))}
           <button className={styles.newCase} onClick={onNew}>
             <FolderOpen />
-            New investigation
+            Active Cases
           </button>
           <small>
             Upload → Review → Investigate
@@ -874,9 +881,7 @@ export function CaseWorkspace({
                 >
                   Verify all file hashes
                 </button>
-                <button onClick={onNew}>
-                  Add evidence to a new investigation
-                </button>
+                <button onClick={onNew}>Back to Active Cases</button>
               </div>
               <section className={styles.panel}>
                 <div className={styles.tableWrap}>
@@ -1489,6 +1494,7 @@ export function CaseWorkspace({
                     { file: 3, ref: "line:4" },
                   ])}
                   <button
+                    disabled={readOnly}
                     aria-pressed={merged}
                     onClick={() => setMerged(!merged)}
                   >
@@ -1635,6 +1641,7 @@ export function CaseWorkspace({
                       <label>
                         Review status
                         <select
+                          disabled={readOnly}
                           aria-label={`Review status for ${f.id}`}
                           value={findingStatuses[f.id] ?? f.status}
                           onChange={(e) =>
@@ -1929,6 +1936,23 @@ export function CaseWorkspace({
               Signed entries and acquisition attestations are planned. An
               unchanged file may still contain a false claim.
             </p>
+            {!isDemo && caseAudit && (
+              <div className={styles.auditList}>
+                {caseAudit.entries.map((a) => (
+                  <article key={a.id}>
+                    <h3>{a.action}</h3>
+                    <p>
+                      {a.actor} · {time(a.created_at)}
+                    </p>
+                    <pre className={styles.raw}>
+                      {JSON.stringify(a.payload, null, 2)}
+                    </pre>
+                    <code>Previous: {a.previous_hash}</code>
+                    <code>Entry: {a.entry_hash}</code>
+                  </article>
+                ))}
+              </div>
+            )}
             {isDemo && (
               <>
                 <button

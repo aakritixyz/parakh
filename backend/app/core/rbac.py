@@ -18,7 +18,7 @@ def can_access_case(db: Session, user: User, case_id: int, *, write: bool = Fals
     )
     if not membership:
         return False
-    if write and membership.role not in WRITE_ROLES:
+    if write and (user.role not in WRITE_ROLES or membership.role not in WRITE_ROLES):
         return False
     return True
 

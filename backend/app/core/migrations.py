@@ -49,10 +49,6 @@ def migrate_database(engine: Engine, *, adopt_existing: bool = False) -> None:
                     "Unversioned database found. Back it up, then run "
                     "`python -m app.cli migrate --adopt-existing` to validate it before stamping."
                 )
-            if ScriptDirectory.from_config(config).get_heads() != [BASELINE_REVISION]:
-                raise RuntimeError(
-                    "Legacy adoption requires a reviewed migration once revisions extend beyond the baseline."
-                )
             differences = compare_metadata(
                 MigrationContext.configure(connection, opts={"compare_server_default": True}),
                 Base.metadata,
@@ -62,5 +58,5 @@ def migrate_database(engine: Engine, *, adopt_existing: bool = False) -> None:
                     "Existing schema differs from this release; no adoption was performed. "
                     "Keep the backup and use a new database or a reviewed legacy migration."
                 )
-            command.stamp(config, BASELINE_REVISION)
+            command.stamp(config, "head")
         command.upgrade(config, "head")

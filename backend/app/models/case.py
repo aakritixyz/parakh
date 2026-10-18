@@ -14,6 +14,8 @@ class Case(Base):
     description: Mapped[str] = mapped_column(Text, default="")
     case_number: Mapped[str | None] = mapped_column(String(120), nullable=True, index=True)
     jurisdiction: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    offence_type: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    lead_investigator_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     status: Mapped[str] = mapped_column(String(32), default="open")
     classification: Mapped[str] = mapped_column(String(80), default="standard")
     created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)

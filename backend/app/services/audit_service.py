@@ -1,10 +1,11 @@
 import hashlib
 import json
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from app.models.audit import AuditLog
+from app.models.session import AuditHead
 
 
 def _entry_hash(data: dict) -> str:
@@ -26,6 +27,11 @@ class AuditService:
         target_id: str = "",
         payload: dict | None = None,
     ) -> AuditLog:
+        # Serialize appends across workers (including SQLite) before reading the tip.
+        if not self.db.get(AuditHead, 1):
+            self.db.add(AuditHead(id=1, sequence=0))
+            self.db.flush()
+        self.db.execute(update(AuditHead).where(AuditHead.id == 1).values(sequence=AuditHead.sequence + 1))
         previous = self.db.scalars(select(AuditLog).order_by(AuditLog.id.desc()).limit(1)).first()
         previous_hash = previous.entry_hash if previous else "GENESIS"
         base = {

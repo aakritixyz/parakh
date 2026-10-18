@@ -19,7 +19,10 @@ from app.core.types import UTCDateTime
 
 class Evidence(Base):
     __tablename__ = "evidence"
-    __table_args__ = (UniqueConstraint("case_id", "idempotency_key", name="uq_case_upload_idempotency"),)
+    __table_args__ = (
+        UniqueConstraint("case_id", "idempotency_key", name="uq_case_upload_idempotency"),
+        UniqueConstraint("case_id", "sha256", name="uq_case_evidence_sha256"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     case_id: Mapped[int] = mapped_column(ForeignKey("cases.id"), index=True)
@@ -35,6 +38,12 @@ class Evidence(Base):
     acquired_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
     acquisition_note: Mapped[str] = mapped_column(Text, default="")
     received_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    owner_id: Mapped[int | None] = mapped_column(ForeignKey("owners.id"), nullable=True, index=True)
+    device_id: Mapped[int | None] = mapped_column(ForeignKey("devices.id"), nullable=True, index=True)
+    parent_evidence_id: Mapped[int | None] = mapped_column(
+        ForeignKey("evidence.id"), nullable=True, index=True
+    )
+    archive_path: Mapped[str | None] = mapped_column(String(500), nullable=True)
     idempotency_key: Mapped[str | None] = mapped_column(String(120), nullable=True)
     metadata_json: Mapped[dict] = mapped_column(JSON, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

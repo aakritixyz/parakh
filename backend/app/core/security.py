@@ -1,18 +1,15 @@
-import base64
-import hashlib
-import hmac
-import json
 from datetime import UTC, datetime, timedelta
 from enum import StrEnum
+from uuid import uuid4
 
 import bcrypt
-
-try:
-    from jose import jwt
-except ModuleNotFoundError:  # pragma: no cover - lightweight fallback
-    jwt = None
+from argon2 import PasswordHasher
+from argon2.exceptions import InvalidHashError, VerificationError
+from jose import JWTError, jwt
 
 from app.core.config import get_settings
+
+password_hasher = PasswordHasher(time_cost=2, memory_cost=19456, parallelism=1)
 
 
 class Role(StrEnum):
@@ -23,47 +20,51 @@ class Role(StrEnum):
 
 
 def hash_password(password: str) -> str:
-    encoded = password.encode("utf-8")
-    if not encoded or len(encoded) > 72:
+    if not 1 <= len(password.encode("utf-8")) <= 72:
         raise ValueError("Passwords must contain between 1 and 72 UTF-8 bytes.")
-    return bcrypt.hashpw(encoded, bcrypt.gensalt()).decode("ascii")
+    return password_hasher.hash(password)
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    encoded = password.encode("utf-8")
-    if not encoded or len(encoded) > 72:
+    if not 1 <= len(password.encode("utf-8")) <= 72:
         return False
     try:
-        return bcrypt.checkpw(encoded, hashed.encode("ascii"))
-    except (ValueError, UnicodeError):
+        if hashed.startswith("$argon2"):
+            return password_hasher.verify(hashed, password)
+        return bcrypt.checkpw(password.encode(), hashed.encode())
+    except (VerificationError, InvalidHashError, ValueError, UnicodeError):
         return False
 
 
-def create_access_token(subject: str, role: Role) -> str:
+def password_needs_upgrade(hashed: str) -> bool:
+    return not hashed.startswith("$argon2") or password_hasher.check_needs_rehash(hashed)
+
+
+def create_access_token(subject: str, role: Role, *, session_id: str | None = None) -> str:
     settings = get_settings()
-    expires = datetime.now(UTC) + timedelta(minutes=settings.access_token_expire_minutes)
-    payload = {"sub": subject, "role": role.value, "exp": int(expires.timestamp())}
-    if jwt:
-        return jwt.encode(payload, settings.secret_key, algorithm="HS256")
-    body = base64.urlsafe_b64encode(json.dumps(payload, separators=(",", ":")).encode()).decode()
-    sig = hmac.new(settings.secret_key.encode(), body.encode(), hashlib.sha256).hexdigest()
-    return f"dev.{body}.{sig}"
+    minutes = 15 if session_id else settings.access_token_expire_minutes
+    return encode_token(subject, role, "access", minutes, session_id)
+
+
+def encode_token(subject: str, role: Role, token_use: str, minutes: int, session_id: str | None) -> str:
+    now = datetime.now(UTC)
+    return jwt.encode({"sub": subject, "role": role.value, "token_use": token_use,
+                       "sid": session_id, "jti": str(uuid4()), "iat": int(now.timestamp()),
+                       "exp": int((now + timedelta(minutes=minutes)).timestamp())},
+                      get_settings().secret_key, algorithm="HS256")
+
+
+def decode_token(token: str) -> dict:
+    try:
+        payload = jwt.decode(token, get_settings().secret_key, algorithms=["HS256"],
+                             options={"require_exp": True, "require_sub": True})
+        return payload
+    except JWTError as exc:
+        raise ValueError("Invalid or expired token") from exc
 
 
 def decode_access_token(token: str) -> dict:
-    settings = get_settings()
-    if jwt:
-        return jwt.decode(token, settings.secret_key, algorithms=["HS256"])
-    try:
-        prefix, body, sig = token.split(".", 2)
-    except ValueError as exc:
-        raise ValueError("Invalid token") from exc
-    if prefix != "dev":
-        raise ValueError("Invalid token")
-    expected = hmac.new(settings.secret_key.encode(), body.encode(), hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(sig, expected):
-        raise ValueError("Invalid token signature")
-    payload = json.loads(base64.urlsafe_b64decode(body.encode()))
-    if int(payload.get("exp", 0)) < int(datetime.now(UTC).timestamp()):
-        raise ValueError("Token expired")
+    payload = decode_token(token)
+    if payload.get("token_use", "access") != "access":
+        raise ValueError("Not an access token")
     return payload

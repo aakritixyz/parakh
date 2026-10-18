@@ -53,7 +53,6 @@ def test_fresh_migration_seed_login_and_api_lifespan(bootstrap, monkeypatch):
     import app.main as main
 
     monkeypatch.setattr(main, "engine", engine)
-    monkeypatch.setattr(main, "SessionLocal", sessions)
     app = main.create_app()
 
     def database():

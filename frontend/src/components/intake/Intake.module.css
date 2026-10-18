@@ -154,6 +154,40 @@
   color: var(--ink-3);
   font-weight: 400;
 }
+.sectionTitle {
+  font-size: 16px;
+  margin: 0 0 16px;
+}
+.sectionTitle:not(:first-child) {
+  margin-top: 28px;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 18px;
+}
+.formGrid label,
+.fullLabel {
+  color: var(--ink-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+.formGrid label > span {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.formGrid .caseInput,
+.fullLabel .caseInput {
+  margin: 7px 0 0;
+}
+.fullLabel {
+  display: block;
+  margin-top: 14px;
+}
+.fullLabel textarea {
+  min-height: 76px;
+  resize: vertical;
+}
 .caseInput {
   width: 100%;
   border: 1px solid var(--line);
@@ -262,6 +296,31 @@
   gap: 12px;
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
+}
+.fileList .fileRow {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1.4fr) repeat(
+      4,
+      minmax(105px, 0.7fr)
+    ) auto auto;
+  align-items: end;
+}
+.compactLabel {
+  color: var(--ink-3);
+  font-size: 10px;
+}
+.compactLabel select,
+.compactLabel input {
+  width: 100%;
+  display: block;
+  margin-top: 5px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 11px;
 }
 .fileList li > svg {
   color: var(--ink-3);
@@ -402,6 +461,12 @@
   .actions {
     flex-wrap: wrap;
   }
+  .fileList .fileRow {
+    grid-template-columns: auto minmax(180px, 1fr) auto auto;
+  }
+  .compactLabel {
+    grid-column: span 2;
+  }
 }
 @media (max-width: 600px) {
   .header {
@@ -418,6 +483,16 @@
   .steps {
     gap: 10px;
     margin: 24px 0;
+  }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+  .fileList .fileRow {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+  .compactLabel {
+    grid-column: 1 / -1;
   }
   .steps li {
     font-size: 10px;

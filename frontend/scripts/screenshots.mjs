@@ -15,8 +15,12 @@ async function enter() {
       process.env.PARAKH_URL || "http://127.0.0.1:5173",
     ).href,
   );
-  await page.getByRole("button", { name: "Use bundled demo evidence" }).click();
-  await page.getByRole("button", { name: "Open sample analysis" }).click();
+  await page
+    .getByRole("button", {
+      name: "Open case Riya: investment scam complaint",
+      exact: true,
+    })
+    .click();
   await page.getByRole("heading", { name: "Overview", exact: true }).waitFor();
 }
 try {
