@@ -100,6 +100,21 @@ def ml_foundation(args: argparse.Namespace) -> None:
     print(f"Registered {card['name']} {card['version']} ({card['evaluation_label']}).")
 
 
+def step6_model(args: argparse.Namespace) -> None:
+    from app.services.ml_foundation_service import register_model
+    from app.services.step6_model_service import train_hinglish_classifier
+
+    require_current_schema(engine)
+    output = Path(__file__).resolve().parents[1] / "data" / "ml"
+    card = train_hinglish_classifier(output, seed=args.seed)
+    db = SessionLocal()
+    try:
+        register_model(db, card)
+    finally:
+        db.close()
+    print(f"Registered {card['name']} {card['version']} ({card['evaluation_label']}).")
+
+
 def not_ready(name: str):
     def _handler(_: argparse.Namespace) -> None:
         print(f"{name} command is registered but currently STUB for Phase 0.")
@@ -145,6 +160,9 @@ def build_parser() -> argparse.ArgumentParser:
     ml_parser = sub.add_parser("ml-foundation", help="Generate, evaluate and register the synthetic baseline")
     ml_parser.add_argument("--seed", type=int, default=51026)
     ml_parser.set_defaults(func=ml_foundation)
+    step6_parser = sub.add_parser("step6-model", help="Train and register the offline Hinglish scam classifier")
+    step6_parser.add_argument("--seed", type=int, default=61026)
+    step6_parser.set_defaults(func=step6_model)
     sub.add_parser("reindex", help="Rebuild search indexes").set_defaults(func=not_ready("reindex"))
     sub.add_parser("export-case", help="Export a portable case bundle").set_defaults(
         func=not_ready("export-case")

@@ -1,0 +1,16 @@
+{
+  "label": "on synthetic data",
+  "precision": 1.0,
+  "recall": 1.0,
+  "pr_auc": 1.0,
+  "calibration_curve": [
+    {
+      "mean_predicted": 0.0,
+      "fraction_positive": 0.0
+    },
+    {
+      "mean_predicted": 1.0,
+      "fraction_positive": 1.0
+    }
+  ]
+}

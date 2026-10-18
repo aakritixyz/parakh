@@ -206,6 +206,38 @@ export type ModelCard = {
   seed: number;
   offline_only: boolean;
 };
+export type PatternSupport = {
+  event_id: number;
+  evidence_id: number;
+  file: string;
+  reference: string;
+  timestamp: string | null;
+  sha256: string;
+};
+export type PatternResult = {
+  flags: {
+    type: string;
+    title: string;
+    why: string;
+    method: string;
+    status: string;
+    confidence: number;
+    support: PatternSupport[];
+    caveat: string;
+    test?: { p_value: number; fdr_alpha: number; complete: boolean; seed: number };
+  }[];
+  summary: { events_checked: number; flag_count: number; fdr_alpha: number };
+  classifier: {
+    status: string;
+    name?: string;
+    version?: string;
+    label?: string;
+    metrics?: { precision: number; recall: number; pr_auc: number };
+    reason?: string;
+  };
+  assumptions: Record<string, string | number>;
+  fallback: string;
+};
 let session: Session | null = null;
 let refreshFlight: Promise<Session> | null = null;
 let generation = 0;
@@ -443,6 +475,8 @@ export const getEventDetail = (caseId: number, eventId: number) =>
 export const getIdentities = (caseId: number) =>
   sessionRequest<IdentityOverview>(`/api/v2/cases/${caseId}/identities`);
 export const getModelCards = () => sessionRequest<ModelCard[]>("/api/v2/models");
+export const getPatterns = (caseId: number) =>
+  sessionRequest<PatternResult>(`/api/v2/cases/${caseId}/patterns`);
 export const confirmAlias = (caseId: number, suggestionId: number) =>
   sessionRequest(
     `/api/v2/cases/${caseId}/alias-suggestions/${suggestionId}/confirm`,

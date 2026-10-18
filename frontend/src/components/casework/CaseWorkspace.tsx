@@ -2,12 +2,14 @@ import {
   confirmAlias,
   getIdentities,
   getModelCards,
+  getPatterns,
   searchCaseEvents,
   unmergeAlias,
   verifyLiveIntegrity,
   type Audit,
   type IdentityOverview,
   type ModelCard,
+  type PatternResult,
   type SearchResult,
 } from "../../caseApi";
 import {
@@ -193,6 +195,7 @@ export function CaseWorkspace({
     [searchError, setSearchError] = useState("");
   const [identityData, setIdentityData] = useState<IdentityOverview | null>(null);
   const [modelCards, setModelCards] = useState<ModelCard[]>([]);
+  const [patterns, setPatterns] = useState<PatternResult | null>(null);
   const records: RecordEvent[] = useMemo(
     () =>
       searchResult
@@ -291,6 +294,10 @@ export function CaseWorkspace({
     if (!token || view !== "Reports") return;
     void getModelCards().then(setModelCards);
   }, [token, view]);
+  useEffect(() => {
+    if (!token || !caseId || view !== "Comms") return;
+    void getPatterns(caseId).then(setPatterns);
+  }, [caseId, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -1311,9 +1318,56 @@ export function CaseWorkspace({
               </section>
             </>
           )}
-          {view === "Comms" &&
-            scenarioGuard(
-              <>
+          {view === "Comms" && (
+            <>
+              <section className={styles.panel}>
+                <div className={styles.cardTitle}>
+                  <h2>Patterns and anomalies</h2>
+                  {patterns && (
+                    <span className={styles.viewLabel}>
+                      {patterns.summary.flag_count} flags · FDR {patterns.summary.fdr_alpha}
+                    </span>
+                  )}
+                </div>
+                {!token ? (
+                  <p className={styles.note}>Sign in to analyse uploaded communications.</p>
+                ) : !patterns ? (
+                  <p>Analysing uploaded messages and calls…</p>
+                ) : patterns.flags.length ? (
+                  <div className={styles.auditList}>
+                    {patterns.flags.map((flag, index) => (
+                      <article key={`${flag.type}-${index}`}>
+                        <div className={styles.cardTitle}>
+                          <h3>{flag.title}</h3>
+                          <span className={styles.viewLabel}>{flag.status} · {Math.round(flag.confidence * 100)}%</span>
+                        </div>
+                        <p>{flag.why}</p>
+                        <p className={styles.note}>{flag.method}</p>
+                        <div className={styles.toolbar}>
+                          {flag.support.map((item) => (
+                            <button
+                              key={`${item.event_id}-${item.reference}`}
+                              onClick={() => open({ file: item.evidence_id, ref: item.reference })}
+                            >
+                              {item.file} · {item.reference}
+                            </button>
+                          ))}
+                        </div>
+                        <p className={styles.warning}>{flag.caveat}</p>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p>No significant or heuristic communication flags found in the uploaded evidence.</p>
+                )}
+                {patterns?.classifier.status === "active" && (
+                  <p className={styles.note}>
+                    {patterns.classifier.name} {patterns.classifier.version} · precision {patterns.classifier.metrics?.precision} · recall {patterns.classifier.metrics?.recall} · {patterns.classifier.label}. ML output is a lead, never a finding.
+                  </p>
+                )}
+              </section>
+              {scenarioGuard(
+                <>
                 <div className={styles.toolbar}>
                   <button
                     aria-pressed={english}
@@ -1422,8 +1476,10 @@ export function CaseWorkspace({
                     records.filter((e) => [10, 11, 12].includes(e.evidence_id)),
                   )}
                 </section>
-              </>,
-            )}
+                </>,
+              )}
+            </>
+          )}
           {view === "Money" &&
             scenarioGuard(
               <>

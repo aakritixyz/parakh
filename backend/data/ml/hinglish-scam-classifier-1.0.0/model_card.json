@@ -1,0 +1,101 @@
+{
+  "name": "hinglish-scam-classifier",
+  "version": "1.0.0",
+  "licence": "Internal evaluation only",
+  "training_data": "Generated English, Hindi and Hinglish text cases; seed 61026. Riya excluded.",
+  "known_limits": [
+    "A lead generator, never a finding.",
+    "Offline multilingual character n-gram embeddings are not a fine-tuned language model.",
+    "Metrics are on synthetic data and do not estimate performance on real investigations."
+  ],
+  "metrics": {
+    "label": "on synthetic data",
+    "precision": 1.0,
+    "recall": 1.0,
+    "pr_auc": 1.0,
+    "calibration_curve": [
+      {
+        "mean_predicted": 0.0,
+        "fraction_positive": 0.0
+      },
+      {
+        "mean_predicted": 1.0,
+        "fraction_positive": 1.0
+      }
+    ]
+  },
+  "explanations": {
+    "tree": {
+      "method": "logistic-regression character-feature weights",
+      "values": {
+        "ro ": 0.6828,
+        "otp": 0.6496,
+        " ky": 0.6496,
+        "bhe": 0.6496,
+        "bhej": 0.6496,
+        " kyc ": 0.6496,
+        " kyc": 0.6496,
+        "bhejo": 0.6496,
+        " bh": 0.6496,
+        " otp": 0.6496,
+        "hejo": 0.6496,
+        "hej": 0.6496
+      }
+    },
+    "top_words": [
+      {
+        "feature": "ro ",
+        "weight": 0.6828
+      },
+      {
+        "feature": "otp",
+        "weight": 0.6496
+      },
+      {
+        "feature": " ky",
+        "weight": 0.6496
+      },
+      {
+        "feature": "bhe",
+        "weight": 0.6496
+      },
+      {
+        "feature": "bhej",
+        "weight": 0.6496
+      },
+      {
+        "feature": " kyc ",
+        "weight": 0.6496
+      },
+      {
+        "feature": " kyc",
+        "weight": 0.6496
+      },
+      {
+        "feature": "bhejo",
+        "weight": 0.6496
+      },
+      {
+        "feature": " bh",
+        "weight": 0.6496
+      },
+      {
+        "feature": " otp",
+        "weight": 0.6496
+      },
+      {
+        "feature": "hejo",
+        "weight": 0.6496
+      },
+      {
+        "feature": "hej",
+        "weight": 0.6496
+      }
+    ]
+  },
+  "artifact_path": "data/ml/hinglish-scam-classifier-1.0.0/model.joblib",
+  "artifact_sha256": "af975a7ef7dcb86e59e47e61c9e5b804d870c747be5507d7a55ca78532f02f78",
+  "evaluation_label": "on synthetic data",
+  "seed": 61026,
+  "offline_only": true
+}
