@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 
 from pypdf import PdfReader
+from pypdf.errors import PdfReadError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -23,7 +24,15 @@ class DocumentExtractionService:
         suffix = Path(evidence.filename).suffix.casefold()
         warnings: list[dict] = []
         if suffix == ".pdf":
-            text, boxes = self._embedded_pdf_text(path)
+            try:
+                text, boxes = self._embedded_pdf_text(path)
+            except (PdfReadError, ValueError):
+                return None, [
+                    {
+                        "type": "pdf_unreadable",
+                        "message": "PDF structure could not be read; the original remains sealed for manual review.",
+                    }
+                ]
             engine, version, languages = "embedded_pdf_text", "pypdf", ["document-declared"]
             if not text.strip():
                 warnings.append(

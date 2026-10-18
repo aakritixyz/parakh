@@ -94,7 +94,11 @@ class AuthenticityService:
             finding.weight = weights[finding.severity]
             finding.contribution = finding.weight
         suspicion = round(min(100.0, sum(item.contribution for item in findings)))
-        rng = random.Random(int(evidence.sha256[:8], 16))
+        try:
+            seed = int(evidence.sha256[:8], 16)
+        except (TypeError, ValueError):
+            seed = 0
+        rng = random.Random(seed)
         samples = sorted(
             min(100.0, sum(item.weight * rng.betavariate(8, 2) for item in findings))
             for _ in range(1000)
@@ -112,7 +116,7 @@ class AuthenticityService:
             detector_status={
                 "kind": "weighted_heuristics",
                 "samples": 1000,
-                "seed": int(evidence.sha256[:8], 16),
+                "seed": seed,
                 "image_embeddings": "planned_T2_not_assessed",
                 "neural_tamper_localisation": "planned_T3_not_assessed",
                 "deepfake_detection": "planned_T3_not_assessed",
