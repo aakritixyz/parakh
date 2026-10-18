@@ -181,6 +181,11 @@ export function CaseWorkspace({
     [sourceId, setSourceId] = useState(initialFilters.get("source") ?? "All"),
     [day, setDay] = useState(initialFilters.get("day") ?? "All"),
     [identifier, setIdentifier] = useState(initialFilters.get("identifier") ?? "All"),
+    [app, setApp] = useState(initialFilters.get("app") ?? "All"),
+    [device, setDevice] = useState(initialFilters.get("device") ?? "All"),
+    [party, setParty] = useState(initialFilters.get("party") ?? "All"),
+    [tag, setTag] = useState(initialFilters.get("tag") ?? "All"),
+    [deleted, setDeleted] = useState(initialFilters.get("deleted") ?? "all"),
     [regex, setRegex] = useState(initialFilters.get("regex") ?? "");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null),
     [searchError, setSearchError] = useState("");
@@ -244,7 +249,7 @@ export function CaseWorkspace({
       const selectedSource =
         sourceId === "All" ? "" : sources.find((item) => String(item.id) === sourceId)?.file ?? "";
       const params = new URLSearchParams(window.location.search);
-      const values = { q: query, owner, type: kind, source: sourceId, day, identifier, regex };
+      const values = { q: query, owner, type: kind, source: sourceId, day, identifier, app, device, party, tag, deleted, regex };
       Object.entries(values).forEach(([key, value]) => {
         if (!value || value === "All") params.delete(key);
         else params.set(key, value);
@@ -258,6 +263,11 @@ export function CaseWorkspace({
           ...(kind !== "All" ? { type: kind } : {}),
           ...(identifier !== "All" ? { identifier } : {}),
           ...(selectedSource ? { source: selectedSource } : {}),
+          ...(app !== "All" ? { app } : {}),
+          ...(device !== "All" ? { device } : {}),
+          ...(party !== "All" ? { party } : {}),
+          ...(tag !== "All" ? { tag } : {}),
+          ...(deleted !== "all" ? { deleted: deleted === "recovered" } : {}),
         },
         time: day !== "All" ? { start: `${day}T00:00:00+05:30`, end: `${day}T23:59:59+05:30` } : {},
         page: { limit: 100000 },
@@ -269,7 +279,7 @@ export function CaseWorkspace({
         .catch((cause) => setSearchError(cause instanceof Error ? cause.message : "Search failed."));
     }, 180);
     return () => window.clearTimeout(timer);
-  }, [caseId, day, identifier, kind, owner, query, regex, sourceId, sources, token]);
+  }, [app, caseId, day, deleted, device, identifier, kind, owner, party, query, regex, sourceId, sources, tag, token]);
   useEffect(() => {
     if (!token || !caseId || view !== "Graph") return;
     void getIdentities(caseId).then(setIdentityData);
@@ -1109,6 +1119,50 @@ export function CaseWorkspace({
                   </select>
                 </label>
                 <label>
+                  App
+                  <select value={app} onChange={(e) => setApp(e.target.value)}>
+                    <option>All</option>
+                    {(searchResult?.facets.apps ?? []).map((item) => (
+                      <option key={item.value} value={item.value}>{item.value} ({item.count})</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Device
+                  <select value={device} onChange={(e) => setDevice(e.target.value)}>
+                    <option>All</option>
+                    {(searchResult?.facets.devices ?? []).map((item) => (
+                      <option key={item.value} value={item.value}>{item.value} ({item.count})</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Party
+                  <select value={party} onChange={(e) => setParty(e.target.value)}>
+                    <option>All</option>
+                    {(searchResult?.facets.parties ?? []).map((item) => (
+                      <option key={item.value} value={item.value}>{item.value} ({item.count})</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Tag
+                  <select value={tag} onChange={(e) => setTag(e.target.value)}>
+                    <option>All</option>
+                    {(searchResult?.facets.tags ?? []).map((item) => (
+                      <option key={item.value} value={item.value}>{item.value} ({item.count})</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Deleted / recovered
+                  <select value={deleted} onChange={(e) => setDeleted(e.target.value)}>
+                    <option value="all">All</option>
+                    <option value="recovered">Recovered only</option>
+                    <option value="current">Current only</option>
+                  </select>
+                </label>
+                <label>
                   Regex <span className={styles.note}>(guarded)</span>
                   <input
                     value={regex}
@@ -1123,6 +1177,11 @@ export function CaseWorkspace({
                     setSourceId("All");
                     setDay("All");
                     setIdentifier("All");
+                    setApp("All");
+                    setDevice("All");
+                    setParty("All");
+                    setTag("All");
+                    setDeleted("all");
                     setRegex("");
                     setQuery("");
                   }}
