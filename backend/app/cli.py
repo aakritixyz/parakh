@@ -86,6 +86,20 @@ def verify_audit(_: argparse.Namespace) -> None:
         db.close()
 
 
+def ml_foundation(args: argparse.Namespace) -> None:
+    from app.services.ml_foundation_service import register_model, run_baseline
+
+    require_current_schema(engine)
+    output = Path(__file__).resolve().parents[1] / "data" / "ml"
+    card = run_baseline(output, seed=args.seed)
+    db = SessionLocal()
+    try:
+        register_model(db, card)
+    finally:
+        db.close()
+    print(f"Registered {card['name']} {card['version']} ({card['evaluation_label']}).")
+
+
 def not_ready(name: str):
     def _handler(_: argparse.Namespace) -> None:
         print(f"{name} command is registered but currently STUB for Phase 0.")
@@ -128,6 +142,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("verify-audit", help="Verify the hash-chained audit log").set_defaults(
         func=verify_audit
     )
+    ml_parser = sub.add_parser("ml-foundation", help="Generate, evaluate and register the synthetic baseline")
+    ml_parser.add_argument("--seed", type=int, default=51026)
+    ml_parser.set_defaults(func=ml_foundation)
     sub.add_parser("reindex", help="Rebuild search indexes").set_defaults(func=not_ready("reindex"))
     sub.add_parser("export-case", help="Export a portable case bundle").set_defaults(
         func=not_ready("export-case")

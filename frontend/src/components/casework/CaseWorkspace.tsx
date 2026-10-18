@@ -1,11 +1,13 @@
 import {
   confirmAlias,
   getIdentities,
+  getModelCards,
   searchCaseEvents,
   unmergeAlias,
   verifyLiveIntegrity,
   type Audit,
   type IdentityOverview,
+  type ModelCard,
   type SearchResult,
 } from "../../caseApi";
 import {
@@ -190,6 +192,7 @@ export function CaseWorkspace({
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null),
     [searchError, setSearchError] = useState("");
   const [identityData, setIdentityData] = useState<IdentityOverview | null>(null);
+  const [modelCards, setModelCards] = useState<ModelCard[]>([]);
   const records: RecordEvent[] = useMemo(
     () =>
       searchResult
@@ -284,6 +287,10 @@ export function CaseWorkspace({
     if (!token || !caseId || view !== "Graph") return;
     void getIdentities(caseId).then(setIdentityData);
   }, [caseId, token, view]);
+  useEffect(() => {
+    if (!token || view !== "Reports") return;
+    void getModelCards().then(setModelCards);
+  }, [token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -1953,6 +1960,36 @@ export function CaseWorkspace({
                   entries, backend export audit logging, a zipped evidence
                   bundle and formatted court reports are planned.
                 </p>
+              </section>
+              <section className={styles.panel}>
+                <h2>Model registry</h2>
+                {!token ? (
+                  <p className={styles.note}>Model cards require an authenticated investigator session.</p>
+                ) : modelCards.length ? (
+                  modelCards.map((card) => (
+                    <article key={`${card.name}-${card.version}`}>
+                      <div className={styles.cardTitle}>
+                        <h3>{card.name} · {card.version}</h3>
+                        <span className={styles.viewLabel}>{card.evaluation_label}</span>
+                      </div>
+                      <p>{card.training_data}</p>
+                      <dl>
+                        <dt>Licence</dt><dd>{card.licence}</dd>
+                        <dt>Seed</dt><dd>{card.seed}</dd>
+                        <dt>Offline</dt><dd>{card.offline_only ? "Yes" : "No"}</dd>
+                        <dt>Precision</dt><dd>{card.metrics.precision}</dd>
+                        <dt>Recall</dt><dd>{card.metrics.recall}</dd>
+                        <dt>PR-AUC</dt><dd>{card.metrics.pr_auc}</dd>
+                        <dt>Explanation</dt><dd>{card.explanations.tree.method}</dd>
+                        <dt>Artifact SHA-256</dt><dd className={styles.hash}>{card.artifact_sha256}</dd>
+                      </dl>
+                      <p className={styles.warning}>ML output is a lead, never a finding.</p>
+                      <ul>{card.known_limits.map((limit) => <li key={limit}>{limit}</li>)}</ul>
+                    </article>
+                  ))
+                ) : (
+                  <p>No registered model card found. Run the Step 5A baseline command.</p>
+                )}
               </section>
               <section className={styles.panel}>
                 <h2>

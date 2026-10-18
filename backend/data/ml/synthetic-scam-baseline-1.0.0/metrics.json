@@ -1,0 +1,32 @@
+{
+  "label": "on synthetic data",
+  "precision": 0.9545,
+  "recall": 0.913,
+  "pr_auc": 0.9699,
+  "calibration_curve": [
+    {
+      "mean_predicted": 0.0,
+      "fraction_positive": 0.0286
+    },
+    {
+      "mean_predicted": 0.1667,
+      "fraction_positive": 0.3
+    },
+    {
+      "mean_predicted": 0.3401,
+      "fraction_positive": 0.4
+    },
+    {
+      "mean_predicted": 0.4934,
+      "fraction_positive": 0.0
+    },
+    {
+      "mean_predicted": 0.6667,
+      "fraction_positive": 1.0
+    },
+    {
+      "mean_predicted": 1.0,
+      "fraction_positive": 0.9841
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "seed": 51026,
+  "case_count": 240,
+  "row_count": 811,
+  "labels": [
+    "scam",
+    "mule",
+    "altered_receipt",
+    "same_person"
+  ],
+  "split_case_counts": {
+    "train": 168,
+    "validation": 36,
+    "test": 36
+  },
+  "riya_pack_used_for_training": false
+}

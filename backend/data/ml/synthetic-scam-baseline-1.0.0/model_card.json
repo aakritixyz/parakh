@@ -1,0 +1,95 @@
+{
+  "name": "synthetic-scam-baseline",
+  "version": "1.0.0",
+  "licence": "Internal evaluation only",
+  "training_data": "Generated synthetic cases; seed 51026. Riya excluded.",
+  "known_limits": [
+    "A lead generator, never a finding.",
+    "Metrics do not estimate performance on real investigations.",
+    "Synthetic patterns may be easier than real-world patterns."
+  ],
+  "metrics": {
+    "label": "on synthetic data",
+    "precision": 0.9545,
+    "recall": 0.913,
+    "pr_auc": 0.9699,
+    "calibration_curve": [
+      {
+        "mean_predicted": 0.0,
+        "fraction_positive": 0.0286
+      },
+      {
+        "mean_predicted": 0.1667,
+        "fraction_positive": 0.3
+      },
+      {
+        "mean_predicted": 0.3401,
+        "fraction_positive": 0.4
+      },
+      {
+        "mean_predicted": 0.4934,
+        "fraction_positive": 0.0
+      },
+      {
+        "mean_predicted": 0.6667,
+        "fraction_positive": 1.0
+      },
+      {
+        "mean_predicted": 1.0,
+        "fraction_positive": 0.9841
+      }
+    ]
+  },
+  "explanations": {
+    "tree": {
+      "method": "feature_importance_fallback",
+      "values": {
+        "amount": 0.7885532699116041,
+        "urgency": 0.08703363457728588,
+        "new_payee": 0.03938942323124763,
+        "refund_claim": 0.07349840143397893,
+        "device_count": 0.011525270845883359
+      },
+      "limit": "Install the vetted local SHAP package to calculate per-row SHAP values."
+    },
+    "top_words": [
+      {
+        "word": "verify",
+        "weight": 0.5255
+      },
+      {
+        "word": "urgent",
+        "weight": 0.5255
+      },
+      {
+        "word": "refund",
+        "weight": 0.5255
+      },
+      {
+        "word": "payment",
+        "weight": -0.029
+      },
+      {
+        "word": "account",
+        "weight": -0.029
+      },
+      {
+        "word": "known",
+        "weight": -0.5141
+      },
+      {
+        "word": "invoice",
+        "weight": -0.5141
+      },
+      {
+        "word": "confirmed",
+        "weight": -0.5141
+      }
+    ]
+  },
+  "artifact_path": "data/ml/synthetic-scam-baseline-1.0.0/model.joblib",
+  "artifact_sha256": "7285ed0cc8903830604310c69d5c7c46a7a42ced9a3e12baf0e70a9f6ae9d55e",
+  "evaluation_label": "on synthetic data",
+  "seed": 51026,
+  "offline_only": true
+}

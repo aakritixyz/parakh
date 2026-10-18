@@ -183,6 +183,29 @@ export type IdentityOverview = {
   };
   lookalike_domains: { left: string; right: string; distance: number; reason: string }[];
 };
+export type ModelCard = {
+  id: number;
+  name: string;
+  version: string;
+  licence: string;
+  training_data: string;
+  known_limits: string[];
+  metrics: {
+    label: string;
+    precision: number;
+    recall: number;
+    pr_auc: number;
+    calibration_curve: { mean_predicted: number; fraction_positive: number }[];
+  };
+  explanations: {
+    tree: { method: string; values: Record<string, number>; limit?: string };
+    top_words: { word: string; weight: number }[];
+  };
+  artifact_sha256: string;
+  evaluation_label: string;
+  seed: number;
+  offline_only: boolean;
+};
 let session: Session | null = null;
 let refreshFlight: Promise<Session> | null = null;
 let generation = 0;
@@ -419,6 +442,7 @@ export const getEventDetail = (caseId: number, eventId: number) =>
   sessionRequest(`/api/v2/cases/${caseId}/events/${eventId}/detail`);
 export const getIdentities = (caseId: number) =>
   sessionRequest<IdentityOverview>(`/api/v2/cases/${caseId}/identities`);
+export const getModelCards = () => sessionRequest<ModelCard[]>("/api/v2/models");
 export const confirmAlias = (caseId: number, suggestionId: number) =>
   sessionRequest(
     `/api/v2/cases/${caseId}/alias-suggestions/${suggestionId}/confirm`,
