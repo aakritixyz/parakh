@@ -729,12 +729,42 @@
   font-size: 13px;
   margin: 0 0 8px;
 }
+.graph {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 0;
+}
+.graph button {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-width: 2px;
+  overflow-wrap: anywhere;
+}
 .map {
   width: 100%;
   max-height: 320px;
   border: 1px solid var(--line);
   background: var(--hover);
   border-radius: 6px;
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.map > button {
+  position: absolute;
+  z-index: 2;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 6px;
+  border-radius: 50%;
+}
+.map > button.tower {
+  border-radius: 4px;
+  background: var(--navy);
+  color: white;
 }
 .map g {
   cursor: pointer;

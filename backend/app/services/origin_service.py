@@ -158,7 +158,7 @@ class OriginService:
                 item["event_id"]
                 for item in provenance
                 if item["evidence_id"] == comparison.get("secondary_evidence_id")
-                and low <= 0 <= high
+                and correction != 0
             ],
         }
 

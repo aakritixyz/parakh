@@ -4,6 +4,7 @@ import {
   getModelCards,
   getMoneyAnalysis,
   getCaseIntegrity,
+  getCorrelation,
   getFraudReview,
   getOriginAnalysis,
   getPatterns,
@@ -17,6 +18,7 @@ import {
   type IdentityOverview,
   type IntegrityResult,
   type FraudReview,
+  type CorrelationResult,
   type ModelCard,
   type MoneyResult,
   type PatternResult,
@@ -212,6 +214,14 @@ export function CaseWorkspace({
   const [integrityData, setIntegrityData] = useState<IntegrityResult | null>(null);
   const [originData, setOriginData] = useState<OriginResult | null>(null);
   const [fraudReview, setFraudReview] = useState<FraudReview | null>(null);
+  const [correlation, setCorrelation] = useState<CorrelationResult | null>(null);
+  const [graphFocus, setGraphFocus] = useState("");
+  const [graphSource, setGraphSource] = useState("");
+  const [graphTarget, setGraphTarget] = useState("");
+  const [graphType, setGraphType] = useState("All");
+  const [graphDepth, setGraphDepth] = useState(1);
+  const [clockConfidence, setClockConfidence] = useState(1);
+  const [mapCursor, setMapCursor] = useState(100);
   const [tamperResult, setTamperResult] = useState("");
   const [displayZone, setDisplayZone] = useState<"Asia/Kolkata" | "UTC" | "Source time">("Asia/Kolkata");
   const records: RecordEvent[] = useMemo(
@@ -332,6 +342,16 @@ export function CaseWorkspace({
     if (!token || !caseId || view !== "Authenticity") return;
     void getFraudReview(caseId).then(setFraudReview);
   }, [caseId, token, view]);
+  useEffect(() => {
+    if (!token || !caseId || !["Graph", "Map", "Timeline"].includes(view)) return;
+    void getCorrelation(caseId, {
+      source: graphSource || undefined,
+      target: graphTarget || undefined,
+      focus: graphFocus || undefined,
+      depth: graphDepth,
+      clockConfidence,
+    }).then(setCorrelation);
+  }, [caseId, clockConfidence, graphDepth, graphFocus, graphSource, graphTarget, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -1847,7 +1867,30 @@ export function CaseWorkspace({
               </section>
             </> : <section className={styles.panel}><p>Analysing uploaded documents and linked records…</p></section>
           )}
-          {view === "Graph" &&
+          {view === "Graph" && !isDemo && (
+            correlation ? <>
+              <section className={styles.panel}>
+                <div className={styles.cardTitle}><h2>Correlation graph</h2><span className={styles.viewLabel}>{correlation.graph.community_method} communities</span></div>
+                <div className={styles.filters}>
+                  <label>Shortest path from<select value={graphSource || correlation.graph.shortest_path.source || ""} onChange={(event) => setGraphSource(event.target.value)}>{correlation.graph.nodes.filter((node) => node.type === "account").map((node) => <option value={node.id} key={node.id}>{node.label}</option>)}</select></label>
+                  <label>To<select value={graphTarget || correlation.graph.shortest_path.target || ""} onChange={(event) => setGraphTarget(event.target.value)}>{correlation.graph.nodes.filter((node) => node.type === "account").map((node) => <option value={node.id} key={node.id}>{node.label}</option>)}</select></label>
+                  <label>Neighbour depth<input type="range" min="0" max="4" value={graphDepth} onChange={(event) => setGraphDepth(Number(event.target.value))} /></label>
+                  <label>Node type<select value={graphType} onChange={(event) => setGraphType(event.target.value)}><option>All</option>{Array.from(new Set(correlation.graph.nodes.map((node) => node.type))).map((type) => <option key={type}>{type}</option>)}</select></label>
+                  {graphFocus && <button onClick={() => setGraphFocus("")}>Show full graph</button>}
+                </div>
+                <div className={styles.graph}>
+                  {correlation.graph.nodes.filter((node) => graphType === "All" || node.type === graphType).map((node) => <button key={node.id} style={{ minWidth: `${Math.min(180, Math.max(84, node.size * 3))}px`, borderColor: `hsl(${(node.community * 67) % 360} 58% 45%)` }} onClick={() => { setGraphFocus(node.id); if (node.type === "identifier") setIdentifier(node.label); else if (node.type === "party") setParty(node.label); else setQuery(node.label); }}>{node.label}<small>{node.type} · {node.edge_count} links · importance {node.importance}</small></button>)}
+                </div>
+                <div className={styles.auditList}>{correlation.graph.edges.map((edge) => <article key={`${edge.source}-${edge.target}`}><strong>{edge.source.replace(/^\w+:/, "")} → {edge.target.replace(/^\w+:/, "")}</strong><p>{edge.relation} · {edge.count} record(s)</p>{edge.support.slice(0, 2).map((support) => <button key={`${support.event_id}-${support.reference}`} onClick={() => open({ file: support.evidence_id, ref: support.reference })}>{support.file} · {support.reference}</button>)}</article>)}</div>
+              </section>
+              <div className={styles.twoColumns}>
+                <section className={styles.panel}><h2>Shortest and time-respecting paths</h2><p><strong>Shortest:</strong> {correlation.graph.shortest_path.nodes.map((node) => node.replace(/^\w+:/, "")).join(" → ") || "No connected path"}</p><p><strong>Time-respecting:</strong> {correlation.graph.time_respecting_path.nodes.map((node) => node.replace(/^\w+:/, "")).join(" → ") || "No time-respecting path"}</p></section>
+                <section className={styles.panel}><h2>Steiner connection</h2><p>{correlation.graph.steiner_tree.method}</p>{correlation.graph.steiner_tree.edges.map((edge) => <p key={`${edge.source}-${edge.target}`}>{edge.source.replace(/^\w+:/, "")} ↔ {edge.target.replace(/^\w+:/, "")}</p>)}</section>
+              </div>
+              <p className={styles.note}>Link prediction, k-core and graph neural networks are planned and not assessed.</p>
+            </> : <section className={styles.panel}><p>Building the source-backed correlation graph…</p></section>
+          )}
+          {view === "Graph" && isDemo &&
             scenarioGuard(
               <>
                 <section className={styles.panel}>
@@ -1921,7 +1964,28 @@ export function CaseWorkspace({
                 </section>
               </>,
             )}
-          {view === "Map" &&
+          {view === "Map" && !isDemo && (
+            correlation ? <>
+              <section className={styles.panel}>
+                <div className={styles.cardTitle}><h2>GPS trail, stay points and towers</h2><span className={styles.viewLabel}>Up to {mapCursor}% of observed time</span></div>
+                <input type="range" min="1" max="100" value={mapCursor} onChange={(event) => setMapCursor(Number(event.target.value))} aria-label="Map time slider" />
+                <div className={styles.map}>
+                  {correlation.map.gps_trail.slice(0, Math.ceil(correlation.map.gps_trail.length * mapCursor / 100)).map((point) => <button key={point.event_id} style={{ left: `${8 + ((point.lon - 77.35) * 7000) % 82}%`, top: `${8 + ((28.63 - point.lat) * 7000) % 72}%` }} onClick={() => open({ file: point.support.evidence_id, ref: point.support.reference })} aria-label={`GPS ${point.lat}, ${point.lon}`}>GPS</button>)}
+                  {correlation.map.towers.slice(0, Math.ceil(correlation.map.towers.length * mapCursor / 100)).map((tower) => <button key={tower.event_id} className={styles.tower} style={{ left: `${12 + ((tower.lon - 77.35) * 6500) % 75}%`, top: `${12 + ((28.63 - tower.lat) * 6500) % 65}%` }} onClick={() => open({ file: tower.support.evidence_id, ref: tower.support.reference })}>{tower.cell_id}</button>)}
+                </div>
+                <p className={styles.warning}>{correlation.disclaimer}</p>
+              </section>
+              <div className={styles.twoColumns}>
+                <section className={styles.panel}><h2>DBSCAN stay points</h2>{correlation.map.stay_points.map((stay) => <article key={stay.cluster}><strong>{stay.lat.toFixed(5)}, {stay.lon.toFixed(5)}</strong><p>{stay.samples} samples · {time(stay.start)} to {time(stay.end)}</p><small>{stay.method}</small></article>)}</section>
+                <section className={styles.panel}><h2>Telecom and tower hops</h2><p>{correlation.map.map_matching.method}: {correlation.map.map_matching.sequence.join(" → ") || "No tower sequence"}</p>{correlation.map.tower_hops.map((hop, index) => <p key={`${hop.from}-${hop.to}-${index}`}>{hop.from} → {hop.to} · {time(hop.timestamp)}</p>)}<p className={styles.note}>{correlation.map.map_matching.limits}</p></section>
+              </div>
+              <div className={styles.twoColumns}>
+                <section className={styles.panel}><h2>Call records</h2>{correlation.map.calls.map((call) => <button className={styles.claim} key={call.event_id} onClick={() => open({ file: call.support.evidence_id, ref: call.support.reference })}>{time(call.timestamp)} · {call.caller} → {call.called} · {call.duration_seconds}s · {call.status}</button>)}</section>
+                <section className={styles.panel}><h2>Common numbers</h2>{correlation.map.common_numbers.map((number) => <p key={number.number}>{number.number} · {number.count} records</p>)}</section>
+              </div>
+            </> : <section className={styles.panel}><p>Correlating uploaded location and telecom records…</p></section>
+          )}
+          {view === "Map" && isDemo &&
             scenarioGuard(
               <>
                 <section className={styles.panel}>
@@ -2008,6 +2072,26 @@ export function CaseWorkspace({
                 </div>
                 {activeEvent && recordButton(activeEvent)}
               </section>
+              {token && correlation && <>
+                <section className={styles.panel}>
+                  <div className={styles.cardTitle}><h2>Reconstructed cited phases</h2><span className={styles.viewLabel}>{correlation.timeline.summary_selection.method}</span></div>
+                  <label>Clock confidence · {Math.round(clockConfidence * 100)}%<input type="range" min="0" max="1" step="0.1" value={clockConfidence} onChange={(event) => setClockConfidence(Number(event.target.value))} /></label>
+                  <p className={styles.note}>Changing this value recalculates ordering confidence only. Source timestamps and evidence bytes remain unchanged.</p>
+                  {correlation.timeline.phases.map((phase, phaseIndex) => <article className={styles.signal} key={phase.name}>
+                    <h3>{phaseIndex + 1}. {phase.name.replaceAll("_", " ")}</h3>
+                    {phase.events.map((event) => <button className={styles.claim} key={event.event_id} onClick={() => open({ file: event.evidence_id, ref: event.citation.reference })}>
+                      {time(event.timestamp_utc, displayZone === "UTC" ? "UTC" : "Asia/Kolkata")} · {event.summary}
+                      <small>Confidence {Math.round(event.confidence * 100)}% · ordering {Math.round(event.ordering_probability * 100)}%{event.order_depends_on_clock ? " · depends on clock estimate" : ""}</small>
+                    </button>)}
+                  </article>)}
+                  <p className={styles.note}>Coverage {Math.round(correlation.timeline.summary_selection.coverage * 100)}%. {correlation.timeline.summary_selection.guarantee}</p>
+                  <p className={styles.warning}>{correlation.timeline.limits}</p>
+                </section>
+                <div className={styles.twoColumns}>
+                  <section className={styles.panel}><h2>Detected phase boundaries</h2>{correlation.timeline.change_points.length ? correlation.timeline.change_points.map((point) => <p key={`${point.after_event_id}-${point.before_event_id}`}>Event {point.after_event_id} → {point.before_event_id}<small>{point.method}</small></p>) : <p>No additional change point was supported.</p>}</section>
+                  <section className={styles.panel}><h2>Evidence gaps</h2>{correlation.timeline.gaps.map((gap) => <article key={gap.missing}><strong>{gap.missing}</strong><p>Would help: {gap.would_help}</p></article>)}</section>
+                </div>
+              </>}
               {scenarioGuard(
                 <div className={styles.threeColumns}>
                   <section className={styles.panel}>

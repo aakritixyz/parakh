@@ -283,6 +283,40 @@ export type FraudReview = {
   ranking: { method: string; assumption: string; feedback: string };
 };
 export type FraudLead = { id: number; title: string; status: "new" | "reviewing" | "confirmed" | "dismissed"; assignee: string | null; score: number; reasons: string[]; citations: { evidence_id: number; event_id?: number; reference?: string }[]; comments: { id: number; body: string; author: string; created_at: string }[]; dismissal_reason: string | null };
+type SourceReceipt = { evidence_id: number; file: string; event_id: number; reference: string; timestamp?: string; sha256?: string };
+export type CorrelationResult = {
+  graph: {
+    nodes: { id: string; label: string; type: string; edge_count: number; importance: number; betweenness: number; size: number; community: number }[];
+    edges: { source: string; target: string; count: number; relation: string; support: SourceReceipt[] }[];
+    community_method: string;
+    shortest_path: { source: string | null; target: string | null; nodes: string[]; hops: number };
+    steiner_tree: { terminals: string[]; edges: { source: string; target: string }[]; method: string };
+    time_respecting_path: { nodes: string[]; complete: boolean };
+    filters: { focus: string | null; depth: number };
+  };
+  map: {
+    gps_trail: { event_id: number; lat: number; lon: number; timestamp: string; support: SourceReceipt }[];
+    stay_points: { cluster: number; lat: number; lon: number; samples: number; start: string; end: string; method: string; support: SourceReceipt[] }[];
+    towers: { event_id: number; cell_id: string; lat: number; lon: number; radius_m: number; timestamp: string; subject: string; support: SourceReceipt }[];
+    tower_hops: { from: string; to: string; timestamp: string }[];
+    map_matching: { method: string; sequence: string[]; limits: string };
+    calls: { event_id: number; caller: string; called: string; duration_seconds: number; status: string; timestamp: string; support: SourceReceipt }[];
+    common_numbers: { number: string; count: number }[];
+    disclaimer: string;
+  };
+  timeline: {
+    phases: { name: string; events: CorrelatedTimelineEvent[] }[];
+    all_events: CorrelatedTimelineEvent[];
+    change_points: { after_event_id: number; before_event_id: number; method: string }[];
+    summary_selection: { method: string; selected_event_ids: number[]; coverage: number; guarantee: string };
+    clock_confidence: number;
+    gaps: { missing: string; would_help: string }[];
+    limits: string;
+  };
+  disclaimer: string;
+  planned: Record<string, string>;
+};
+export type CorrelatedTimelineEvent = { event_id: number; evidence_id: number; timestamp_utc: string; original_timestamp: string | null; phase: string; summary: string; confidence: number; ordering_probability: number; order_depends_on_clock: boolean; citation: SourceReceipt };
 export type MoneySupport = {
   evidence_id: number;
   file: string;
@@ -592,6 +626,15 @@ export const getOriginAnalysis = (caseId: number) =>
   sessionRequest<OriginResult>(`/api/v2/cases/${caseId}/origin`);
 export const getFraudReview = (caseId: number) =>
   sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/fraud-review`);
+export const getCorrelation = (caseId: number, options: { source?: string; target?: string; focus?: string; depth?: number; clockConfidence?: number } = {}) => {
+  const query = new URLSearchParams();
+  if (options.source) query.set("source", options.source);
+  if (options.target) query.set("target", options.target);
+  if (options.focus) query.set("focus", options.focus);
+  if (options.depth !== undefined) query.set("depth", String(options.depth));
+  if (options.clockConfidence !== undefined) query.set("clock_confidence", String(options.clockConfidence));
+  return sessionRequest<CorrelationResult>(`/api/v2/cases/${caseId}/correlation?${query.toString()}`);
+};
 export const updateFraudLead = (caseId: number, leadId: number, status: string, assignee?: string, comment?: string) =>
   sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/leads/${leadId}`, json({ status, assignee: assignee || null, comment: comment || null }));
 export async function downloadVerifiedBundle(caseId: number) {
