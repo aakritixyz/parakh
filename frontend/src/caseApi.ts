@@ -238,6 +238,53 @@ export type PatternResult = {
   assumptions: Record<string, string | number>;
   fallback: string;
 };
+export type MoneySupport = {
+  evidence_id: number;
+  file: string;
+  reference: string;
+  timestamp: string | null;
+  sha256: string;
+};
+export type MoneyResult = {
+  transactions: {
+    event_id: number;
+    timestamp: string | null;
+    account: string;
+    counterparty: string;
+    direction: string;
+    amount: number;
+    currency: string;
+    utr: string;
+    vpa: string;
+    ifsc: string;
+    balance: number;
+    support: MoneySupport;
+    representations: MoneySupport[];
+  }[];
+  graph: {
+    nodes: { id: string }[];
+    edges: { source: string; target: string; amount: number; utr: string; support: MoneySupport[] }[];
+    choke_points: { account: string; cut_paths: number; method: string }[];
+    cycles: string[][];
+    gnn_mule_detection: string;
+  };
+  patterns: {
+    pass_through: { account: string; minutes: number; incoming_amount: number; outgoing_amount: number; support: MoneySupport[]; caveat: string }[];
+    fan_in: { account: string; count: number; type: string }[];
+    fan_out: { account: string; count: number; type: string }[];
+    benford: Record<string, string | number>;
+  };
+  tracing: {
+    rule: "fifo" | "proportional" | "lifo";
+    available_rules: string[];
+    directly_shown: { text: string; support: MoneySupport }[];
+    possible: { amount: number; from_utr: string; to_utr: string; to: string; support: MoneySupport[]; status: string }[];
+    unexplained: string[];
+    solver: { engine: string; status: string; incomplete: boolean; reason: string; seed: number; time_limit_seconds: number };
+    warning: string;
+  };
+  anomalies: { title: string; reason: string; confidence: number; support: MoneySupport; caveat: string }[];
+};
 let session: Session | null = null;
 let refreshFlight: Promise<Session> | null = null;
 let generation = 0;
@@ -477,6 +524,8 @@ export const getIdentities = (caseId: number) =>
 export const getModelCards = () => sessionRequest<ModelCard[]>("/api/v2/models");
 export const getPatterns = (caseId: number) =>
   sessionRequest<PatternResult>(`/api/v2/cases/${caseId}/patterns`);
+export const getMoneyAnalysis = (caseId: number, rule: string) =>
+  sessionRequest<MoneyResult>(`/api/v2/cases/${caseId}/money?rule=${encodeURIComponent(rule)}`);
 export const confirmAlias = (caseId: number, suggestionId: number) =>
   sessionRequest(
     `/api/v2/cases/${caseId}/alias-suggestions/${suggestionId}/confirm`,

@@ -12,6 +12,7 @@ pillow>=10.4.0
 pypdf>=4.3.0
 email-validator>=2.2.0
 networkx>=3.3
+ortools>=9.10.0
 scikit-learn>=1.5.1
 numpy>=1.26.4
 reportlab>=4.2.2

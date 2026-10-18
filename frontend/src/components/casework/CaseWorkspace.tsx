@@ -2,6 +2,7 @@ import {
   confirmAlias,
   getIdentities,
   getModelCards,
+  getMoneyAnalysis,
   getPatterns,
   searchCaseEvents,
   unmergeAlias,
@@ -9,6 +10,7 @@ import {
   type Audit,
   type IdentityOverview,
   type ModelCard,
+  type MoneyResult,
   type PatternResult,
   type SearchResult,
 } from "../../caseApi";
@@ -196,6 +198,8 @@ export function CaseWorkspace({
   const [identityData, setIdentityData] = useState<IdentityOverview | null>(null);
   const [modelCards, setModelCards] = useState<ModelCard[]>([]);
   const [patterns, setPatterns] = useState<PatternResult | null>(null);
+  const [moneyRule, setMoneyRule] = useState<"fifo" | "proportional" | "lifo">("fifo");
+  const [moneyAnalysis, setMoneyAnalysis] = useState<MoneyResult | null>(null);
   const records: RecordEvent[] = useMemo(
     () =>
       searchResult
@@ -298,6 +302,10 @@ export function CaseWorkspace({
     if (!token || !caseId || view !== "Comms") return;
     void getPatterns(caseId).then(setPatterns);
   }, [caseId, token, view]);
+  useEffect(() => {
+    if (!token || !caseId || view !== "Money") return;
+    void getMoneyAnalysis(caseId, moneyRule).then(setMoneyAnalysis);
+  }, [caseId, moneyRule, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -1481,7 +1489,76 @@ export function CaseWorkspace({
             </>
           )}
           {view === "Money" &&
-            scenarioGuard(
+            (token ? (
+              moneyAnalysis ? (
+                <>
+                  <section className={styles.panel}>
+                    <div className={styles.cardTitle}>
+                      <h2>Normalised transactions</h2>
+                      <label>
+                        Tracing rule
+                        <select
+                          value={moneyRule}
+                          onChange={(event) => setMoneyRule(event.target.value as "fifo" | "proportional" | "lifo")}
+                        >
+                          <option value="fifo">First in, first out</option>
+                          <option value="proportional">Proportional</option>
+                          <option value="lifo">Last in, first out</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div className={styles.tableWrap}>
+                      <table>
+                        <thead><tr><th>Time</th><th>Account</th><th>Direction</th><th>Amount</th><th>Counterparty</th><th>UTR / VPA / IFSC</th><th>Balance</th></tr></thead>
+                        <tbody>
+                          {moneyAnalysis.transactions.map((item) => (
+                            <tr key={item.event_id}>
+                              <td><button onClick={() => open({ file: item.support.evidence_id, ref: item.support.reference })}>{time(item.timestamp)}</button></td>
+                              <td>{item.account}</td><td>{item.direction}</td><td>{money(item.amount)}</td><td>{item.counterparty}</td>
+                              <td>{item.utr}<br/><small>{item.vpa || item.ifsc || "Not supplied"}</small>{item.representations.slice(1).map((source) => <button key={`${source.evidence_id}-${source.reference}`} onClick={() => open({ file: source.evidence_id, ref: source.reference })}>PDF</button>)}</td><td>{money(item.balance)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                  <section className={styles.panel}>
+                    <h2>Money-flow graph</h2>
+                    <div className={styles.auditList}>
+                      {moneyAnalysis.graph.edges.map((edge) => (
+                        <article key={`${edge.utr}-${edge.source}-${edge.target}`}>
+                          <strong>{edge.source} → {edge.target}</strong>
+                          <p>{money(edge.amount)} · {edge.utr}</p>
+                          {edge.support.map((item) => <button key={`${item.evidence_id}-${item.reference}`} onClick={() => open({ file: item.evidence_id, ref: item.reference })}>{item.file} · {item.reference}</button>)}
+                        </article>
+                      ))}
+                    </div>
+                    <p className={styles.note}>Choke points: {moneyAnalysis.graph.choke_points.map((item) => item.account).join(", ") || "none established"}. Cycles: {moneyAnalysis.graph.cycles.length}. GNN mule detection: planned T3.</p>
+                  </section>
+                  <div className={styles.threeColumns}>
+                    <section className={styles.panel}>
+                      <h2>Directly shown by records</h2>
+                      {moneyAnalysis.tracing.directly_shown.map((item, index) => <button className={styles.claim} key={index} onClick={() => open({ file: item.support.evidence_id, ref: item.support.reference })}>{item.text}</button>)}
+                    </section>
+                    <section className={styles.panel}>
+                      <h2>Possible under stated assumptions</h2>
+                      {moneyAnalysis.tracing.possible.map((item, index) => <article key={index}><p>{money(item.amount)} from {item.from_utr} → {item.to} ({item.to_utr})</p>{item.support.map((support) => <button key={`${support.evidence_id}-${support.reference}`} onClick={() => open({ file: support.evidence_id, ref: support.reference })}>{support.file} · {support.reference}</button>)}</article>)}
+                      <p className={styles.warning}>{moneyAnalysis.tracing.warning}</p>
+                    </section>
+                    <section className={styles.panel}>
+                      <h2>Unexplained</h2>
+                      <ul>{moneyAnalysis.tracing.unexplained.map((item) => <li key={item}>{item}</li>)}</ul>
+                    </section>
+                  </div>
+                  <section className={styles.panel}>
+                    <h2>Pass-through and unusual transfers</h2>
+                    {moneyAnalysis.patterns.pass_through.map((item, index) => <article key={index}><strong>{item.account}: in then out after {item.minutes} minutes</strong><p>{money(item.incoming_amount)} in · {money(item.outgoing_amount)} out</p><p className={styles.warning}>{item.caveat}</p></article>)}
+                    {moneyAnalysis.anomalies.map((item, index) => <article key={index}><strong>{item.title} · {Math.round(item.confidence * 100)}%</strong><p>{item.reason}</p><button onClick={() => open({ file: item.support.evidence_id, ref: item.support.reference })}>{item.support.file} · {item.support.reference}</button><p className={styles.warning}>{item.caveat}</p></article>)}
+                    <p className={styles.note}>Benford: {String(moneyAnalysis.patterns.benford.result ?? moneyAnalysis.patterns.benford.absolute_deviation)} · weak heuristic. Solver: {moneyAnalysis.tracing.solver.engine} · {moneyAnalysis.tracing.solver.status}{moneyAnalysis.tracing.solver.incomplete ? " · incomplete" : ""}. Seed {moneyAnalysis.tracing.solver.seed}; {moneyAnalysis.tracing.solver.time_limit_seconds}s limit.</p>
+                  </section>
+                </>
+              ) : <section className={styles.panel}><p>Analysing uploaded transactions…</p></section>
+            ) : scenarioGuard(
               <>
                 <section className={styles.panel}>
                   <h2>Recorded account flow</h2>
@@ -1542,7 +1619,7 @@ export function CaseWorkspace({
                   ])}
                 </section>
               </>,
-            )}
+            ))}
           {view === "Authenticity" &&
             scenarioGuard(
               <>
