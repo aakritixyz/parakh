@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v2.auth import router as auth_router
 from app.api.v2.cases import router as cases_router
+from app.api.v2.fraud import router as fraud_router
 from app.api.v2.identity import router as identity_router
 from app.api.v2.import_report import router as import_report_router
 from app.api.v2.intake import router as intake_router
@@ -24,3 +25,4 @@ api_router.include_router(money_router)
 api_router.include_router(patterns_router)
 api_router.include_router(integrity_router)
 api_router.include_router(origin_router)
+api_router.include_router(fraud_router)

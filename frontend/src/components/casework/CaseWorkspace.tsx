@@ -4,16 +4,19 @@ import {
   getModelCards,
   getMoneyAnalysis,
   getCaseIntegrity,
+  getFraudReview,
   getOriginAnalysis,
   getPatterns,
   downloadVerifiedBundle,
   runTamperDemo,
+  updateFraudLead,
   searchCaseEvents,
   unmergeAlias,
   verifyLiveIntegrity,
   type Audit,
   type IdentityOverview,
   type IntegrityResult,
+  type FraudReview,
   type ModelCard,
   type MoneyResult,
   type PatternResult,
@@ -208,6 +211,7 @@ export function CaseWorkspace({
   const [moneyAnalysis, setMoneyAnalysis] = useState<MoneyResult | null>(null);
   const [integrityData, setIntegrityData] = useState<IntegrityResult | null>(null);
   const [originData, setOriginData] = useState<OriginResult | null>(null);
+  const [fraudReview, setFraudReview] = useState<FraudReview | null>(null);
   const [tamperResult, setTamperResult] = useState("");
   const [displayZone, setDisplayZone] = useState<"Asia/Kolkata" | "UTC" | "Source time">("Asia/Kolkata");
   const records: RecordEvent[] = useMemo(
@@ -323,6 +327,10 @@ export function CaseWorkspace({
   useEffect(() => {
     if (!token || !caseId || view !== "Timeline") return;
     void getOriginAnalysis(caseId).then(setOriginData);
+  }, [caseId, token, view]);
+  useEffect(() => {
+    if (!token || !caseId || view !== "Authenticity") return;
+    void getFraudReview(caseId).then(setFraudReview);
   }, [caseId, token, view]);
   useEffect(() => {
     if (isDemo) {
@@ -1643,7 +1651,7 @@ export function CaseWorkspace({
                 </section>
               </>,
             ))}
-          {view === "Authenticity" &&
+          {view === "Authenticity" && isDemo &&
             scenarioGuard(
               <>
                 <div className={styles.twoColumns}>
@@ -1786,6 +1794,59 @@ export function CaseWorkspace({
                 </section>
               </>,
             )}
+          {view === "Authenticity" && !isDemo && (
+            fraudReview ? <>
+              <section className={styles.panel}>
+                <div className={styles.cardTitle}><h2>Document authenticity signals</h2><span className={styles.viewLabel}>Heuristic review</span></div>
+                {fraudReview.authenticity.map((report) => <article className={styles.signal} key={report.evidence_id}>
+                  <div className={styles.cardTitle}>
+                    <button className={styles.claim} onClick={() => open({ file: report.evidence_id })}>Evidence {report.evidence_id}</button>
+                    <strong>Suspicion {report.suspicion_score}/100 · range {report.score_range[0]}–{report.score_range[1]}</strong>
+                  </div>
+                  {report.findings.length ? report.findings.map((finding) => <div key={finding.signal}>
+                    <strong>{finding.signal.replaceAll("_", " ")}</strong> · weight {finding.weight} · contribution {finding.contribution}
+                    <p>{finding.explanation} {finding.heuristic && <span className={styles.viewLabel}>Heuristic</span>}</p>
+                  </div>) : <p>No suspicious heuristic signal was found in the assessed fields.</p>}
+                  {Object.keys(report.ocr_claims).length > 0 && <p className={styles.note}>OCR claims indexed: {Object.entries(report.ocr_claims).map(([key, value]) => `${key}=${value.value} (${Math.round(value.confidence * 100)}%)`).join(" · ")}</p>}
+                  {report.similar_documents.map((match) => <p key={match.evidence_id}>Near duplicate: <button onClick={() => open({ file: match.evidence_id })}>{match.filename}</button> · {Math.round(match.similarity * 100)}% · {match.method}</p>)}
+                  <p className={styles.warning}>{report.limits}</p>
+                  <p className={styles.note}>Neural tamper localisation and deepfake detection: planned · not assessed.</p>
+                </article>)}
+              </section>
+              <section className={styles.panel}>
+                <h2>Contradictions and tested alternatives</h2>
+                {fraudReview.contradictions.contradictions.map((item) => <article className={styles.signal} key={`${item.receipt.evidence_id}-${item.record.event_id}`}>
+                  <div className={styles.cardTitle}><h3>Receipt versus bank row</h3><span className={`${styles.status} ${styles.contradicted}`}>{item.label}</span></div>
+                  <p>Receipt: INR {item.receipt.amount.toLocaleString("en-IN")} · {item.receipt.utr}. Bank: INR {item.record.amount.toLocaleString("en-IN")} {item.record.direction} · {item.record.utr}.</p>
+                  {cites([{ file: item.receipt.evidence_id, ref: item.receipt.reference }, { file: item.record.evidence_id, ref: item.record.reference }])}
+                  <p className={styles.note}>{item.match.algorithm} · amount match {String(item.match.amount_match)} · reference match {String(item.match.reference_match)}</p>
+                  <div className={styles.tableWrap}><table><thead><tr><th>Alternative</th><th>Result</th><th>Likelihood ratio</th><th>Reason</th></tr></thead><tbody>{item.alternatives.map((alternative) => <tr key={alternative.name}><td>{alternative.name}</td><td>{alternative.result}</td><td>{alternative.likelihood_ratio}</td><td>{alternative.reason}</td></tr>)}</tbody></table></div>
+                  <p><strong>Evidence that would settle it:</strong> {item.would_settle.join("; ")}.</p>
+                </article>)}
+                <p className={styles.warning}>{fraudReview.contradictions.limits}</p>
+              </section>
+              <section className={styles.panel}>
+                <div className={styles.cardTitle}><h2>Ranked fraud leads</h2><span className={styles.viewLabel}>{fraudReview.review_plan.method} · {fraudReview.review_plan.budget_minutes} min</span></div>
+                <p className={styles.warning}>{fraudReview.ranking.assumption}</p>
+                {fraudReview.ranked.map((lead, index) => <article className={styles.signal} key={lead.id}>
+                  <div className={styles.cardTitle}><h3>#{index + 1} {lead.title}</h3><strong>{Math.round(lead.score * 100)}%</strong></div>
+                  <ul>{lead.reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
+                  {cites(lead.citations.filter((citation) => citation.evidence_id).map((citation) => ({ file: citation.evidence_id, ref: citation.reference })))}
+                </article>)}
+              </section>
+              <section className={styles.panel}>
+                <h2>Leads board</h2>
+                <div className={styles.threeColumns}>{(["new", "reviewing", "confirmed", "dismissed"] as const).map((column) => <div key={column}><h3>{column}</h3>{fraudReview.leads.filter((lead) => lead.status === column).map((lead) => <article className={styles.signal} key={lead.id}>
+                  <strong>{lead.title}</strong><small>{lead.assignee ?? "Unassigned"}</small>
+                  <select disabled={readOnly} value={lead.status} onChange={(event) => caseId && void updateFraudLead(caseId, lead.id, event.target.value, lead.assignee ?? undefined, event.target.value === "dismissed" ? "Dismissed during investigator review" : undefined).then(setFraudReview)}><option value="new">new</option><option value="reviewing">reviewing</option><option value="confirmed">confirmed</option><option value="dismissed">dismissed</option></select>
+                  <button disabled={readOnly} onClick={() => { const assignee = window.prompt("Assign this lead", lead.assignee ?? ""); if (assignee !== null && caseId) void updateFraudLead(caseId, lead.id, lead.status, assignee, undefined).then(setFraudReview); }}>Assign</button>
+                  <button disabled={readOnly} onClick={() => { const comment = window.prompt("Add a source-aware comment"); if (comment && caseId) void updateFraudLead(caseId, lead.id, lead.status, lead.assignee ?? undefined, comment).then(setFraudReview); }}>Comment</button>
+                  {lead.comments.map((comment) => <p key={comment.id}><strong>{comment.author}:</strong> {comment.body}</p>)}
+                </article>)}</div>)}</div>
+                <p className={styles.note}>{fraudReview.ranking.feedback}</p>
+              </section>
+            </> : <section className={styles.panel}><p>Analysing uploaded documents and linked records…</p></section>
+          )}
           {view === "Graph" &&
             scenarioGuard(
               <>

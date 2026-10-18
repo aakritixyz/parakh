@@ -255,6 +255,34 @@ export type OriginResult = {
   ordering_probability: { statement: string; probability: number; samples: number; seed: number };
   order_dependent_event_ids: number[];
 };
+export type FraudReview = {
+  authenticity: {
+    evidence_id: number;
+    suspicion_score: number;
+    score_range: number[];
+    findings: { severity: string; explanation: string; signal: string; weight: number; contribution: number; heuristic: boolean }[];
+    similar_documents: { evidence_id: number; filename: string; similarity: number; method: string }[];
+    ocr_claims: Record<string, { value: string; confidence: number }>;
+    limits: string;
+    detector_status: Record<string, string | number>;
+  }[];
+  contradictions: {
+    contradictions: {
+      type: string; label: string;
+      receipt: { evidence_id: number; file: string; reference: string; amount: number; utr: string };
+      record: { event_id: number; evidence_id: number; reference: string; amount: number; direction: string; utr: string };
+      match: { algorithm: string; cost: number; amount_match: boolean; reference_match: boolean };
+      alternatives: { name: string; result: string; likelihood_ratio: number; reason: string }[];
+      would_settle: string[];
+    }[];
+    limits: string;
+  };
+  leads: FraudLead[];
+  ranked: FraudLead[];
+  review_plan: { budget_minutes: number; selected_lead_ids: number[]; method: string; complete: boolean; seed: number; fallback: string };
+  ranking: { method: string; assumption: string; feedback: string };
+};
+export type FraudLead = { id: number; title: string; status: "new" | "reviewing" | "confirmed" | "dismissed"; assignee: string | null; score: number; reasons: string[]; citations: { evidence_id: number; event_id?: number; reference?: string }[]; comments: { id: number; body: string; author: string; created_at: string }[]; dismissal_reason: string | null };
 export type MoneySupport = {
   evidence_id: number;
   file: string;
@@ -562,6 +590,10 @@ export const runTamperDemo = (caseId: number, target: "file" | "audit") =>
   sessionRequest<{ target: string; detected: boolean; failed_at: string; detail: string }>(`/api/v2/cases/${caseId}/integrity/tamper-demo?target=${target}`, { method: "POST" });
 export const getOriginAnalysis = (caseId: number) =>
   sessionRequest<OriginResult>(`/api/v2/cases/${caseId}/origin`);
+export const getFraudReview = (caseId: number) =>
+  sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/fraud-review`);
+export const updateFraudLead = (caseId: number, leadId: number, status: string, assignee?: string, comment?: string) =>
+  sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/leads/${leadId}`, json({ status, assignee: assignee || null, comment: comment || null }));
 export async function downloadVerifiedBundle(caseId: number) {
   if (!session) throw new Error("Sign in to continue.");
   const send = () => fetch(`/api/v2/cases/${caseId}/integrity/export`, { method: "POST", credentials: "same-origin", headers: { Authorization: `Bearer ${session!.access_token}` } });
