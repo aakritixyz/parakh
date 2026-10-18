@@ -43,6 +43,20 @@ Open:
 http://127.0.0.1:5173
 ```
 
+The root URL opens the Parakh landing page. Choose a capability card to open
+the matching investigator view, or use **Open investigator workspace** to open
+the dashboard. In the investigator console, select the Parakh brand to return
+to the landing page.
+
+Landing-page destinations:
+
+- Evidence collection → Gallery
+- Pattern and anomaly analysis → AI Leads
+- Integrity and origin → Authenticity
+- Fraud and manipulation detection → Fraud
+- Cross-source correlation → Graph
+- Incident reconstruction → Reconstruction
+
 No-install preview:
 
 ```text

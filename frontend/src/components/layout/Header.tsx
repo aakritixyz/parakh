@@ -42,10 +42,14 @@ export function Header({
       >
         <Menu />
       </button>
-      <div className="product-lockup">
+      <a
+        className="product-lockup"
+        href="./index.html"
+        aria-label="Return to the Parakh landing page"
+      >
         <div className="brand-mark">P</div>
         <strong>Parakh</strong>
-      </div>
+      </a>
       <div className="case-title">
         <strong title={title}>{title}</strong>
         <small>{online ? "Backend connected" : "Demo data · Offline"}</small>

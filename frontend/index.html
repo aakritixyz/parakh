@@ -1,12 +1,425 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parakh Investigator Console</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parakh (परख) | AI-Powered Digital Forensics Investigation Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Serif:wght@600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#25307A; --navy-d:#1B2460; --ink:#1D2340; --mute:#52587A;
+  --line:#E3E6F2; --bg:#F5F7FC; --blue-t:#E7EAFA; --hero:#EAF6F8;
+  --peacock:#0B6E7F; --peacock-t:#DDF2F5;
+  --rani:#C2185B; --rani-d:#8E1043; --rani-t:#FCE4EE;
+  --saffron:#F5A524; --saf-t:#FBD38D; --saf-d:#9A4A06; --marigold-t:#FFF1D6;
+  --green:#2F7D4F; --green-t:#E0F3E7; --red:#C2185B; --red-t:#FCE4EE;
+  --r:96px;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(110px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:400 17px/1.7 "Noto Sans","Noto Sans Devanagari",system-ui,sans-serif}
+h1,h2,h3,.serif{font-family:"Noto Serif","Noto Serif Devanagari",Georgia,serif;font-weight:700;color:var(--navy);margin:0;line-height:1.25}
+p{margin:0}
+a{color:var(--navy)}
+:focus-visible{outline:3px solid var(--rani);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px;position:relative}
+section{padding:88px 0;position:relative}
+.lead{color:var(--mute);font-size:18px;max-width:62ch}
+.hi{color:var(--saf-d);font-weight:500}
+.skip{position:absolute;left:-999px;top:0;background:var(--navy);color:#fff;padding:10px 16px;z-index:100}
+.skip:focus{left:8px;top:8px}
+
+/* utility + header + toran */
+.util{background:var(--bg);border-bottom:1px solid var(--line);font-size:14px;color:var(--mute)}
+.util .wrap{display:flex;justify-content:space-between;gap:12px;padding-top:7px;padding-bottom:7px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:#fff;box-shadow:0 2px 10px rgba(18,48,107,.08)}
+header::after{content:"";display:block;height:17px;background:
+ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='14'%3E%3Cpath d='M0 0h24l-12 13z' fill='%23C2185B'/%3E%3Cpath d='M24 0h24L36 13z' fill='%230B6E7F'/%3E%3C/svg%3E") repeat-x left 3px/48px 14px,
+ linear-gradient(var(--saffron),var(--saffron)) top/100% 3px no-repeat}
+nav{display:flex;align-items:center;justify-content:space-between;min-height:76px;gap:20px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.brand svg{width:46px;height:46px;flex:none}
+.brand .t b{display:block;font:700 26px/1.1 "Noto Serif","Noto Serif Devanagari",serif;color:var(--navy)}
+.brand .t span{font-size:13px;color:var(--mute)}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-weight:500;font-size:16px}
+nav ul a{text-decoration:none;color:var(--ink);padding:6px 0;border-bottom:2px solid transparent}
+nav ul a:hover{border-color:var(--saffron);color:var(--navy)}
+.btn{display:inline-block;padding:13px 26px;border-radius:4px;font-weight:600;font-size:16px;text-decoration:none;border:2px solid var(--navy);transition:background .15s,transform .15s}
+.btn-p{background:var(--rani);border-color:var(--rani);color:#fff}
+.btn-p:hover{background:var(--rani-d);border-color:var(--rani-d);transform:translateY(-1px)}
+.btn-g{background:#fff;color:var(--navy)}
+.btn-g:hover{background:var(--blue-t)}
+
+/* hero */
+.hero{background:var(--hero);padding:56px 0 100px;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center}
+.word{font:700 clamp(110px,15vw,190px)/.95 "Noto Serif Devanagari",serif;color:var(--peacock);text-shadow:6px 6px 0 var(--saf-t);margin:0 0 8px -3px}
+.sub{font-size:21px;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,3.4vw,42px);max-width:20ch;margin-bottom:16px}
+.hero .lead{margin-bottom:30px;color:#34405A}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+
+/* lens stage */
+.arch{position:relative;width:min(440px,100%);margin:0 auto}
+.arch::before{content:"";position:absolute;inset:-16px;border:2px dashed var(--rani);border-radius:236px 236px 30px 30px;opacity:.6}
+.stage{position:relative;aspect-ratio:4/5.3;border-radius:220px 220px 14px 14px;background:#fff;border:3px solid var(--navy);box-shadow:12px 12px 0 var(--saffron);overflow:hidden;touch-action:pan-y;cursor:crosshair;user-select:none}
+.doc{position:absolute;inset:0;padding:108px 32px 24px;font-size:15px;line-height:1.5}
+.doc .dh{text-align:center;margin-bottom:14px}
+.doc .dh b{display:block;font:700 21px "Noto Serif Devanagari",serif;color:var(--navy)}
+.doc .dh span{font-size:13px;color:var(--mute)}
+.doc .ln{padding:7px 0;border-bottom:1px solid var(--line)}
+.doc .row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-weight:600;position:relative}
+.doc mark{background:none;color:var(--ink);padding:2px 8px;border-radius:4px;font-weight:600}
+.doc .sigrow{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.doc .sigrow svg{width:110px;height:40px;stroke:var(--navy);fill:none;stroke-width:2.2;stroke-linecap:round}
+.doc .stamp{position:absolute;right:26px;bottom:78px;width:74px;height:74px;border-radius:50%;border:3px double var(--peacock);color:var(--peacock);display:grid;place-items:center;text-align:center;font-size:12px;font-weight:600;transform:rotate(-12deg);line-height:1.2}
+.doc .hash{position:absolute;left:32px;right:32px;bottom:22px;font:500 12px ui-monospace,Menlo,monospace;color:var(--mute)}
+.note{display:none}
+.scan{background:var(--peacock-t);clip-path:circle(var(--r) at var(--x,50%) var(--y,40%))}
+.scan mark{background:var(--red);color:#fff;box-shadow:0 0 0 4px rgba(194,24,91,.25)}
+.scan .hash{color:var(--green);font-weight:600}
+.scan .note{display:inline-block;font:600 12px/1.3 "Noto Sans",sans-serif;padding:3px 9px;border-radius:3px;white-space:nowrap;color:#fff}
+.scan .n1{position:absolute;right:0;top:calc(100% - 6px);background:var(--red);z-index:3}
+.scan .n2{background:var(--green)}
+.ring{position:absolute;left:var(--x,50%);top:var(--y,40%);width:calc(var(--r)*2);height:calc(var(--r)*2);transform:translate(-50%,-50%);border-radius:50%;border:4px solid var(--rani);box-shadow:0 0 0 3px #fff,0 14px 30px -8px rgba(194,24,91,.5);pointer-events:none;z-index:5}
+.ring::after{content:"";position:absolute;right:-6px;bottom:-6px;width:18px;height:18px;border-radius:50%;background:var(--saffron);border:3px solid #fff}
+.hint{text-align:center;margin-top:34px;font-weight:600;color:var(--navy);font-size:16px}
+.hint span{color:var(--saf-d)}
+
+/* band */
+.band{background:var(--navy);color:#fff;padding:18px 0}
+.band .wrap{display:flex;gap:10px 34px;flex-wrap:wrap;justify-content:center;font-weight:500;font-size:16.5px}
+.band b{color:var(--saffron);font-weight:600}
+
+/* headings */
+.sh{margin-bottom:52px;max-width:760px}
+.sh .hi{display:block;font-size:20px;margin-bottom:6px}
+.sh::before{content:"";display:block;width:48px;height:4px;background:var(--saffron);margin-bottom:16px}
+.sh h2{font-size:clamp(28px,3.4vw,40px);margin-bottom:12px}
+.alt{background:var(--bg);border-block:1px solid var(--line)}
+.flow{background:var(--marigold-t)}
+
+/* capabilities */
+.caps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cap{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:30px;text-decoration:none;color:inherit;transition:transform .2s,border-color .2s,box-shadow .2s}
+.cap:hover{transform:translateY(-4px);border-color:var(--c,var(--navy));box-shadow:0 14px 26px -20px rgba(18,48,107,.6)}
+.glyph{width:72px;height:90px;border-radius:36px 36px 8px 8px;background:var(--ct,var(--blue-t));border:2px solid var(--c,var(--navy));display:grid;place-items:center;font:700 30px "Noto Serif Devanagari",serif;color:var(--c,var(--navy));margin-bottom:18px}
+.k1{--c:#0B6E7F;--ct:#DDF2F5}.k2{--c:#25307A;--ct:#E7EAFA}.k3{--c:#B7791F;--ct:#FFF1D6}.k4{--c:#C2185B;--ct:#FCE4EE}.k5{--c:#2F7D4F;--ct:#E0F3E7}.k6{--c:#6D3FB2;--ct:#EEE6FA}
+.cap h3{font-size:21px;margin-bottom:2px}
+.cap .hi{display:block;font-size:15.5px;margin-bottom:10px}
+.cap p{font-size:16.5px;color:var(--mute)}
+
+/* workflow */
+.steps{display:grid;grid-template-columns:repeat(6,1fr)}
+.step{padding-right:14px;position:relative}
+.step .n{width:62px;height:62px;border-radius:50%;background:#fff;border:3px solid var(--rani);color:var(--rani);display:grid;place-items:center;font:700 28px "Noto Serif Devanagari",serif;margin-bottom:16px;position:relative;z-index:1;box-shadow:0 0 0 6px var(--rani-t)}
+.step::after{content:"";position:absolute;top:30px;left:62px;right:0;border-top:3px dotted var(--saffron)}
+.step:last-child::after{display:none}
+.step h3{font-size:20px;margin-bottom:6px}
+.step p{font-size:15.5px;color:var(--mute);line-height:1.55}
+
+/* swadeshi */
+.swa{background:var(--peacock-t);overflow:hidden;border-block:1px solid var(--line)}
+.mandala{position:absolute;right:-180px;top:-150px;width:640px;height:640px;opacity:.3;pointer-events:none;color:var(--peacock)}
+.split{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:start}
+.big{font:700 clamp(64px,9vw,112px)/1 "Noto Serif Devanagari",serif;color:var(--peacock);text-shadow:5px 5px 0 #fff;margin-bottom:14px}
+.split h2{font-size:clamp(28px,3.4vw,40px);margin-bottom:14px}
+.pts{display:grid;gap:18px;position:relative}
+.pt{background:#fff;border:2px solid var(--peacock);border-radius:6px;padding:22px 26px;box-shadow:6px 6px 0 var(--saffron)}
+.pt h3{font-size:20px;margin-bottom:4px}
+.pt p{font-size:16.5px;color:var(--mute)}
+
+/* users */
+.users{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.u{background:#fff;border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:4px;padding:24px}
+.u:nth-child(1){border-top-color:var(--peacock)}.u:nth-child(2){border-top-color:var(--navy)}.u:nth-child(3){border-top-color:var(--saffron)}.u:nth-child(4){border-top-color:var(--rani)}
+.u h3{font-size:18px;margin-bottom:6px}
+.u p{font-size:15.5px;color:var(--mute);line-height:1.6}
+
+/* case */
+.two{display:grid;grid-template-columns:1.08fr .92fr;gap:32px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-top:5px solid var(--navy);border-radius:6px;box-shadow:0 20px 40px -28px rgba(18,48,107,.5)}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ph h3{font-size:18px}
+.ph small{color:var(--mute);font-size:14px}
+.badge{font-size:13px;font-weight:600;padding:3px 10px;border-radius:3px;border:1px solid;white-space:nowrap}
+.b-s{background:var(--bg);color:var(--mute);border-color:var(--line)}
+.b-ok{background:var(--green-t);color:var(--green);border-color:#B5DEC6}
+.b-no{background:var(--red-t);color:var(--red);border-color:#F4B6CF}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;min-width:420px}
+th{text-align:left;font-size:13px;font-weight:600;color:var(--mute);padding:10px 22px;background:var(--bg);border-bottom:1px solid var(--line)}
+td{padding:14px 22px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+td small{display:block;color:var(--mute);font-size:13.5px;margin-top:2px}
+.pf{padding:16px 22px;font-size:14.5px;color:var(--mute)}
+.pf code{font:500 13px ui-monospace,Menlo,monospace;color:var(--navy);background:var(--blue-t);padding:1px 6px;border-radius:3px}
+.tl{padding:30px 32px}
+.tl h3{font-size:18px;margin-bottom:22px}
+.ev{display:grid;grid-template-columns:64px 20px 1fr;gap:14px;padding-bottom:22px}
+.ev:last-child{padding-bottom:0}
+.ev time{font:600 15px ui-monospace,Menlo,monospace;color:var(--mute);padding-top:2px}
+.ev i{width:14px;height:14px;border-radius:50%;background:var(--peacock);margin-top:6px;position:relative;box-shadow:0 0 0 4px var(--peacock-t)}
+.ev i::after{content:"";position:absolute;left:6px;top:16px;width:2px;height:calc(100% + 34px);background:var(--line)}
+.ev:last-child i::after{display:none}
+.ev.flag i{background:var(--red);box-shadow:0 0 0 4px var(--red-t)}
+.ev small{display:block;color:var(--mute);font-size:14.5px}
+.ev.flag small{color:var(--red);font-weight:600}
+
+/* cta + footer */
+.cta-sec{background:#B0124F;color:#fff;padding:84px 0;text-align:center;overflow:hidden}
+.cta-sec .mandala{left:-170px;right:auto;top:-210px;opacity:.12;color:#fff}
+.cta-sec h2{color:#fff;font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 auto 14px;position:relative}
+.cta-sec p{color:#FCE4EE;max-width:56ch;margin:0 auto 30px;font-size:18px;position:relative}
+.cta-sec .btn{background:#fff;color:var(--rani-d);border-color:#fff;position:relative}
+.cta-sec .btn:hover{background:var(--saf-t)}
+footer{background:var(--navy);color:#DDE2FA;padding:48px 0 28px;font-size:15.5px}
+footer::before{content:"";display:block;height:14px;margin:-48px 0 40px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='14'%3E%3Cpath d='M0 0h24l-12 13z' fill='%23F5A524'/%3E%3Cpath d='M24 0h24L36 13z' fill='%23C2185B'/%3E%3C/svg%3E") repeat-x}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid #3B478F}
+footer b{color:#fff;font:700 22px "Noto Serif","Noto Serif Devanagari",serif;display:block;margin-bottom:8px}
+footer h4{margin:0 0 10px;color:#fff;font-size:16px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+footer a{color:#DDE2FA;text-decoration:none}
+footer a:hover{color:#fff;text-decoration:underline}
+.fb{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;font-size:14.5px}
+
+@media(max-width:1000px){
+  .hero-grid,.split,.fg,.two{grid-template-columns:1fr}
+  .caps{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr 1fr;row-gap:36px}
+  .step:nth-child(3)::after{display:none}
+  .users{grid-template-columns:1fr 1fr}
+  nav ul{display:none}
+  .arch{margin-top:20px}
+}
+@media(max-width:620px){
+  section{padding:64px 0}
+  :root{--r:78px}
+  .util span:last-child{display:none}
+  .caps,.steps,.users{grid-template-columns:1fr}
+  .step::after{display:none}
+  .tl{padding:22px}
+  .ev{grid-template-columns:58px 16px 1fr;gap:10px}
+  .brand .t span{display:none}
+  nav .btn{padding:10px 16px;font-size:15px}
+  .doc{padding:96px 22px 20px;font-size:13.5px}
+  .doc .hash{left:22px;right:22px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="mandala" viewBox="-100 -100 200 200"><g id="mg" fill="none" stroke="currentColor" stroke-width="1.6"></g></symbol>
+</defs></svg>
+
+<a class="skip" href="#main">Skip to main content</a>
+<div class="util"><div class="wrap"><span>Digital Forensics Investigation Framework</span><span lang="hi">डिजिटल फोरेंसिक जाँच ढाँचा</span></div></div>
+
+<header>
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a class="brand" href="#top" aria-label="Parakh home">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l17 6v13c0 11-7.5 19-17 23C14.5 41 7 33 7 22V9z" fill="#25307A"/><circle cx="22" cy="22" r="8" fill="none" stroke="#fff" stroke-width="3"/><path d="M28 28l8 8" stroke="#F5A524" stroke-width="4" stroke-linecap="round"/><path d="M18.5 22l3 3 5-6" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="t"><b>Parakh <span lang="hi" style="font-size:22px;color:var(--rani)">परख</span></b><span>AI-Powered Digital Forensics Framework</span></span>
+      </a>
+      <ul>
+        <li><a href="#framework">Framework</a></li>
+        <li><a href="#workflow">Workflow</a></li>
+        <li><a href="#swadeshi">Indigenous by design</a></li>
+        <li><a href="#case">Case view</a></li>
+      </ul>
+      <a class="btn btn-p" href="./dashboard.html?tab=Dashboard">Open investigator workspace</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="word" lang="hi">परख</div>
+      <p class="sub hi" lang="hi">हर डिजिटल सबूत की सच्ची परख</p>
+      <h1>Verified digital evidence. Reconstructed incidents.</h1>
+      <p class="lead">Parakh is an AI-powered framework that collects, analyses, authenticates and correlates digital evidence from multiple sources, helping investigators establish what happened and prove it.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="./dashboard.html?tab=Dashboard">Open investigator workspace</a>
+        <a class="btn btn-g" href="#workflow">See how it works</a>
+      </div>
+    </div>
+    <div>
+      <div class="arch">
+        <div class="stage" id="stage" aria-label="Interactive demo: a forensic lens over a sale agreement reveals an edited amount">
+          <div class="doc base" id="base"></div>
+          <div class="doc scan" id="scan" aria-hidden="true"></div>
+          <div class="ring"></div>
+        </div>
+      </div>
+      <p class="hint"><span lang="hi">लेंस घुमाइए</span> · Drag the lens over the document to test it</p>
+    </div>
+  </div>
+</section>
+
+<div class="band"><div class="wrap">
+  <span><b>Phones</b></span><span><b>Call records</b></span><span><b>UPI &amp; bank</b></span><span><b>Chats</b></span><span><b>Emails</b></span><span><b>CCTV</b></span><span><b>Server logs</b></span><span><b>Images</b></span>
+</div></div>
+
+<section id="framework">
+  <div class="wrap">
+    <div class="sh">
+      <span class="hi" lang="hi">हमारी क्षमताएँ</span>
+      <h2>One framework for the full evidence lifecycle</h2>
+      <p class="lead">Parakh takes on the slow, manual parts of a digital investigation and applies them consistently, so investigators can focus on judgement and decisions.</p>
+    </div>
+    <div class="caps">
+      <a class="cap k1" href="./dashboard.html?tab=Gallery"><div class="glyph" lang="hi">सं</div><h3>Evidence collection</h3><span class="hi" lang="hi">संग्रह</span><p>Ingest phone extractions, call records, chats, emails, statements and logs into one common structure.</p></a>
+      <a class="cap k2" href="./dashboard.html?tab=AI%20Leads"><div class="glyph" lang="hi">वि</div><h3>Pattern and anomaly analysis</h3><span class="hi" lang="hi">विश्लेषण</span><p>Machine learning highlights unusual timings, repeated contacts and irregular transactions, and states why.</p></a>
+      <a class="cap k3" href="./dashboard.html?tab=Authenticity"><div class="glyph" lang="hi">प्र</div><h3>Integrity and origin</h3><span class="hi" lang="hi">प्रमाणीकरण</span><p>Every file receives a digital fingerprint on arrival, so its integrity and source can be demonstrated later.</p></a>
+      <a class="cap k4" href="./dashboard.html?tab=Fraud"><div class="glyph" lang="hi">धो</div><h3>Fraud and manipulation detection</h3><span class="hi" lang="hi">धोखाधड़ी की पहचान</span><p>Identify edited images, altered documents, spoofed messages and suspicious financial activity.</p></a>
+      <a class="cap k5" href="./dashboard.html?tab=Graph"><div class="glyph" lang="hi">सह</div><h3>Cross-source correlation</h3><span class="hi" lang="hi">सहसंबंध</span><p>Link people, numbers, accounts, devices and locations that appear in more than one source.</p></a>
+      <a class="cap k6" href="./dashboard.html?tab=Reconstruction"><div class="glyph" lang="hi">पु</div><h3>Incident reconstruction</h3><span class="hi" lang="hi">घटना पुनर्निर्माण</span><p>Build a clear timeline from the combined evidence, with each step traceable to its source.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="alt flow" id="workflow">
+  <div class="wrap">
+    <div class="sh">
+      <span class="hi" lang="hi">कार्यप्रणाली</span>
+      <h2>A defined workflow, fully recorded</h2>
+      <p class="lead">Every case follows the same six stages, and every action is logged so the process can be reviewed and defended.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n" lang="hi">१</div><h3>Collect</h3><p>Ingest evidence and record its fingerprint at once.</p></div>
+      <div class="step"><div class="n" lang="hi">२</div><h3>Normalise</h3><p>Convert formats and time zones to one standard.</p></div>
+      <div class="step"><div class="n" lang="hi">३</div><h3>Analyse</h3><p>Surface patterns, outliers and gaps with AI models.</p></div>
+      <div class="step"><div class="n" lang="hi">४</div><h3>Authenticate</h3><p>Verify integrity and origin; test for tampering.</p></div>
+      <div class="step"><div class="n" lang="hi">५</div><h3>Correlate</h3><p>Connect the same people, devices and events.</p></div>
+      <div class="step"><div class="n" lang="hi">६</div><h3>Report</h3><p>Export findings and timeline with an audit trail.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="swa" id="swadeshi">
+  <svg class="mandala" aria-hidden="true"><use href="#mandala"/></svg>
+  <div class="wrap split">
+    <div>
+      <div class="big" lang="hi">स्वदेशी</div>
+      <h2>Indigenous by design</h2>
+      <p class="lead">Most forensic tools are built abroad and assume foreign formats, languages and workflows. Parakh is developed in India, around the evidence Indian investigators actually handle.</p>
+    </div>
+    <div class="pts">
+      <div class="pt"><h3>Data sovereignty</h3><p>Deploys on your own infrastructure, so sensitive case data does not have to leave your organisation or the country.</p></div>
+      <div class="pt"><h3>Built for Indian data</h3><p>Handles Indian telecom records, UPI and bank statement layouts, and chats that mix Hindi, English and other Indian languages.</p></div>
+      <div class="pt"><h3>Explainable findings</h3><p>Each flag shows the evidence behind it, so conclusions can be questioned, verified and presented with confidence.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="users">
+  <div class="wrap">
+    <div class="sh">
+      <span class="hi" lang="hi">किनके लिए</span>
+      <h2>Designed for agencies that investigate</h2>
+      <p class="lead">Parakh supports any team that must establish the facts from digital evidence.</p>
+    </div>
+    <div class="users">
+      <div class="u"><h3>Police and cyber cells</h3><p>Handle seized devices and records with a clear chain of custody.</p></div>
+      <div class="u"><h3>Forensic laboratories</h3><p>Standardise how evidence is examined, verified and reported.</p></div>
+      <div class="u"><h3>Financial investigators</h3><p>Trace suspicious transactions and link them to communications.</p></div>
+      <div class="u"><h3>Regulators and auditors</h3><p>Verify the origin and integrity of records under review.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="case">
+  <div class="wrap">
+    <div class="sh">
+      <span class="hi" lang="hi">घटना की पूरी तस्वीर</span>
+      <h2>The complete incident, not isolated files</h2>
+      <p class="lead">In this sample, scattered records become a single timeline. The altered photograph is flagged so it cannot be relied on by mistake.</p>
+    </div>
+    <div class="two">
+      <div class="panel" role="group" aria-label="Sample evidence verification report">
+        <div class="ph">
+          <div><h3>Evidence Verification Report</h3><small>Case ref: DF/SAMPLE/0142</small></div>
+          <span class="badge b-s">Sample data</span>
+        </div>
+        <div class="scroll">
+        <table>
+          <thead><tr><th scope="col">Evidence</th><th scope="col">Integrity check</th><th scope="col">Result</th></tr></thead>
+          <tbody>
+            <tr><td>Call detail records<small>Telecom export</small></td><td>Fingerprint matches seized copy</td><td><span class="badge b-ok">Verified</span></td></tr>
+            <tr><td>Chat export<small>Messaging data</small></td><td>Timestamps consistent across devices</td><td><span class="badge b-ok">Verified</span></td></tr>
+            <tr><td>Bank statement<small>Transaction record</small></td><td>Cross-checked with call timeline</td><td><span class="badge b-ok">Verified</span></td></tr>
+            <tr><td>Photograph<small>Image file</small></td><td>Edit traces found in file data</td><td><span class="badge b-no">Flagged</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="pf">Chain of custody logged at every step. Fingerprint: <code>sha256:9f2c…e41a</code></div>
+      </div>
+      <div class="panel tl" role="list" aria-label="Sample reconstructed timeline">
+        <h3>Reconstructed timeline (sample)</h3>
+        <div class="ev" role="listitem"><time>09:12</time><i></i><div>Suspect receives a call from an unknown number<small>Source: call records</small></div></div>
+        <div class="ev" role="listitem"><time>09:20</time><i></i><div>Chat message instructs a transfer of funds<small>Source: chat export</small></div></div>
+        <div class="ev" role="listitem"><time>09:41</time><i></i><div>Large transfer leaves the account<small>Source: bank statement</small></div></div>
+        <div class="ev flag" role="listitem"><time>10:05</time><i></i><div>Photograph presented as proof of delivery<small>Flagged: edited after capture</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-sec" id="contact">
+  <svg class="mandala" aria-hidden="true"><use href="#mandala"/></svg>
+  <div class="wrap">
+    <h2>Explore Parakh on a sample investigation</h2>
+    <p>Enter the investigator workspace and move through the evidence, leads, relationships, authenticity checks and reconstructed timeline.</p>
+    <a class="btn" href="./dashboard.html?tab=Dashboard">Open sample investigation</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><b>Parakh <span lang="hi">परख</span></b><p>An AI-powered digital forensics investigation framework, developed in India.</p></div>
+      <div><h4>Framework</h4><ul><li><a href="#framework">Capabilities</a></li><li><a href="#workflow">Workflow</a></li><li><a href="#swadeshi">Indigenous by design</a></li></ul></div>
+      <div><h4>Contact</h4><ul><li><a href="#contact">Request a demonstration</a></li><li><a href="mailto:hello@parakh.example">hello@parakh.example</a></li></ul></div>
+    </div>
+    <div class="fb"><span>© 2026 Parakh. All rights reserved.</span><span lang="hi">भारत में विकसित · Developed in India</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var g=document.getElementById('mg'),ns='http://www.w3.org/2000/svg',i,e,c;
+  for(i=0;i<16;i++){e=document.createElementNS(ns,'ellipse');e.setAttribute('cx',0);e.setAttribute('cy',-68);e.setAttribute('rx',9);e.setAttribute('ry',26);e.setAttribute('transform','rotate('+(i*22.5)+')');g.appendChild(e)}
+  for(i=0;i<12;i++){e=document.createElementNS(ns,'ellipse');e.setAttribute('cx',0);e.setAttribute('cy',-38);e.setAttribute('rx',6);e.setAttribute('ry',16);e.setAttribute('transform','rotate('+(i*30+15)+')');g.appendChild(e)}
+  [92,96,20,8].forEach(function(r){c=document.createElementNS(ns,'circle');c.setAttribute('r',r);g.appendChild(c)});
+
+  var html='<div class="dh"><b lang="hi">विक्रय अनुबंध</b><span>Sale Agreement</span></div>'+
+  '<p class="ln">Seller: R. K. Sharma</p><p class="ln">Buyer: A. Verma</p><p class="ln">Plot 14, Sector 9, New Delhi</p>'+
+  '<div class="row"><span>Sale amount</span><mark>₹ 4,50,000</mark><span class="note n1">Amount edited after signing</span></div>'+
+  '<div class="sigrow"><svg viewBox="0 0 110 40"><path d="M4 28c10-24 16-24 14-6s8 8 14-8 6 14 14 6 10-12 14-4 10 4 18-8"/></svg><span>Signature</span><span class="note n2">Original, untouched</span></div>'+
+  '<div class="stamp">e-Stamp<br>verified</div>'+
+  '<div class="hash">SHA-256 9f2c…e41a · sealed at intake</div>';
+  var base=document.getElementById('base'),scan=document.getElementById('scan'),stage=document.getElementById('stage');
+  base.innerHTML=html;scan.innerHTML=html;
+
+  var idle=true,t=0,reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function set(x,y){stage.style.setProperty('--x',x+'px');stage.style.setProperty('--y',y+'px')}
+  function pos(e){var r=stage.getBoundingClientRect();set(Math.max(0,Math.min(r.width,e.clientX-r.left)),Math.max(0,Math.min(r.height,e.clientY-r.top)))}
+  function loop(){if(!idle)return;var r=stage.getBoundingClientRect();t+=.014;
+    set(r.width*(.5+.3*Math.sin(t)),r.height*(.47+.14*Math.sin(t*1.6+1)));requestAnimationFrame(loop)}
+  stage.addEventListener('pointermove',function(e){idle=false;pos(e)});
+  stage.addEventListener('pointerdown',function(e){idle=false;pos(e)});
+  var r0=stage.getBoundingClientRect();
+  if(reduce){idle=false;set(r0.width*.7,r0.height*.47)}else{loop()}
+})();
+</script>
+</body>
 </html>
+

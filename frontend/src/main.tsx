@@ -72,6 +72,11 @@ const tabs: Tab[] = [
   "Assistant",
 ];
 
+function initialTabFromLocation(): Tab {
+  const requested = new URLSearchParams(window.location.search).get("tab");
+  return tabs.includes(requested as Tab) ? (requested as Tab) : "Dashboard";
+}
+
 type RailItem =
   | "Active Cases"
   | "Inactive Cases"
@@ -128,7 +133,7 @@ function App() {
 
 function InvestigationWorkspace({ data }: { data: DashboardData }) {
   const [query, setQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<Tab>("Dashboard");
+  const [activeTab, setActiveTab] = useState<Tab>(initialTabFromLocation);
   const [activeRail, setActiveRail] = useState<RailItem>("Active Cases");
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [navCollapsed, setNavCollapsed] = useState(
