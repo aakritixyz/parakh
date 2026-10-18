@@ -110,6 +110,28 @@ class PartyIdentifier(Base):
     source: Mapped[str] = mapped_column(String(120), default="parser")
 
 
+class AliasSuggestion(Base):
+    __tablename__ = "alias_suggestions"
+    __table_args__ = (
+        UniqueConstraint("case_id", "party_id", "identifier_id", name="uq_alias_suggestion_pair"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    case_id: Mapped[int] = mapped_column(ForeignKey("cases.id"), index=True)
+    party_id: Mapped[int] = mapped_column(ForeignKey("parties.id"), index=True)
+    identifier_id: Mapped[int] = mapped_column(ForeignKey("identifiers.id"), index=True)
+    confidence: Mapped[float] = mapped_column(Float)
+    reasons: Mapped[list] = mapped_column(JSON, default=list)
+    features: Mapped[dict] = mapped_column(JSON, default=dict)
+    status: Mapped[str] = mapped_column(String(24), default="suggested", index=True)
+    feedback_count: Mapped[int] = mapped_column(Integer, default=0)
+    prior_party_ids: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class Thread(Base):
     __tablename__ = "threads"
 

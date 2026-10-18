@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import bcrypt
 from argon2 import PasswordHasher
-from argon2.exceptions import InvalidHashError, VerificationError
+from argon2.exceptions import InvalidHash, VerificationError
 from jose import JWTError, jwt
 
 from app.core.config import get_settings
@@ -32,7 +32,7 @@ def verify_password(password: str, hashed: str) -> bool:
         if hashed.startswith("$argon2"):
             return password_hasher.verify(hashed, password)
         return bcrypt.checkpw(password.encode(), hashed.encode())
-    except (VerificationError, InvalidHashError, ValueError, UnicodeError):
+    except (VerificationError, InvalidHash, ValueError, UnicodeError):
         return False
 
 

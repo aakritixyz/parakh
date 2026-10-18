@@ -4,6 +4,7 @@ import { fallbackDashboard, type DashboardData } from "./api";
 import {
   caseDashboard,
   getCase,
+  getCases,
   getAudit,
   type Audit,
   forgetSession,
@@ -17,6 +18,7 @@ import {
 import { SignInPage } from "./components/entry/SignInPage";
 import { ActiveCases } from "./components/cases/ActiveCases";
 import { EvidenceIntake } from "./components/intake/EvidenceIntake";
+import { ImportReport } from "./components/intake/ImportReport";
 import { CaseWorkspace } from "./components/casework/CaseWorkspace";
 import "./styles.css";
 function App() {
@@ -26,7 +28,9 @@ function App() {
     params.get("mode") === "demo" ? "demo" : "signin",
   );
   const [session, setSession] = useState<Session | null>(null),
-    [view, setView] = useState<"cases" | "upload" | "case">("cases"),
+    [view, setView] = useState<"cases" | "upload" | "report" | "case">(
+      params.get("view") === "report" ? "report" : "cases",
+    ),
     [item, setItem] = useState<CaseInfo | null>(null),
     [caseAudit, setCaseAudit] = useState<Audit | null>(null),
     [data, setData] = useState<DashboardData>(fallbackDashboard),
@@ -64,6 +68,14 @@ function App() {
     };
   }, []);
   useEffect(() => {
+    if (mode !== "signed" || view !== "report" || item) return;
+    void getCases().then((cases) => {
+      const imported = cases.find((candidate) => candidate.evidence_count > 0);
+      if (imported) setItem(imported);
+      else setView("cases");
+    });
+  }, [item, mode, view]);
+  useEffect(() => {
     document.title =
       mode === "signin"
         ? "Investigator sign-in | Parakh"
@@ -71,6 +83,8 @@ function App() {
           ? "Active Cases | Parakh"
           : view === "upload"
             ? "Upload evidence | Parakh"
+            : view === "report"
+              ? "Import report | Parakh"
             : `${item?.title ?? "Case workspace"} | Parakh`;
   }, [mode, view, item?.title]);
   async function logout() {
@@ -153,7 +167,15 @@ function App() {
         initialTitle={item.title}
         backLabel="Back to Active Cases"
         onBack={() => setView("cases")}
-        onReview={async () => openCase(item)}
+        onReview={async () => setView("report")}
+      />
+    );
+  if (view === "report" && item && session)
+    return (
+      <ImportReport
+        caseInfo={item}
+        onBack={() => setView("upload")}
+        onContinue={() => openCase(item)}
       />
     );
   if (view === "case" && item)
@@ -177,7 +199,7 @@ function App() {
       onOpen={openCase}
       onUpload={(selected) => {
         setItem(selected);
-        setView("upload");
+        setView(selected.evidence_count > 0 ? "report" : "upload");
       }}
     />
   );

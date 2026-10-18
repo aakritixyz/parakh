@@ -406,6 +406,58 @@
   padding: 12px;
   border-radius: 6px;
 }
+.reportStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.reportStats div {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+.reportStats strong {
+  display: block;
+  font-size: 28px;
+}
+.reportStats span,
+.reportTable small {
+  display: block;
+  margin-top: 5px;
+  color: var(--ink-3);
+  font-size: 11px;
+}
+.decisionList article {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid var(--line);
+  padding: 16px 0;
+}
+.decisionList article > div:first-child { min-width: 0; }
+.decisionList span {
+  margin-left: 8px;
+  padding: 3px 7px;
+  border-radius: 20px;
+  background: var(--info-bg);
+  color: var(--ink-2);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.decisionList p { color: var(--ink-2); margin: 8px 0; }
+.decisionList code { overflow-wrap: anywhere; }
+.decisionAction { display: flex; align-items: end; gap: 10px; }
+.decisionAction label { color: var(--ink-3); font-size: 11px; }
+.decisionAction select { display: block; margin-top: 5px; padding: 8px; border: 1px solid var(--line); border-radius: 5px; }
+.decisionAction button { padding: 9px 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 5px; white-space: nowrap; }
+.reportTable { overflow-x: auto; }
+.reportTable > div { display: grid; grid-template-columns: minmax(260px, 2fr) minmax(150px, 1fr) 90px 70px 110px; gap: 16px; align-items: center; border-top: 1px solid var(--line); padding: 13px 0; min-width: 780px; font-size: 12px; }
+.reportTable .reportHead { color: var(--ink-3); font-size: 10px; text-transform: uppercase; letter-spacing: .5px; }
+.reportActions { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 20px; }
+.reportActions p { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 12px; }
+.reportActions p svg { color: var(--ok); }
 .help {
   padding: 20px;
   border: 1px solid var(--line);
@@ -527,6 +579,8 @@
   .dropzone {
     padding: 24px 12px;
   }
+  .reportStats { grid-template-columns: 1fr; }
+  .decisionList article, .reportActions { align-items: stretch; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner {

@@ -704,7 +704,7 @@ export function EvidenceIntake({
                     ? "Loading…"
                     : demo
                       ? "Open sample analysis"
-                      : "Open case analysis"}
+                      : "Review import report"}
                   <ArrowRight />
                 </button>
               ) : (

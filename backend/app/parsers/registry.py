@@ -1,6 +1,7 @@
+import re
 from pathlib import Path
 
-from app.parsers.base import Parser
+from app.parsers.base import Parser, streaming_parser
 
 
 class ParserRegistry:
@@ -13,10 +14,18 @@ class ParserRegistry:
 
     @classmethod
     def detect(cls, filename: str, content_type: str, path: Path) -> Parser:
+        parser, _, _ = cls.detect_with_confidence(filename, content_type, path)
+        return parser
+
+    @classmethod
+    def detect_with_confidence(
+        cls, filename: str, content_type: str, path: Path, *, options: dict | None = None
+    ) -> tuple[Parser, float, list[str]]:
         for parser_cls in cls._parsers:
             if parser_cls.matches(filename, content_type, path):
-                return parser_cls()
-        return GenericLogParser()
+                confidence = parser_cls.detection_confidence(filename, content_type, path)
+                return parser_cls(options=options), confidence, [f"Matched {parser_cls.name}"]
+        return GenericLogParser(options=options), 0.35, ["No specialised format matched"]
 
     @classmethod
     def capabilities(cls) -> list[dict]:
@@ -44,22 +53,43 @@ class GenericLogParser(Parser):
     def matches(cls, filename: str, content_type: str, path: Path) -> bool:
         return True
 
+    @streaming_parser
     def parse(self, path: Path, *, case_id: int, evidence_id: int):
         from app.parsers.base import ParsedEvent
 
-        text = path.read_text(errors="ignore")
-        return [
-            ParsedEvent(
-                case_id=case_id,
-                evidence_id=evidence_id,
-                source_type=self.source_type,
-                action="log_line",
-                content=line[:2000],
-                raw_ref=f"line:{i}",
-            )
-            for i, line in enumerate(text.splitlines()[:500], start=1)
-            if line.strip()
-        ]
+        with path.open(encoding="utf-8-sig", errors="replace") as source:
+            for i, line in enumerate(source, start=1):
+                if not line.strip():
+                    continue
+                if i > 500:
+                    self.warnings.append(
+                        {"type": "record_limit", "message": "Only the first 500 lines were parsed."}
+                    )
+                    break
+                offset = re.search(
+                    r"(?i)(?:offset|slow|fast)[^\n-]*?(-?\d+)\s*(seconds?|minutes?)", line
+                )
+                if offset and not any(
+                    isinstance(item, dict) and item.get("type") == "clock_offset_hint"
+                    for item in self.warnings
+                ):
+                    self.warnings.append(
+                        {
+                            "type": "clock_offset_hint",
+                            "line": i,
+                            "value": offset.group(0).strip(),
+                            "message": "A clock offset is stated in the source and needs investigator review.",
+                        }
+                    )
+                yield ParsedEvent(
+                    case_id=case_id,
+                    evidence_id=evidence_id,
+                    source_type=self.source_type,
+                    event_type="other",
+                    action="log_line",
+                    content=line.rstrip("\r\n")[:2000],
+                    raw_ref=f"line:{i}",
+                )
 
 
 from app.parsers import concrete as _concrete  # noqa: E402,F401

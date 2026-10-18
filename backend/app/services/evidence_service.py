@@ -1,5 +1,7 @@
 import hashlib
 import json
+import re
+from itertools import islice
 from pathlib import Path
 
 from fastapi import UploadFile
@@ -11,6 +13,7 @@ from app.models.evidence import Event, Evidence
 from app.models.investigation import Extraction, Job
 from app.parsers.registry import ParserRegistry
 from app.services.audit_service import AuditService
+from app.services.document_extraction_service import DocumentExtractionService
 from app.services.file_types import extension_mismatch, sniff_type
 from app.storage.content_addressed import ContentAddressedStorage
 
@@ -66,18 +69,30 @@ class EvidenceService:
         archive_path: str | None = None,
     ) -> tuple[Evidence, Job | None, bool]:
         if idempotency_key:
-            existing = self.db.scalar(select(Evidence).where(Evidence.case_id == case_id, Evidence.idempotency_key == idempotency_key))
+            existing = self.db.scalar(
+                select(Evidence).where(
+                    Evidence.case_id == case_id, Evidence.idempotency_key == idempotency_key
+                )
+            )
             if existing:
-                prior_job = self.db.scalar(select(Job).where(Job.evidence_id == existing.id).order_by(Job.id.desc()))
+                prior_job = self.db.scalar(
+                    select(Job).where(Job.evidence_id == existing.id).order_by(Job.id.desc())
+                )
                 return existing, prior_job, True
         blob = self.storage.put_fileobj(fileobj, get_settings().max_upload_bytes)
-        existing = self.db.scalar(select(Evidence).where(Evidence.case_id == case_id, Evidence.sha256 == blob.sha256))
+        existing = self.db.scalar(
+            select(Evidence).where(Evidence.case_id == case_id, Evidence.sha256 == blob.sha256)
+        )
         if existing:
-            prior_job = self.db.scalar(select(Job).where(Job.evidence_id == existing.id).order_by(Job.id.desc()))
+            prior_job = self.db.scalar(
+                select(Job).where(Job.evidence_id == existing.id).order_by(Job.id.desc())
+            )
             return existing, prior_job, True
         detected = sniff_type(blob.path)
         mismatch = extension_mismatch(filename, detected)
-        parser = ParserRegistry.detect(filename, detected, blob.path)
+        parser, detection_confidence, detection_reasons = ParserRegistry.detect_with_confidence(
+            filename, detected, blob.path
+        )
         selected_type = source_type or parser.source_type
         evidence = Evidence(
             case_id=case_id,
@@ -103,6 +118,12 @@ class EvidenceService:
                 "detected_mime": detected,
                 "declared_mime": content_type,
                 "magic_byte_warning": mismatch,
+                "format_detection": {
+                    "confidence": detection_confidence,
+                    "reasons": detection_reasons,
+                    "parser": parser.name,
+                    "version": parser.version,
+                },
             },
         )
         self.db.add(evidence)
@@ -148,7 +169,19 @@ class EvidenceService:
         if not evidence:
             raise ValueError("Evidence not found")
         stored_path = Path(evidence.storage_path)
-        parser = ParserRegistry.detect(evidence.filename, evidence.content_type, stored_path)
+        options = evidence.metadata_json.get("parser_options", {})
+        parser, detection_confidence, detection_reasons = ParserRegistry.detect_with_confidence(
+            evidence.filename, evidence.mime, stored_path, options=options
+        )
+        evidence.metadata_json = {
+            **evidence.metadata_json,
+            "format_detection": {
+                "confidence": detection_confidence,
+                "reasons": detection_reasons,
+                "parser": parser.name,
+                "version": parser.version,
+            },
+        }
         extraction = self.db.scalar(
             select(Extraction)
             .where(Extraction.evidence_id == evidence.id)
@@ -171,20 +204,17 @@ class EvidenceService:
             .filter(Event.extraction_id == extraction.id)
             .delete(synchronize_session=False)
         )
-        self.db.expire_all()
         inserted = 0
-        for parsed in parser.parse(stored_path, case_id=evidence.case_id, evidence_id=evidence.id):
-            event_data = parsed.model_dump()
-            event_data["extraction_id"] = extraction.id
-            event_data["source_app"] = parser.source_type
-            event_data["event_type"] = _event_type_for_action(str(event_data.get("action", "")))
-            event_data["parser_name"] = parser.__class__.__name__
-            event_data["parser_version"] = getattr(parser, "version", "1")
-            event_data["dedupe_hash"] = _dedupe_hash(event_data)
-            self.db.add(Event(**event_data))
-            inserted += 1
+        stream = parser.parse(stored_path, case_id=evidence.case_id, evidence_id=evidence.id)
+        while batch := list(islice(stream, 5000)):
+            events = [_event_from_parsed(item, evidence, extraction.id, parser) for item in batch]
+            self.db.add_all(events)
+            self.db.flush()
+            inserted += len(events)
+        _, document_warnings = DocumentExtractionService(self.db).extract(evidence)
+        parser.warnings.extend(document_warnings)
         extraction.warnings = list(getattr(parser, "warnings", []))
-        extraction.parse_status = "needs_review" if extraction.warnings else "complete"
+        extraction.parse_status = _parse_status(extraction.warnings)
         extraction.parser_name = parser.__class__.__name__
         extraction.parser_version = getattr(parser, "version", "1")
         if extraction.warnings:
@@ -244,3 +274,43 @@ def _dedupe_hash(event_data: dict) -> str:
     }
     encoded = json.dumps(stable, sort_keys=True, separators=(",", ":"), default=str)
     return hashlib.sha256(encoded.encode()).hexdigest()
+
+
+def _event_from_parsed(parsed, evidence: Evidence, extraction_id: int, parser) -> Event:
+    event_data = parsed.model_dump()
+    aadhaar_pattern = re.compile(r"(?<!\d)(\d{4})[ -]?(\d{4})[ -]?(\d{4})(?!\d)")
+    content = str(event_data.get("content", ""))
+    if aadhaar_pattern.search(content):
+        event_data["content"] = aadhaar_pattern.sub(r"XXXX XXXX \3", content)
+        if not any(
+            isinstance(item, dict) and item.get("type") == "masked_aadhaar"
+            for item in parser.warnings
+        ):
+            parser.warnings.append(
+                {
+                    "type": "masked_aadhaar",
+                    "message": "Aadhaar-like digits were masked in the searchable event; original evidence remains unchanged.",
+                }
+            )
+    event_data.update(
+        extraction_id=extraction_id,
+        owner_id=evidence.owner_id,
+        source_app=evidence.source_type,
+        parser_name=parser.__class__.__name__,
+        parser_version=getattr(parser, "version", "1"),
+    )
+    if event_data.get("event_type") == "other":
+        event_data["event_type"] = _event_type_for_action(str(event_data.get("action", "")))
+    event_data["dedupe_hash"] = _dedupe_hash(event_data)
+    return Event(**event_data)
+
+
+def _parse_status(warnings: list) -> str:
+    blocking = {"unparsed_line", "ocr_required", "ocr_engine_unavailable", "pdf_unreadable"}
+    return (
+        "needs_review"
+        if any(
+            (item.get("type") if isinstance(item, dict) else item) in blocking for item in warnings
+        )
+        else "complete"
+    )

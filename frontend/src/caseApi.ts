@@ -90,6 +90,99 @@ export type IntakeItem = {
   duplicate: boolean;
   job: IntakeJob | null;
 };
+export type ImportDecision = {
+  type: string;
+  message: string;
+  evidence_id: number;
+  filename: string;
+  line?: number;
+  value?: string;
+  selected?: string;
+};
+export type ImportReportData = {
+  case_id: number;
+  files_imported: number;
+  total_events: number;
+  status: "ready" | "needs_review";
+  decisions: ImportDecision[];
+  files: {
+    evidence_id: number;
+    filename: string;
+    event_count: number;
+    parser_name: string | null;
+    parser_version: string | null;
+    parse_status: string;
+    format_confidence: number | null;
+    warnings: (string | ImportDecision)[];
+    document_extraction: null | {
+      engine: string;
+      engine_version: string;
+      languages: string[];
+      boxes: { text: string; page: number; bbox: number[] }[];
+      fields: Record<
+        string,
+        {
+          value: string;
+          confidence: number;
+          method: string;
+          reason: string;
+          receipt: { page: number; bbox: number[] | null; text?: string };
+        }
+      >;
+    };
+  }[];
+};
+export type SearchEvent = {
+  event_id: number;
+  evidence_id: number;
+  type: string;
+  action: string;
+  app: string;
+  owner: string;
+  device: string;
+  parties: string[];
+  identifiers: string[];
+  tags: string[];
+  timestamp_utc: string | null;
+  original_timestamp: string | null;
+  timezone_offset: string | null;
+  content: string;
+  raw_ref: string;
+  confidence: number;
+  source: { filename: string; sha256: string; reference: string };
+};
+export type SearchResult = {
+  items: SearchEvent[];
+  total_matching: number;
+  total_in_case: number;
+  next_cursor: number | null;
+  search_engine: string;
+  facets: Record<string, { value: string; count: number }[]>;
+  histogram: { bucket: string; count: number }[];
+  semantic_search: { status: string; reason: string };
+};
+export type IdentityOverview = {
+  suggestions: {
+    id: number;
+    party: string;
+    identifier: string;
+    identifier_type: string;
+    confidence: number;
+    base_confidence: number;
+    status: "suggested" | "confirmed" | "reverted";
+    reasons: string[];
+    feedback_bonus: number;
+  }[];
+  links: { party: string; identifier: string; source: string }[];
+  matcher: {
+    kind: string;
+    version: string;
+    ml_status: string;
+    labels_recorded: number;
+    limits: string;
+  };
+  lookalike_domains: { left: string; right: string; distance: number; reason: string }[];
+};
 let session: Session | null = null;
 let refreshFlight: Promise<Session> | null = null;
 let generation = 0;
@@ -289,6 +382,51 @@ export const cancelIntakeJob = (caseId: number, jobId: number) =>
 export const retryIntakeJob = (caseId: number, jobId: number) =>
   sessionRequest<IntakeJob>(
     `/api/v2/cases/${caseId}/intake/jobs/${jobId}/retry`,
+    { method: "POST" },
+  );
+export const getImportReport = (caseId: number) =>
+  sessionRequest<ImportReportData>(`/api/v2/cases/${caseId}/import-report`);
+export const confirmImportReport = (caseId: number) =>
+  sessionRequest<{ confirmed: boolean }>(
+    `/api/v2/cases/${caseId}/import-report/confirm`,
+    { method: "POST" },
+  );
+export const reparseEvidence = (
+  caseId: number,
+  evidenceId: number,
+  dateOrder: "day_first" | "month_first",
+) =>
+  sessionRequest<{ job_id: number; status: string }>(
+    `/api/v2/cases/${caseId}/evidence/${evidenceId}/reparse`,
+    json({ date_order: dateOrder }),
+  );
+export const searchCaseEvents = (
+  caseId: number,
+  spec: {
+    q?: string;
+    regex?: string;
+    phrases?: string[];
+    time?: Record<string, string>;
+    facets?: Record<string, string | boolean>;
+    page?: { cursor?: number; limit?: number };
+  },
+) =>
+  sessionRequest<SearchResult>(
+    `/api/v2/cases/${caseId}/search/events`,
+    json(spec),
+  );
+export const getEventDetail = (caseId: number, eventId: number) =>
+  sessionRequest(`/api/v2/cases/${caseId}/events/${eventId}/detail`);
+export const getIdentities = (caseId: number) =>
+  sessionRequest<IdentityOverview>(`/api/v2/cases/${caseId}/identities`);
+export const confirmAlias = (caseId: number, suggestionId: number) =>
+  sessionRequest(
+    `/api/v2/cases/${caseId}/alias-suggestions/${suggestionId}/confirm`,
+    { method: "POST" },
+  );
+export const unmergeAlias = (caseId: number, suggestionId: number) =>
+  sessionRequest(
+    `/api/v2/cases/${caseId}/alias-suggestions/${suggestionId}/unmerge`,
     { method: "POST" },
   );
 

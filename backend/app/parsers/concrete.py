@@ -21,7 +21,7 @@ else:
     PDF_READ_ERRORS = (ValueError, _PdfReadError)
 
 from app.core.config import get_settings
-from app.parsers.base import ParsedEvent, Parser, parse_datetime
+from app.parsers.base import ParsedEvent, Parser, parse_datetime, streaming_parser, timezone_offset
 from app.parsers.registry import ParserRegistry
 
 
@@ -62,33 +62,58 @@ class WhatsAppParser(Parser):
             sample = source.read(65536)
         return any(cls._header(line) for line in sample.splitlines()[:20])
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
-        events: list[ParsedEvent] = []
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
         settings = get_settings()
-        for line_number, line in enumerate(
-            path.read_text(encoding="utf-8-sig", errors="replace").splitlines(), start=1
-        ):
-            header = self._header(line)
-            if header is None:
-                if events:
-                    events[-1].content += "\n" + line
-                continue
-            timestamp, body = header
-            actor, separator, content = body.partition(":")
-            is_message = bool(separator and actor.strip())
-            content = content.strip() if is_message else body.strip()
-            events.append(
-                ParsedEvent(
+        selected_order = self.options.get("date_order")
+        dayfirst = (
+            settings.whatsapp_day_first
+            if selected_order is None
+            else selected_order != "month_first"
+        )
+        current: ParsedEvent | None = None
+        with path.open(encoding="utf-8-sig", errors="replace") as source:
+            for line_number, raw_line in enumerate(source, start=1):
+                line = raw_line.rstrip("\r\n")
+                header = self._header(line)
+                if header is None:
+                    if current is not None:
+                        current.content += "\n" + line
+                    elif line.strip():
+                        self.warnings.append(
+                            {
+                                "type": "unparsed_line",
+                                "line": line_number,
+                                "message": "Text before the first WhatsApp header was not parsed.",
+                            }
+                        )
+                    continue
+                if current is not None:
+                    yield current
+                timestamp, body = header
+                self._flag_ambiguous_date(timestamp, line_number)
+                actor, separator, content = body.partition(":")
+                is_message = bool(separator and actor.strip())
+                content = content.strip() if is_message else body.strip()
+                current = ParsedEvent(
                     case_id=case_id,
                     evidence_id=evidence_id,
                     source_type=self.source_type,
+                    event_type="message" if is_message else "other",
                     timestamp_utc=parse_datetime(
                         timestamp,
                         default_timezone=settings.whatsapp_timezone,
-                        dayfirst=settings.whatsapp_day_first,
+                        dayfirst=dayfirst,
                         fuzzy=False,
                     ),
                     original_timestamp=timestamp,
+                    timezone_offset=timezone_offset(
+                        timestamp,
+                        default_timezone=settings.whatsapp_timezone,
+                        dayfirst=dayfirst,
+                    ),
+                    direction="unknown",
+                    from_party_text=actor.strip() if is_message else None,
                     actor_entities=[actor.strip()] if is_message else [],
                     action=("media_omitted" if _is_whatsapp_media_omitted(content) else "message")
                     if is_message
@@ -97,8 +122,32 @@ class WhatsAppParser(Parser):
                     raw_ref=f"line:{line_number}",
                     confidence=0.95 if is_message else 0.85,
                 )
+        if current is not None:
+            yield current
+
+    def _flag_ambiguous_date(self, timestamp: str, line_number: int) -> None:
+        match = re.match(r"^(\d{1,2})[/.-](\d{1,2})[/.-]", timestamp)
+        if not match:
+            return
+        first, second = (int(value) for value in match.groups())
+        if (
+            first <= 12
+            and second <= 12
+            and first != second
+            and not any(
+                isinstance(item, dict) and item.get("type") == "ambiguous_date"
+                for item in self.warnings
             )
-        return events
+        ):
+            self.warnings.append(
+                {
+                    "type": "ambiguous_date",
+                    "line": line_number,
+                    "value": timestamp,
+                    "selected": self.options.get("date_order", "day_first"),
+                    "message": "Numeric date can mean DD/MM or MM/DD. Investigator decision required.",
+                }
+            )
 
 
 def _is_whatsapp_media_omitted(value: str) -> bool:
@@ -118,8 +167,19 @@ class CsvParser(Parser):
     def matches(cls, filename: str, content_type: str, path: Path) -> bool:
         return filename.lower().endswith(".csv")
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
-        events = []
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
+        with path.open(newline="", encoding="utf-8-sig", errors="replace") as fh:
+            reader = csv.DictReader(fh)
+            fieldnames = {_csv_header(name) for name in (reader.fieldnames or [])}
+            if len(fieldnames) != len(reader.fieldnames or []):
+                raise ValueError("CSV has duplicate column names after normalization.")
+            first_row = next(reader, None)
+            if first_row is not None and None in first_row:
+                raise ValueError("CSV row 2 has more fields than its header.")
+        return self._parse_rows(path, case_id=case_id, evidence_id=evidence_id)
+
+    @streaming_parser
+    def _parse_rows(self, path: Path, *, case_id: int, evidence_id: int):
         with path.open(newline="", encoding="utf-8-sig", errors="replace") as fh:
             reader = csv.DictReader(fh)
             fieldnames = {_csv_header(name) for name in (reader.fieldnames or [])}
@@ -145,20 +205,36 @@ class CsvParser(Parser):
                 action = (
                     lower.get("type") or lower.get("action") or lower.get("direction") or "record"
                 )
-                events.append(
-                    ParsedEvent(
-                        case_id=case_id,
-                        evidence_id=evidence_id,
-                        source_type=source_type,
-                        timestamp_utc=parse_datetime(ts),
-                        original_timestamp=ts,
-                        actor_entities=[actor] if actor else [],
-                        action=action,
-                        content=json.dumps(row, ensure_ascii=False),
-                        raw_ref=f"row:{i}",
-                    )
+                recipient = lower.get("to") or lower.get("recipient") or lower.get("called")
+                direction = lower.get("direction") or "unknown"
+                yield ParsedEvent(
+                    case_id=case_id,
+                    evidence_id=evidence_id,
+                    source_type=source_type,
+                    event_type=_event_type_for_csv(source_type, action),
+                    timestamp_utc=parse_datetime(ts),
+                    original_timestamp=ts,
+                    timezone_offset=timezone_offset(ts),
+                    direction=direction.casefold() if direction else "unknown",
+                    from_party_text=actor,
+                    to_party_text=[recipient] if recipient else [],
+                    actor_entities=[actor] if actor else [],
+                    action=action,
+                    content=json.dumps(row, ensure_ascii=False),
+                    raw_ref=f"row:{i}",
                 )
-        return events
+
+
+def _event_type_for_csv(source_type: str, action: str) -> str:
+    if source_type == "bank_upi_statement":
+        return "transaction"
+    if source_type == "cdr_ipdr":
+        return (
+            "call"
+            if "call" in action.casefold() or action.casefold() in {"in", "out"}
+            else "telecom"
+        )
+    return "other"
 
 
 def _csv_header(value: str) -> str:
@@ -214,27 +290,33 @@ class BrowserSQLiteParser(Parser):
     def matches(cls, filename: str, content_type: str, path: Path) -> bool:
         return filename.lower().endswith((".sqlite", ".db"))
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
-        events = []
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
         with sqlite3.connect(path) as conn:
             tables = {
                 row[0] for row in conn.execute("select name from sqlite_master where type='table'")
             }
             if "urls" in tables:
-                for i, (url, title) in enumerate(
-                    conn.execute("select url, title from urls limit 500"), start=1
-                ):
-                    events.append(
-                        ParsedEvent(
-                            case_id=case_id,
-                            evidence_id=evidence_id,
-                            source_type=self.source_type,
-                            action="visited_url",
-                            content=f"{title or ''} {url}",
-                            raw_ref=f"urls:{i}",
-                        )
+                columns = {row[1] for row in conn.execute("pragma table_info(urls)")}
+                timestamp_column = "visit_time_utc" if "visit_time_utc" in columns else None
+                query = (
+                    "select url, title, visit_time_utc from urls limit 500"
+                    if timestamp_column
+                    else "select url, title, null from urls limit 500"
+                )
+                for i, (url, title, ts) in enumerate(conn.execute(query), start=1):
+                    yield ParsedEvent(
+                        case_id=case_id,
+                        evidence_id=evidence_id,
+                        source_type=self.source_type,
+                        event_type="web_visit",
+                        timestamp_utc=parse_datetime(str(ts)) if ts else None,
+                        original_timestamp=str(ts) if ts else None,
+                        timezone_offset=timezone_offset(str(ts)) if ts else None,
+                        action="visited_url",
+                        content=f"{title or ''} {url}",
+                        raw_ref=f"urls:{i}",
                     )
-        return events
 
 
 @ParserRegistry.register
@@ -249,13 +331,13 @@ class EmailParser(Parser):
     def matches(cls, filename: str, content_type: str, path: Path) -> bool:
         return filename.lower().endswith((".eml", ".mbox"))
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
-        messages: list[Message] = []
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
+        messages: list[Message] | mailbox.mbox
         if path.name.lower().endswith(".mbox"):
             messages = list(mailbox.mbox(path))
         else:
             messages = [email.message_from_bytes(path.read_bytes())]
-        events = []
         for i, msg in enumerate(messages, start=1):
             body = ""
             if msg.is_multipart():
@@ -273,20 +355,24 @@ class EmailParser(Parser):
                     body = payload.decode(errors="ignore")
                 else:
                     body = str(msg.get_payload())
-            events.append(
-                ParsedEvent(
-                    case_id=case_id,
-                    evidence_id=evidence_id,
-                    source_type=self.source_type,
-                    timestamp_utc=parse_datetime(msg.get("Date")),
-                    original_timestamp=msg.get("Date"),
-                    actor_entities=[msg.get("From", ""), msg.get("To", "")],
-                    action="email",
-                    content=f"Subject: {msg.get('Subject', '')}\n{body[:2000]}",
-                    raw_ref=f"message:{i}",
-                )
+            sender = msg.get("From", "")
+            recipients = [value.strip() for value in msg.get("To", "").split(",") if value.strip()]
+            yield ParsedEvent(
+                case_id=case_id,
+                evidence_id=evidence_id,
+                source_type=self.source_type,
+                event_type="email",
+                timestamp_utc=parse_datetime(msg.get("Date")),
+                original_timestamp=msg.get("Date"),
+                timezone_offset=timezone_offset(msg.get("Date")),
+                direction="unknown",
+                from_party_text=sender or None,
+                to_party_text=recipients,
+                actor_entities=[sender, *recipients],
+                action="email",
+                content=f"Subject: {msg.get('Subject', '')}\n{body[:2000]}",
+                raw_ref=f"message:{i}",
             )
-        return events
 
 
 @ParserRegistry.register
@@ -312,16 +398,16 @@ class ImageParser(Parser):
                 "exif_keys": list((img.getexif() or {}).keys()),
             }
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
-        return [
-            ParsedEvent(
-                case_id=case_id,
-                evidence_id=evidence_id,
-                source_type=self.source_type,
-                action="image_added",
-                content=path.name,
-            )
-        ]
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
+        yield ParsedEvent(
+            case_id=case_id,
+            evidence_id=evidence_id,
+            source_type=self.source_type,
+            event_type="media",
+            action="image_added",
+            content=path.name,
+        )
 
 
 @ParserRegistry.register
@@ -332,8 +418,8 @@ class PdfParser(Parser):
     supported_types = ("pdf",)
     status = "stable"
 
-    def __init__(self) -> None:
-        self.warnings: list[str] = []
+    def __init__(self, *, options: dict | None = None) -> None:
+        super().__init__(options=options)
 
     @classmethod
     def matches(cls, filename: str, content_type: str, path: Path) -> bool:
@@ -359,25 +445,26 @@ class PdfParser(Parser):
             "warnings": self.warnings,
         }
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
         if PdfReader is None:
             self.warnings = ["pypdf_not_installed"]
-            return []
+            return
         try:
             reader = PdfReader(str(path))
             text = "\n".join((page.extract_text() or "") for page in reader.pages[:5])
         except PDF_READ_ERRORS:
             self.warnings = ["pdf_unreadable"]
-            return []
-        return [
-            ParsedEvent(
-                case_id=case_id,
-                evidence_id=evidence_id,
-                source_type=self.source_type,
-                action="pdf_text",
-                content=text[:5000],
-            )
-        ]
+            return
+        yield ParsedEvent(
+            case_id=case_id,
+            evidence_id=evidence_id,
+            source_type=self.source_type,
+            event_type="document",
+            action="pdf_text",
+            content=text[:5000],
+            raw_ref="page:1",
+        )
 
 
 @ParserRegistry.register
@@ -394,26 +481,25 @@ class GpsParser(Parser):
             x in filename.lower() for x in ["gps", "location", "takeout"]
         )
 
-    def parse(self, path: Path, *, case_id: int, evidence_id: int) -> list[ParsedEvent]:
+    @streaming_parser
+    def parse(self, path: Path, *, case_id: int, evidence_id: int):
         text = path.read_text(errors="ignore")
-        events = []
-        if path.suffix.lower() == ".json":
+        if text.lstrip().startswith(("{", "[")):
             data = json.loads(text)
             rows = data.get("locations", data if isinstance(data, list) else [])
             for i, row in enumerate(rows[:500], start=1):
                 lat = row.get("latitudeE7", 0) / 1e7 if "latitudeE7" in row else row.get("lat")
                 lon = row.get("longitudeE7", 0) / 1e7 if "longitudeE7" in row else row.get("lon")
                 ts = row.get("timestamp") or row.get("timestampMs")
-                events.append(
-                    ParsedEvent(
-                        case_id=case_id,
-                        evidence_id=evidence_id,
-                        source_type=self.source_type,
-                        timestamp_utc=parse_datetime(str(ts)),
-                        original_timestamp=str(ts),
-                        action="location",
-                        location={"lat": lat, "lon": lon},
-                        raw_ref=f"location:{i}",
-                    )
+                yield ParsedEvent(
+                    case_id=case_id,
+                    evidence_id=evidence_id,
+                    source_type=self.source_type,
+                    event_type="location",
+                    timestamp_utc=parse_datetime(str(ts)),
+                    original_timestamp=str(ts),
+                    timezone_offset=timezone_offset(str(ts)),
+                    action="location",
+                    location={"lat": lat, "lon": lon},
+                    raw_ref=f"location:{i}",
                 )
-        return events

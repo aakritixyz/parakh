@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import (
     JSON,
     DateTime,
+    Double,
     Float,
     ForeignKey,
     Integer,
@@ -39,7 +40,9 @@ class Evidence(Base):
     acquisition_note: Mapped[str] = mapped_column(Text, default="")
     received_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     owner_id: Mapped[int | None] = mapped_column(ForeignKey("owners.id"), nullable=True, index=True)
-    device_id: Mapped[int | None] = mapped_column(ForeignKey("devices.id"), nullable=True, index=True)
+    device_id: Mapped[int | None] = mapped_column(
+        ForeignKey("devices.id"), nullable=True, index=True
+    )
     parent_evidence_id: Mapped[int | None] = mapped_column(
         ForeignKey("evidence.id"), nullable=True, index=True
     )
@@ -58,7 +61,9 @@ class Event(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     case_id: Mapped[int] = mapped_column(ForeignKey("cases.id"), index=True)
     evidence_id: Mapped[int] = mapped_column(ForeignKey("evidence.id"), index=True)
-    extraction_id: Mapped[int | None] = mapped_column(ForeignKey("extractions.id"), nullable=True, index=True)
+    extraction_id: Mapped[int | None] = mapped_column(
+        ForeignKey("extractions.id"), nullable=True, index=True
+    )
     owner_id: Mapped[int | None] = mapped_column(ForeignKey("owners.id"), nullable=True, index=True)
     source_app: Mapped[str] = mapped_column(String(80), default="unknown", index=True)
     source_type: Mapped[str] = mapped_column(String(80), index=True)
@@ -67,22 +72,43 @@ class Event(Base):
     original_timestamp: Mapped[str | None] = mapped_column(String(120), nullable=True)
     timezone_offset: Mapped[str | None] = mapped_column(String(16), nullable=True)
     direction: Mapped[str] = mapped_column(String(16), default="unknown")
-    from_party_id: Mapped[int | None] = mapped_column(ForeignKey("parties.id"), nullable=True, index=True)
+    from_party_text: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    to_party_text: Mapped[list] = mapped_column(JSON, default=list, server_default="[]")
+    from_party_id: Mapped[int | None] = mapped_column(
+        ForeignKey("parties.id"), nullable=True, index=True
+    )
     actor_entities: Mapped[list] = mapped_column(JSON, default=list)
     action: Mapped[str] = mapped_column(String(120), default="observed")
     content: Mapped[str] = mapped_column(Text, default="")
     content_lang: Mapped[str | None] = mapped_column(String(16), nullable=True)
-    thread_id: Mapped[int | None] = mapped_column(ForeignKey("threads.id"), nullable=True, index=True)
+    thread_id: Mapped[int | None] = mapped_column(
+        ForeignKey("threads.id"), nullable=True, index=True
+    )
     attachments: Mapped[list] = mapped_column(JSON, default=list)
     location: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     latitude: Mapped[float | None] = mapped_column(Float, nullable=True)
     longitude: Mapped[float | None] = mapped_column(Float, nullable=True)
     raw_ref: Mapped[str] = mapped_column(String(255), default="")
     is_deleted_recovered: Mapped[bool] = mapped_column(default=False)
-    confidence: Mapped[float] = mapped_column(default=1.0)
+    confidence: Mapped[float] = mapped_column(Double, default=1.0)
     parser_name: Mapped[str] = mapped_column(String(120), default="")
     parser_version: Mapped[str] = mapped_column(String(40), default="")
     dedupe_hash: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     evidence = relationship("Evidence", back_populates="events")
+
+
+class DocumentExtraction(Base):
+    __tablename__ = "document_extractions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    case_id: Mapped[int] = mapped_column(ForeignKey("cases.id"), index=True)
+    evidence_id: Mapped[int] = mapped_column(ForeignKey("evidence.id"), unique=True, index=True)
+    engine: Mapped[str] = mapped_column(String(120))
+    engine_version: Mapped[str] = mapped_column(String(40))
+    languages: Mapped[list] = mapped_column(JSON, default=list)
+    ocr_text: Mapped[str] = mapped_column(Text, default="")
+    boxes: Mapped[list] = mapped_column(JSON, default=list)
+    fields: Mapped[dict] = mapped_column(JSON, default=dict)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

@@ -1,4 +1,13 @@
-import { verifyLiveIntegrity, type Audit } from "../../caseApi";
+import {
+  confirmAlias,
+  getIdentities,
+  searchCaseEvents,
+  unmergeAlias,
+  verifyLiveIntegrity,
+  type Audit,
+  type IdentityOverview,
+  type SearchResult,
+} from "../../caseApi";
 import {
   useCallback,
   useEffect,
@@ -38,6 +47,7 @@ import {
   type FindingStatus,
 } from "./model";
 import styles from "./Casework.module.css";
+import { VirtualList } from "../ui/VirtualList";
 
 const views = [
   "Overview",
@@ -142,7 +152,7 @@ export function CaseWorkspace({
           })),
     [data, isScenario],
   );
-  const records: RecordEvent[] = useMemo(
+  const sourceRecords: RecordEvent[] = useMemo(
     () =>
       isScenario
         ? demo.events
@@ -162,13 +172,42 @@ export function CaseWorkspace({
           })),
     [data, isScenario, sources],
   );
+  const initialFilters = new URLSearchParams(window.location.search);
   const [view, setView] = useState<View>("Overview"),
     [nav, setNav] = useState(false),
-    [query, setQuery] = useState("");
-  const [owner, setOwner] = useState("All"),
-    [kind, setKind] = useState("All"),
-    [sourceId, setSourceId] = useState("All"),
-    [day, setDay] = useState("All");
+    [query, setQuery] = useState(initialFilters.get("q") ?? "");
+  const [owner, setOwner] = useState(initialFilters.get("owner") ?? "All"),
+    [kind, setKind] = useState(initialFilters.get("type") ?? "All"),
+    [sourceId, setSourceId] = useState(initialFilters.get("source") ?? "All"),
+    [day, setDay] = useState(initialFilters.get("day") ?? "All"),
+    [identifier, setIdentifier] = useState(initialFilters.get("identifier") ?? "All"),
+    [regex, setRegex] = useState(initialFilters.get("regex") ?? "");
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null),
+    [searchError, setSearchError] = useState("");
+  const [identityData, setIdentityData] = useState<IdentityOverview | null>(null);
+  const records: RecordEvent[] = useMemo(
+    () =>
+      searchResult
+        ? searchResult.items.map((event) => ({
+            id: String(event.event_id),
+            file: event.source.filename,
+            evidence_id: event.evidence_id,
+            timestamp_utc: event.timestamp_utc,
+            original_timestamp: event.original_timestamp,
+            action: event.type === "transaction" ? "payment" : event.action,
+            content: event.content,
+            raw_ref: event.raw_ref,
+            confidence: event.confidence,
+            actor_entities: event.parties,
+            identifiers: event.identifiers,
+            owner: event.owner,
+            device: event.device,
+            app: event.app,
+            tags: event.tags,
+          }))
+        : sourceRecords,
+    [searchResult, sourceRecords],
+  );
   const [detail, setDetail] = useState<Detail | null>(null),
     [custody, setCustody] = useState(false),
     [assistant, setAssistant] = useState(false);
@@ -199,6 +238,42 @@ export function CaseWorkspace({
   }, [view]);
   const search = useRef<HTMLInputElement>(null);
   const person = identity(token);
+  useEffect(() => {
+    if (!token || !caseId) return;
+    const timer = window.setTimeout(() => {
+      const selectedSource =
+        sourceId === "All" ? "" : sources.find((item) => String(item.id) === sourceId)?.file ?? "";
+      const params = new URLSearchParams(window.location.search);
+      const values = { q: query, owner, type: kind, source: sourceId, day, identifier, regex };
+      Object.entries(values).forEach(([key, value]) => {
+        if (!value || value === "All") params.delete(key);
+        else params.set(key, value);
+      });
+      window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+      void searchCaseEvents(caseId, {
+        q: query,
+        regex,
+        facets: {
+          ...(owner !== "All" ? { owner } : {}),
+          ...(kind !== "All" ? { type: kind } : {}),
+          ...(identifier !== "All" ? { identifier } : {}),
+          ...(selectedSource ? { source: selectedSource } : {}),
+        },
+        time: day !== "All" ? { start: `${day}T00:00:00+05:30`, end: `${day}T23:59:59+05:30` } : {},
+        page: { limit: 100000 },
+      })
+        .then((result) => {
+          setSearchResult(result);
+          setSearchError("");
+        })
+        .catch((cause) => setSearchError(cause instanceof Error ? cause.message : "Search failed."));
+    }, 180);
+    return () => window.clearTimeout(timer);
+  }, [caseId, day, identifier, kind, owner, query, regex, sourceId, sources, token]);
+  useEffect(() => {
+    if (!token || !caseId || view !== "Graph") return;
+    void getIdentities(caseId).then(setIdentityData);
+  }, [caseId, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -269,22 +344,28 @@ export function CaseWorkspace({
     setNav(false);
     setNotice("");
   };
-  const filtered = records.filter(
-    (e) =>
-      (!query ||
-        `${e.content} ${e.file} ${e.actor_entities.join(" ")}`
-          .toLowerCase()
-          .includes(query.toLowerCase())) &&
-      (owner === "All" || e.actor_entities.includes(owner)) &&
-      (kind === "All" || e.action === kind) &&
-      (sourceId === "All" || String(e.evidence_id) === sourceId) &&
-      (day === "All" ||
-        (e.timestamp_utc ? localDay(e.timestamp_utc) : null) === day),
-  );
+  const filtered = searchResult
+    ? records
+    : records.filter(
+        (e) =>
+          (!query ||
+            `${e.content} ${e.file} ${e.actor_entities.join(" ")}`
+              .toLowerCase()
+              .includes(query.toLowerCase())) &&
+          (owner === "All" || e.owner === owner || e.actor_entities.includes(owner)) &&
+          (kind === "All" || e.action === kind) &&
+          (identifier === "All" || e.identifiers?.includes(identifier)) &&
+          (sourceId === "All" || String(e.evidence_id) === sourceId) &&
+          (day === "All" ||
+            (e.timestamp_utc ? localDay(e.timestamp_utc) : null) === day),
+      );
   const actors = Array.from(
     new Set(records.flatMap((e) => e.actor_entities)),
   ).sort();
   const actions = Array.from(new Set(records.map((e) => e.action))).sort();
+  const identifiers = Array.from(
+    new Set(records.flatMap((e) => e.identifiers ?? [])),
+  ).sort();
   const dates = Array.from(
     new Set(
       records.flatMap((e) =>
@@ -1015,18 +1096,46 @@ export function CaseWorkspace({
                     ))}
                   </select>
                 </label>
+                <label>
+                  Identifier
+                  <select
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                  >
+                    <option>All</option>
+                    {identifiers.map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Regex <span className={styles.note}>(guarded)</span>
+                  <input
+                    value={regex}
+                    onChange={(e) => setRegex(e.target.value)}
+                    placeholder="Optional pattern"
+                  />
+                </label>
                 <button
                   onClick={() => {
                     setOwner("All");
                     setKind("All");
                     setSourceId("All");
                     setDay("All");
+                    setIdentifier("All");
+                    setRegex("");
                     setQuery("");
                   }}
                 >
                   Clear filters
                 </button>
               </div>
+              {searchError && <p role="alert" className={styles.warning}>{searchError}</p>}
+              {searchResult && (
+                <p className={styles.note}>
+                  {searchResult.search_engine} · Shared filters are saved in the URL. Multilingual embeddings: {searchResult.semantic_search.status.replaceAll("_", " ")}.
+                </p>
+              )}
               <section className={styles.panel}>
                 <div className={styles.cardTitle}>
                   <h2>Time histogram</h2>
@@ -1077,6 +1186,11 @@ export function CaseWorkspace({
               </section>
               <section className={styles.panel}>
                 <h2>Event table</h2>
+                {filtered.length > 500 ? (
+                  <VirtualList items={filtered}>
+                    {(event) => recordButton(event)}
+                  </VirtualList>
+                ) : (
                 <div className={`${styles.tableWrap} ${styles.tableScroll}`}>
                   <table aria-label="Filtered source events">
                     <thead>
@@ -1127,6 +1241,7 @@ export function CaseWorkspace({
                     <p className={styles.empty}>No matching records.</p>
                   )}
                 </div>
+                )}
               </section>
             </>
           )}
@@ -1482,29 +1597,44 @@ export function CaseWorkspace({
                   ])}
                 </section>
                 <section className={styles.panel}>
-                  <h2>Suggested alias · local demo</h2>
-                  <p>
-                    “Agent Arjun” and the payment identifier are connected by
-                    the chat request and statement. Identity confidence:{" "}
-                    <strong>not numerically calibrated</strong>. Association is
-                    supported; legal identity is not established.
-                  </p>
-                  {cites([
-                    { file: 1, ref: "line:10" },
-                    { file: 3, ref: "line:4" },
-                  ])}
-                  <button
-                    disabled={readOnly}
-                    aria-pressed={merged}
-                    onClick={() => setMerged(!merged)}
-                  >
-                    {merged ? "Undo local grouping" : "Group in this demo view"}
-                  </button>
-                  <p role="status" className={styles.note}>
-                    {merged
-                      ? "Grouped locally: display name + payment identifier. Source records remain distinct. This change resets on reload."
-                      : "Separate source identities. A backend alias-review workflow is planned."}
-                  </p>
+                  <h2>Alias suggestions</h2>
+                  {isDemo ? (
+                    <>
+                      <p>“Agent Arjun” and the payment identifier share a name token and occur in the payment request.</p>
+                      <button disabled={readOnly} aria-pressed={merged} onClick={() => setMerged(!merged)}>
+                        {merged ? "Undo local grouping" : "Group in this demo view"}
+                      </button>
+                    </>
+                  ) : identityData ? (
+                    <>
+                      <p className={styles.note}>
+                        {identityData.matcher.kind} v{identityData.matcher.version} · ML {identityData.matcher.ml_status.replaceAll("_", " ")} · {identityData.matcher.labels_recorded} investigator labels. {identityData.matcher.limits}
+                      </p>
+                      <div className={styles.aliasList}>
+                        {identityData.suggestions.slice(0, 12).map((suggestion) => (
+                          <article key={suggestion.id}>
+                            <div>
+                              <strong>{suggestion.party} ↔ {suggestion.identifier}</strong>
+                              <span>{Math.round(suggestion.confidence * 100)}% heuristic confidence · {suggestion.status}</span>
+                              <small>{suggestion.reasons.join(" · ")}</small>
+                              {suggestion.feedback_bonus > 0 && <small>Ranking feedback bonus +{Math.round(suggestion.feedback_bonus * 100)}%</small>}
+                            </div>
+                            <button
+                              disabled={readOnly}
+                              onClick={async () => {
+                                if (!caseId) return;
+                                if (suggestion.status === "confirmed") await unmergeAlias(caseId, suggestion.id);
+                                else await confirmAlias(caseId, suggestion.id);
+                                setIdentityData(await getIdentities(caseId));
+                              }}
+                            >
+                              {suggestion.status === "confirmed" ? "Unmerge" : "Confirm merge"}
+                            </button>
+                          </article>
+                        ))}
+                      </div>
+                    </>
+                  ) : <p role="status">Preparing identity suggestions…</p>}
                 </section>
               </>,
             )}

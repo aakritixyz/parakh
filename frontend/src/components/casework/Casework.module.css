@@ -534,6 +534,7 @@
   flex: 1;
 }
 .filters select,
+.filters input,
 .findingActions select {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -542,6 +543,31 @@
   padding: 8px;
   max-width: 260px;
   width: 100%;
+}
+.aliasList article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.aliasList article div,
+.aliasList article span,
+.aliasList article small {
+  display: block;
+}
+.aliasList article span,
+.aliasList article small {
+  margin-top: 5px;
+  color: var(--ink-3);
+}
+.aliasList article button {
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 5px;
+  padding: 8px 10px;
 }
 .histogram {
   display: flex;

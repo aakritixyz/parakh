@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from itertools import islice
 from pathlib import Path
 
 from sqlalchemy import select
@@ -8,7 +9,8 @@ from app.models.evidence import Event, Evidence
 from app.models.investigation import Extraction, Job
 from app.parsers.registry import ParserRegistry
 from app.services.audit_service import AuditService
-from app.services.evidence_service import _dedupe_hash, _event_type_for_action
+from app.services.document_extraction_service import DocumentExtractionService
+from app.services.evidence_service import _event_from_parsed, _parse_status
 
 
 def run_intake_job(job_id: int) -> None:
@@ -31,7 +33,21 @@ def run_intake_job(job_id: int) -> None:
         db.commit()
 
         stored_path = Path(evidence.storage_path)
-        parser = ParserRegistry.detect(evidence.filename, evidence.content_type, stored_path)
+        parser, detection_confidence, detection_reasons = ParserRegistry.detect_with_confidence(
+            evidence.filename,
+            evidence.mime,
+            stored_path,
+            options=evidence.metadata_json.get("parser_options", {}),
+        )
+        evidence.metadata_json = {
+            **evidence.metadata_json,
+            "format_detection": {
+                "confidence": detection_confidence,
+                "reasons": detection_reasons,
+                "parser": parser.name,
+                "version": parser.version,
+            },
+        }
         extraction = db.scalar(
             select(Extraction)
             .where(Extraction.evidence_id == evidence.id)
@@ -54,45 +70,44 @@ def run_intake_job(job_id: int) -> None:
         db.query(Event).filter(Event.extraction_id == extraction.id).delete(
             synchronize_session=False
         )
-        parsed_items = list(
-            parser.parse(stored_path, case_id=evidence.case_id, evidence_id=evidence.id)
-        )
-        db.refresh(job)
-        if job.cancel_requested:
-            _cancel(job)
-            extraction.parse_status = "cancelled"
-            db.commit()
-            return
         job.stage = "Indexing"
         job.progress = 85
         db.commit()
-        for parsed in parsed_items:
-            event_data = parsed.model_dump()
-            event_data.update(
-                extraction_id=extraction.id,
-                owner_id=evidence.owner_id,
-                source_app=evidence.source_type,
-                event_type=_event_type_for_action(str(event_data.get("action", ""))),
-                parser_name=parser.__class__.__name__,
-                parser_version=getattr(parser, "version", "1"),
+        inserted = 0
+        stream = parser.parse(stored_path, case_id=evidence.case_id, evidence_id=evidence.id)
+        while batch := list(islice(stream, 5000)):
+            db.add_all(
+                [_event_from_parsed(item, evidence, extraction.id, parser) for item in batch]
             )
-            event_data["dedupe_hash"] = _dedupe_hash(event_data)
-            db.add(Event(**event_data))
+            db.flush()
+            inserted += len(batch)
+            db.refresh(job)
+            if job.cancel_requested:
+                _cancel(job)
+                extraction.parse_status = "cancelled"
+                db.commit()
+                return
+        _, document_warnings = DocumentExtractionService(db).extract(evidence)
+        parser.warnings.extend(document_warnings)
         warnings = list(getattr(parser, "warnings", []))
+        evidence.metadata_json = {**evidence.metadata_json, "warnings": warnings}
         extraction.warnings = warnings
-        extraction.parse_status = "needs_review" if warnings else "complete"
+        extraction.parse_status = _parse_status(warnings)
         job.stage = "Done"
         job.status = "completed"
         job.progress = 100
         job.finished_at = datetime.now(UTC)
-        job.logs = [*job.logs, f"Parsed {len(parsed_items)} records", *warnings]
+        warning_logs = [
+            item if isinstance(item, str) else item.get("message", str(item)) for item in warnings
+        ]
+        job.logs = [*job.logs, f"Parsed {inserted} records", *warning_logs]
         AuditService(db).log(
             action="evidence.indexed",
             actor="background-worker",
             case_id=evidence.case_id,
             target_type="evidence",
             target_id=str(evidence.id),
-            payload={"job_id": job.id, "events": len(parsed_items)},
+            payload={"job_id": job.id, "events": inserted},
         )
         db.commit()
     except Exception as exc:  # pragma: no cover - exercised through API failure tests

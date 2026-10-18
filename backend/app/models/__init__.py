@@ -7,8 +7,9 @@ from app.models.audit import (
 )
 from app.models.case import Case, CaseMembership
 from app.models.entity import Entity
-from app.models.evidence import Event, Evidence
+from app.models.evidence import DocumentExtraction, Event, Evidence
 from app.models.investigation import (
+    AliasSuggestion,
     Artifact,
     AuditCheckpoint,
     Bookmark,
@@ -34,6 +35,7 @@ from app.models.session import AuditHead, AuthSession
 from app.models.user import User
 
 __all__ = [
+    "AliasSuggestion",
     "Artifact",
     "AuthSession",
     "AuditHead",
@@ -47,6 +49,7 @@ __all__ = [
     "Comment",
     "DbRole",
     "Device",
+    "DocumentExtraction",
     "EventRecipient",
     "Entity",
     "Event",

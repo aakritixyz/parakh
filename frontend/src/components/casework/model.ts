@@ -26,6 +26,11 @@ export type RecordEvent = {
   confidence: number;
   actor_entities: string[];
   location?: { lat?: number; lon?: number } | null;
+  identifiers?: string[];
+  owner?: string;
+  device?: string;
+  app?: string;
+  tags?: string[];
 };
 export type AuditEntry = {
   sequence: number;
