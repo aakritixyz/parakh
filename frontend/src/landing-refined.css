@@ -223,3 +223,12 @@
 @media(max-width:1100px) { .pl-document { padding: 71px 23px 22px; }.pl-document-title>h3 { font-size: 20px; }.pl-document-fields>.pl-document-field { font-size: 9px; min-height: 52px; }.pl-document-fields>.pl-document-field-amount dd { font-size: 19px; }.pl-field-context { font-size: 5.5px; }.pl-document-stamp { right: 24px; } }
 @media(min-width:601px) and (max-width:850px) { .pl-document { padding: 67px 17px 22px; }.pl-document-heading { font-size: 5px; gap: 5px; }.pl-document-heading small { font-size: 4px; }.pl-document-folio { font-size: 12px; }.pl-document-title>h3 { font-size: 17px; }.pl-document-title>span { font-size: 15px; }.pl-document-title>p { font-size: 6px; }.pl-document-fields>.pl-document-field { font-size: 8px; min-height: 50px; }.pl-document-fields>.pl-document-field-status dd { font-size: 7px; }.pl-field-context { font-size: 4.5px; }.pl-document-stamp { width: 51px; height: 51px; bottom: 35px; right: 18px; }.pl-document-foot { left: 17px; font-size: 5px; }.pl-lens-instructions { font-size: 9px; } }
 @media(max-width:600px) { .pl-inspection { border-radius: 155px 155px 10px 10px; height: 510px; }.pl-document { padding: 67px 23px 22px; }.pl-document-heading { font-size: 6px; }.pl-document-heading small { font-size: 4.5px; }.pl-document-title>h3 { font-size: 20px; }.pl-document-fields>.pl-document-field { font-size: 9px; min-height: 52px; }.pl-document-title { margin: 20px 0 16px; }.pl-document-stamp { bottom: 34px; right: 25px; }.pl-document-foot { font-size: 5.5px; left: 23px; }.pl-lens-instructions { font-size: 10px; }.pl-document-fields>.pl-document-field-status dd { font-size: 8px; } }
+
+/* Keep the inspection document compact instead of filling its grid column. */
+.pl-hero .pl-lens-art { width: min(100%, 380px); max-width: 380px; justify-self: center; margin-inline: auto; padding-left: 0; }
+.pl-lens-art .pl-inspection { --lens-radius: 86px; }
+.pl-lens-art .pl-inspection-backdrop { inset-inline: -7px; }
+@media(max-width:600px) {
+  .pl-hero .pl-lens-art { width: min(100%, 330px); max-width: 330px; }
+  .pl-lens-art .pl-inspection { --lens-radius: 78px; }
+}
