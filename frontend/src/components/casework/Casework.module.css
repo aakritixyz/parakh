@@ -1285,3 +1285,4 @@
 .exhibitDrop + form { display: grid; gap: 12px; margin-block: 16px; }
 .exhibitDrop + form label { display: grid; gap: 6px; }
 .exhibitDrop + form textarea { min-height: 80px; }
+.eventPinWrap{display:grid;grid-template-columns:1fr auto;align-items:stretch;gap:5px}.pinAction{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.pinAction svg{width:14px;height:14px}

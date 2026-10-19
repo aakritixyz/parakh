@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test:smoke": "node scripts/smoke.mjs",
     "test:screenshots": "node scripts/screenshots.mjs",
-    "test": "node --test scripts/api.test.mjs scripts/casework.test.mjs scripts/session.test.mjs"
+    "test": "node --test scripts/api.test.mjs scripts/board.test.mjs scripts/casework.test.mjs scripts/session.test.mjs",
+    "test:board-performance": "node scripts/board.performance.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.14.19",

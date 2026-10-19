@@ -44,6 +44,7 @@ import {
   FolderOpen,
   Menu,
   Pause,
+  Pin,
   Play,
   Search,
   ShieldCheck,
@@ -68,6 +69,7 @@ import {
 import styles from "./Casework.module.css";
 import { ReviewPanel } from "./ReviewPanel";
 import { VirtualList } from "../ui/VirtualList";
+import { EvidenceBoard } from "../board/EvidenceBoard";
 
 const views = [
   "Overview",
@@ -77,6 +79,7 @@ const views = [
   "Money",
   "Authenticity",
   "Graph",
+  "Board",
   "Map",
   "Timeline",
   "Findings",
@@ -416,6 +419,18 @@ export function CaseWorkspace({
     (citation: Citation, event?: RecordEvent) => setDetail({ citation, event }),
     [],
   );
+  const pinCitation = (c: Citation, title?: string, body?: string, timestamp?: string | null) => {
+    const source = sources.find((item) => item.id === c.file);
+    window.dispatchEvent(new CustomEvent("parakh-pin-board", { detail: {
+      id: `pin-${c.file}-${(c.ref ?? "source").replace(/\W/g, "-")}`,
+      kind: "event", title: title ?? c.label ?? `${source?.file ?? `Source ${c.file}`} · ${c.ref ?? "source"}`,
+      body: body ?? "Pinned source receipt", timestamp: timestamp ?? null, source_badge: source?.source ?? "Source record",
+      receipt: { evidence_id: c.file, file: source?.file ?? String(c.file), reference: c.ref ?? "source", sha256: source?.sha256 ?? "" },
+    }}));
+    setNotice("Pinned to Board. Open Board to place or connect it.");
+  };
+  const pinSource = (evidenceId: number, reference: string, title: string, body = title, timestamp?: string | null) =>
+    pinCitation({ file: evidenceId, ref: reference }, title, body, timestamp);
   const cite = (c: Citation) => (
     <button
       draggable
@@ -429,7 +444,7 @@ export function CaseWorkspace({
     </button>
   );
   const cites = (cs: Citation[]) => (
-    <div className={styles.citations}>{cs.map(cite)}</div>
+    <div className={styles.citations}>{cs.flatMap((c) => [cite(c), <button className={styles.citation} key={`pin-${c.file}-${c.ref}`} onClick={() => pinCitation(c)}><Pin/>Pin to board</button>])}</div>
   );
   const go = (next: View) => {
     setView(next);
@@ -466,7 +481,7 @@ export function CaseWorkspace({
     ),
   ).sort();
   const recordButton = (e: RecordEvent) => (
-    <button
+    <div className={styles.eventPinWrap}><button
       draggable
       onDragStart={(event) => event.dataTransfer.setData("application/parakh-source", JSON.stringify({ file: e.evidence_id, ref: e.raw_ref, event_id: Number(e.id) }))}
       className={styles.eventButton}
@@ -477,7 +492,7 @@ export function CaseWorkspace({
       <small>
         {short(e.file)} · {e.raw_ref}
       </small>
-    </button>
+    </button><button className={styles.pinAction} onClick={() => pinCitation({ file: e.evidence_id, ref: e.raw_ref }, e.content, e.content, e.timestamp_utc)}><Pin/>Pin to board</button></div>
   );
   const source = (id: number) => sources.find((f) => f.id === id);
   async function verifyFile(f: Source) {
@@ -1908,6 +1923,13 @@ export function CaseWorkspace({
                 <div className={styles.graph}>
                   {correlation.graph.nodes.filter((node) => graphType === "All" || node.type === graphType).map((node) => <button key={node.id} className={styles[`community${Math.abs(node.community) % 6}`]} style={{ minWidth: `${Math.min(180, Math.max(84, node.size * 3))}px` }} onClick={() => { setGraphFocus(node.id); if (node.type === "identifier") setIdentifier(node.label); else if (node.type === "party") setParty(node.label); else setQuery(node.label); }}>{node.label}<small>{node.type} · {node.edge_count} links · importance {node.importance}</small></button>)}
                 </div>
+                <div className={styles.citations}>
+                  {correlation.graph.nodes.slice(0, 20).map((node) => {
+                    const edge = correlation.graph.edges.find((item) => item.source === node.id || item.target === node.id);
+                    const support = edge?.support[0];
+                    return support ? <button className={styles.citation} key={`pin-node-${node.id}`} onClick={() => pinSource(support.evidence_id, support.reference, node.label, `${node.type} · source-backed graph node`)}><Pin/>Pin {node.label}</button> : null;
+                  })}
+                </div>
                 <div className={styles.auditList}>{correlation.graph.edges.map((edge) => <article key={`${edge.source}-${edge.target}`}><strong>{edge.source.replace(/^\w+:/, "")} → {edge.target.replace(/^\w+:/, "")}</strong><p>{edge.relation} · {edge.count} record(s)</p>{edge.support.slice(0, 2).map((support) => <button key={`${support.event_id}-${support.reference}`} onClick={() => open({ file: support.evidence_id, ref: support.reference })}>{support.file} · {support.reference}</button>)}</article>)}</div>
               </section>
               <div className={styles.twoColumns}>
@@ -1992,6 +2014,17 @@ export function CaseWorkspace({
                 </section>
               </>,
             )}
+          {view === "Board" && (
+            <EvidenceBoard
+              caseId={caseId}
+              token={token}
+              readOnly={readOnly}
+              isScenario={isScenario}
+              sources={sources}
+              records={records}
+              onOpenReceipt={(receipt) => open({ file: receipt.evidence_id ?? (Number(receipt.file) || 0), ref: receipt.reference })}
+            />
+          )}
           {view === "Map" && !isDemo && (
             correlation ? <>
               <section className={styles.panel}>
@@ -2000,6 +2033,10 @@ export function CaseWorkspace({
                 <div className={styles.map}>
                   {correlation.map.gps_trail.slice(0, Math.ceil(correlation.map.gps_trail.length * mapCursor / 100)).map((point) => <button key={point.event_id} style={{ left: `${8 + ((point.lon - 77.35) * 7000) % 82}%`, top: `${8 + ((28.63 - point.lat) * 7000) % 72}%` }} onClick={() => open({ file: point.support.evidence_id, ref: point.support.reference })} aria-label={`GPS ${point.lat}, ${point.lon}`}>GPS</button>)}
                   {correlation.map.towers.slice(0, Math.ceil(correlation.map.towers.length * mapCursor / 100)).map((tower) => <button key={tower.event_id} className={styles.tower} style={{ left: `${12 + ((tower.lon - 77.35) * 6500) % 75}%`, top: `${12 + ((28.63 - tower.lat) * 6500) % 65}%` }} onClick={() => open({ file: tower.support.evidence_id, ref: tower.support.reference })}>{tower.cell_id}</button>)}
+                </div>
+                <div className={styles.citations}>
+                  {correlation.map.gps_trail.slice(0, 12).map((point) => <button className={styles.citation} key={`pin-gps-${point.event_id}`} onClick={() => pinSource(point.support.evidence_id, point.support.reference, `GPS ${point.lat}, ${point.lon}`, "Pinned map record")}><Pin/>Pin GPS receipt</button>)}
+                  {correlation.map.towers.slice(0, 12).map((tower) => <button className={styles.citation} key={`pin-tower-${tower.event_id}`} onClick={() => pinSource(tower.support.evidence_id, tower.support.reference, tower.cell_id, "Pinned tower record")}><Pin/>Pin {tower.cell_id}</button>)}
                 </div>
                 <p className={styles.warning}>{correlation.disclaimer}</p>
               </section>

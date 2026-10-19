@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 const root = new URL("../src/", import.meta.url);
 const files = await readdir(root, { recursive: true });
 for (const file of files.filter(
-  (file) => /\.(css|tsx?)$/.test(file) && file !== "styles/tokens.css",
+  (file) => /\.(css|tsx?)$/.test(file) && file.replaceAll("\\", "/") !== "styles/tokens.css",
 )) {
   const source = await readFile(new URL(file, root), "utf8");
   assert(

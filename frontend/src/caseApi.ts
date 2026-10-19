@@ -1,4 +1,5 @@
 import type { DashboardData, LoginCredentials } from "./api";
+import type { BoardEnvelope, BoardSnapshot, BoardState } from "./components/board/boardModel";
 export type Role = "admin" | "investigator" | "analyst" | "prosecutor";
 export type Account = { id: number; username: string; role: Role };
 export type Session = {
@@ -522,6 +523,24 @@ export const getMembers = (id: number) =>
   sessionRequest<Member[]>(`/api/v2/cases/${id}/members`);
 export const getAudit = (id: number) =>
   sessionRequest<Audit>(`/api/v2/cases/${id}/audit`);
+export const getBoard = (id: number) =>
+  sessionRequest<BoardEnvelope>(`/api/v2/cases/${id}/board`);
+export const saveBoard = (id: number, expectedRevision: number, action: string, targetId: string, detail: Record<string, unknown>, state: BoardState) =>
+  sessionRequest<BoardEnvelope>(`/api/v2/cases/${id}/board`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ expected_revision: expectedRevision, action, target_id: targetId, detail, state }),
+  });
+export const getBoardSnapshots = (id: number) =>
+  sessionRequest<BoardSnapshot[]>(`/api/v2/cases/${id}/board/snapshots`);
+export const createBoardSnapshot = (id: number, name: string) =>
+  sessionRequest<BoardSnapshot>(`/api/v2/cases/${id}/board/snapshots`, json({ name }));
+export const getBoardSnapshot = (id: number, snapshotId: number) =>
+  sessionRequest<BoardSnapshot>(`/api/v2/cases/${id}/board/snapshots/${snapshotId}`);
+export const analyseBoard = (id: number, operation: string, input: { selected: string[]; source?: string; target?: string; depth?: number; time_limit_ms?: number }) =>
+  sessionRequest<Record<string, unknown>>(`/api/v2/cases/${id}/board/analysis/${operation}`, json(input));
+export const exportBoard = (id: number, format: "png" | "pdf", pngDataUrl: string, caption: string, receiptIds: string[]) =>
+  sessionRequest<{ filename: string; content_base64: string; sha256: string; board_hash: string }>(`/api/v2/cases/${id}/board/export`, json({ format, png_data_url: pngDataUrl, caption, receipt_ids: receiptIds }));
 export const putMember = (id: number, username: string, role: Role) =>
   sessionRequest(`/api/v2/cases/${id}/members`, json({ username, role }));
 export const removeMember = (id: number, userId: number) =>
