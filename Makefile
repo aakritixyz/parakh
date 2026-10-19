@@ -1,3 +1,5 @@
+export PYTHONUTF8 := 1
+
 .PHONY: backend backend-install backend-migrate backend-test backend-lint backend-demo backend-seed create-admin frontend frontend-install lint test
 
 backend:
