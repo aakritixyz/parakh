@@ -1,11 +1,12 @@
 {
   "name": "hinglish-scam-classifier",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "licence": "Internal evaluation only",
   "training_data": "Generated English, Hindi and Hinglish text cases; seed 61026. Riya excluded.",
   "known_limits": [
     "A lead generator, never a finding.",
-    "Offline multilingual character n-gram embeddings are not a fine-tuned language model.",
+    "pretrained multilingual-e5-small + logistic regression; no fine tuning on case data",
+    "Fixed seed; 120 second training limit; keep prior model and phrase rules if incomplete",
     "Metrics are on synthetic data and do not estimate performance on real investigations."
   ],
   "metrics": {
@@ -26,75 +27,40 @@
   },
   "explanations": {
     "tree": {
-      "method": "logistic-regression character-feature weights",
+      "method": "word occlusion of embedding classifier",
       "values": {
-        "ro ": 0.6828,
-        "otp": 0.6496,
-        " ky": 0.6496,
-        "bhe": 0.6496,
-        "bhej": 0.6496,
-        " kyc ": 0.6496,
-        " kyc": 0.6496,
-        "bhejo": 0.6496,
-        " bh": 0.6496,
-        " otp": 0.6496,
-        "hejo": 0.6496,
-        "hej": 0.6496
+        "OTP": 0.058313608169555664,
+        "KYC": 0.05002039670944214,
+        "bhejo": 0.0361936092376709,
+        "jaldi": 0.030140995979309082,
+        "hai": 0.0020475387573242188
       }
     },
     "top_words": [
       {
-        "feature": "ro ",
-        "weight": 0.6828
+        "word": "OTP",
+        "weight": 0.058313608169555664
       },
       {
-        "feature": "otp",
-        "weight": 0.6496
+        "word": "KYC",
+        "weight": 0.05002039670944214
       },
       {
-        "feature": " ky",
-        "weight": 0.6496
+        "word": "bhejo",
+        "weight": 0.0361936092376709
       },
       {
-        "feature": "bhe",
-        "weight": 0.6496
+        "word": "jaldi",
+        "weight": 0.030140995979309082
       },
       {
-        "feature": "bhej",
-        "weight": 0.6496
-      },
-      {
-        "feature": " kyc ",
-        "weight": 0.6496
-      },
-      {
-        "feature": " kyc",
-        "weight": 0.6496
-      },
-      {
-        "feature": "bhejo",
-        "weight": 0.6496
-      },
-      {
-        "feature": " bh",
-        "weight": 0.6496
-      },
-      {
-        "feature": " otp",
-        "weight": 0.6496
-      },
-      {
-        "feature": "hejo",
-        "weight": 0.6496
-      },
-      {
-        "feature": "hej",
-        "weight": 0.6496
+        "word": "hai",
+        "weight": 0.0020475387573242188
       }
     ]
   },
   "artifact_path": "data/ml/hinglish-scam-classifier-1.0.0/model.joblib",
-  "artifact_sha256": "af975a7ef7dcb86e59e47e61c9e5b804d870c747be5507d7a55ca78532f02f78",
+  "artifact_sha256": "3b92bc8f77534a93bf1a538f6ec9b8aae964410e40662c99d055099198c9acda",
   "evaluation_label": "on synthetic data",
   "seed": 61026,
   "offline_only": true

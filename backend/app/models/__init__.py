@@ -33,6 +33,7 @@ from app.models.investigation import (
 from app.models.ml import ModelRecord
 from app.models.report import Report
 from app.models.review import CaseReview
+from app.models.search import SearchKey, SearchRecord
 from app.models.session import AuditHead, AuthSession
 from app.models.user import User
 
@@ -68,6 +69,8 @@ __all__ = [
     "PartyIdentifier",
     "Report",
     "SavedSearch",
+    "SearchKey",
+    "SearchRecord",
     "Tag",
     "Task",
     "Thread",

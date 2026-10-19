@@ -46,7 +46,9 @@ def search_events(
 ):
     require_case_access(db, user, case_id)
     try:
-        return EventSearchService(db).search(case_id, payload.model_dump())
+        result = EventSearchService(db).search(case_id, payload.model_dump())
+        db.commit()  # Persist incremental derived search indexes.
+        return result
     except SearchError as exc:
         raise HTTPException(422, str(exc)) from exc
 

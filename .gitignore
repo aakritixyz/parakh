@@ -49,3 +49,8 @@ work/doc_render*/
 # Local investigator demo vault; only fictional source fixtures are tracked.
 backend/data/demo-vault/
 !frontend/public/demo-evidence/*.sqlite
+
+# Offline runtime and model assets are distributed separately with checksums.
+backend/.runtime/
+backend/data/models/
+backend/data/embeddings/

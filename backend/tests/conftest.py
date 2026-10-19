@@ -20,3 +20,18 @@ def db() -> Generator[Session, None, None]:
         yield session
     finally:
         session.close()
+
+
+@pytest.fixture(autouse=True)
+def provisioned_models_are_explicit(monkeypatch):
+    """Normal unit tests exercise missing-runtime fallbacks; opt in to real local weights."""
+    if os.environ.get("PARAKH_TEST_MODELS") == "1":
+        return
+    from app.services import alias_model_service, embedding_service, local_llm, offline_models
+
+    def unavailable(*args, **kwargs):
+        raise offline_models.ModelUnavailable("Real model integration tests require PARAKH_TEST_MODELS=1")
+
+    monkeypatch.setattr(local_llm, "model_card", unavailable)
+    monkeypatch.setattr(embedding_service, "local_model", unavailable)
+    monkeypatch.setattr(alias_model_service, "load_alias", unavailable)

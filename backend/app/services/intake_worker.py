@@ -9,7 +9,7 @@ from app.models.evidence import Event, Evidence
 from app.models.investigation import Extraction, Job
 from app.parsers.registry import ParserRegistry
 from app.services.audit_service import AuditService
-from app.services.document_extraction_service import DocumentExtractionService
+from app.services.document_extraction_service import DocumentExtractionService, index_ocr_event
 from app.services.evidence_service import _event_from_parsed, _parse_status
 
 
@@ -87,7 +87,8 @@ def run_intake_job(job_id: int) -> None:
                 extraction.parse_status = "cancelled"
                 db.commit()
                 return
-        _, document_warnings = DocumentExtractionService(db).extract(evidence)
+        document, document_warnings = DocumentExtractionService(db).extract(evidence)
+        inserted += index_ocr_event(db, evidence, extraction.id, document)
         parser.warnings.extend(document_warnings)
         warnings = list(getattr(parser, "warnings", []))
         evidence.metadata_json = {**evidence.metadata_json, "warnings": warnings}

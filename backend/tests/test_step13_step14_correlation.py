@@ -140,6 +140,6 @@ def test_graph_stays_phases_and_clock_confidence(db):
     full_table = {item["event_id"]: item for item in full["timeline"]["all_events"]}
     low_table = {item["event_id"]: item for item in low["timeline"]["all_events"]}
     assert (
-        low_table[tablet_event.id]["ordering_probability"]
-        < full_table[tablet_event.id]["ordering_probability"]
+        low_table[tablet_event.id]["clock_interval_seconds"][1] - low_table[tablet_event.id]["clock_interval_seconds"][0]
+        > full_table[tablet_event.id]["clock_interval_seconds"][1] - full_table[tablet_event.id]["clock_interval_seconds"][0]
     )

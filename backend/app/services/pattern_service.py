@@ -334,7 +334,7 @@ class PatternService:
         }]
 
     def _ml_flags(self, events: list[Event], evidence: dict[int, Evidence]) -> tuple[list[dict], dict]:
-        record = self.db.scalar(select(ModelRecord).where(ModelRecord.name == "hinglish-scam-classifier"))
+        record = self.db.scalar(select(ModelRecord).where(ModelRecord.name == "hinglish-scam-classifier").order_by(ModelRecord.created_at.desc(), ModelRecord.id.desc()))
         if record is None:
             return [], {"status": "planned", "reason": "Run the offline Step 6 classifier command."}
         bundle = load_offline_model({"artifact_path": record.artifact_path, "artifact_sha256": record.artifact_sha256})
@@ -345,13 +345,12 @@ class PatternService:
             probability = float(bundle["calibrator"].predict(raw)[0])
             if probability < 0.7:
                 continue
-            weighted = vector.multiply(bundle["model"].coef_[0]).toarray()[0]
-            names = bundle["vectorizer"].get_feature_names_out()
-            reasons = [str(names[index]) for index in np.argsort(weighted)[::-1][:5] if weighted[index] > 0]
+            from app.services.step6_model_service import top_words
+            reasons = [item["word"] for item in top_words(bundle, event.content)]
             output.append({
                 "type": "ml_scam_language",
                 "title": f"Classifier scam-language lead · {probability:.0%}",
-                "why": f"Top character features: {', '.join(reasons) or 'mixed multilingual pattern'}.",
+                "why": f"Top words (occlusion/feature weights): {', '.join(reasons) or 'mixed multilingual pattern'}.",
                 "method": f"{record.name} {record.version}",
                 "status": "ML lead",
                 "confidence": round(probability, 4),

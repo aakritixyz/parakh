@@ -1,20 +1,21 @@
 {
   "label": "on synthetic data",
-  "rows": 20000,
+  "rows": 100000,
   "seed": 18026,
-  "version": "1.0",
-  "python": "3.13.9",
-  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "version": "2.0",
+  "index_build_milliseconds": 4719.63,
+  "python": "3.11.15",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
   "time_limit_seconds": 60,
-  "assumptions": "Single process, local SQLite, cold FTS first query; no production latency claim",
+  "assumptions": "Single process, local SQLite, separately measured index build; warm SQL aggregates; no production latency claim",
   "results": [
     {
       "query": {
         "q": "refund"
       },
-      "milliseconds": 235.47,
-      "matching": 20,
-      "histogram_buckets": 0,
+      "milliseconds": 915.8,
+      "matching": 100,
+      "histogram_buckets": 2,
       "status": "completed"
     },
     {
@@ -23,20 +24,21 @@
           "type": "payment"
         }
       },
-      "milliseconds": 109.57,
-      "matching": 2000,
-      "histogram_buckets": 0,
+      "milliseconds": 200.07,
+      "matching": 10000,
+      "histogram_buckets": 2,
       "status": "completed"
     },
     {
       "query": {},
-      "milliseconds": 571.69,
-      "status": "time_limit",
-      "reason": "Search time limit reached. Narrow the filters or regex."
+      "milliseconds": 646.52,
+      "matching": 100000,
+      "histogram_buckets": 2,
+      "status": "completed"
     }
   ],
   "explain": [
     "(3, 0, 52, 'SEARCH events USING COVERING INDEX ix_events_case_type_time (case_id=? AND event_type=?)')"
   ],
-  "fallback": "Narrow filters; large unfiltered aggregation remains planned if the time guard triggers"
+  "fallback": "Narrow filters if the time guard triggers; no invented results"
 }

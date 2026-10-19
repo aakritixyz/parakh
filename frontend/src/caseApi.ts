@@ -147,6 +147,7 @@ export type SearchEvent = {
   original_timestamp: string | null;
   timezone_offset: string | null;
   content: string;
+  location?: {lat?: number; lon?: number};
   raw_ref: string;
   confidence: number;
   source: { filename: string; sha256: string; reference: string };
@@ -156,6 +157,8 @@ export type SearchResult = {
   total_matching: number;
   total_in_case: number;
   next_cursor: number | null;
+  filters?: { q?: string; regex?: string; time?: Record<string, string>; facets?: Record<string, string | boolean>; page?: { limit?: number; cursor?: number } };
+  histogram_ist?: { bucket: string; count: number }[];
   search_engine: string;
   facets: Record<string, { value: string; count: number }[]>;
   histogram: { bucket: string; count: number }[];
@@ -172,6 +175,11 @@ export type IdentityOverview = {
     status: "suggested" | "confirmed" | "reverted";
     reasons: string[];
     feedback_bonus: number;
+    priority_score?: number;
+    top_reasons?: string[];
+    model_name?: string;
+    model_version?: string;
+    explanation_method?: string;
   }[];
   links: { party: string; identifier: string; source: string }[];
   matcher: {
@@ -316,9 +324,10 @@ export type CorrelationResult = {
   disclaimer: string;
   planned: Record<string, string>;
 };
-export type CorrelatedTimelineEvent = { event_id: number; evidence_id: number; timestamp_utc: string; original_timestamp: string | null; phase: string; summary: string; confidence: number; ordering_probability: number; order_depends_on_clock: boolean; citation: SourceReceipt };
+export type CorrelatedTimelineEvent = { event_id: number; evidence_id: number; timestamp_utc: string; original_timestamp: string | null; reconciled_timestamp_utc?: string; clock_interval_seconds?: number[]; phase: string; summary: string; confidence: number; ordering_probability: number | null; order_depends_on_clock: boolean; citation: SourceReceipt };
 export type AssistantResult = {
   answer: string;
+  originals?: { text: string; citation: SourceReceipt }[];
   refused: boolean;
   claims: { text: string; citations: SourceReceipt[] }[];
   citations: SourceReceipt[];
@@ -653,10 +662,10 @@ export const getCorrelation = (caseId: number, options: { source?: string; targe
   if (options.clockConfidence !== undefined) query.set("clock_confidence", String(options.clockConfidence));
   return sessionRequest<CorrelationResult>(`/api/v2/cases/${caseId}/correlation?${query.toString()}`);
 };
-export const askCaseAssistant = (caseId: number, question: string) =>
+export const askCaseAssistant = (caseId: number, question: string, mode: "answer" | "summary" | "translate" = "answer") =>
   sessionRequest<AssistantResult>(
     `/api/v2/cases/${caseId}/assistant`,
-    json({ question }),
+    json({ question, mode }),
   );
 export const updateFraudLead = (caseId: number, leadId: number, status: string, assignee?: string, comment?: string) =>
   sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/leads/${leadId}`, json({ status, assignee: assignee || null, comment: comment || null }));

@@ -9,7 +9,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from app.ml.entities import extract_entities
-from app.models.evidence import Event
+from app.models.evidence import Event, Evidence
 from app.models.investigation import (
     AliasSuggestion,
     Identifier,
@@ -19,7 +19,9 @@ from app.models.investigation import (
     PartyIdentifier,
 )
 from app.normalize import extract_domain
+from app.services.alias_model_service import alias_prediction
 from app.services.audit_service import AuditService
+from app.services.offline_models import ModelUnavailable
 
 
 class IdentityService:
@@ -61,13 +63,28 @@ class IdentityService:
             )
         )
         ranked: list[dict] = []
+        model_card = None
+        decisions = list(self.db.scalars(select(AliasSuggestion).where(AliasSuggestion.case_id == case_id, AliasSuggestion.status.in_(["confirmed", "reverted"]))))
         for suggestion in suggestions:
             party = party_map.get(suggestion.party_id)
             identifier = identifier_map.get(suggestion.identifier_id)
             if not party or not identifier:
                 continue
             feedback_bonus = min(0.08, party_confirmed.get(party.id, 0) * 0.03)
-            score = min(0.99, suggestion.confidence + feedback_bonus)
+            score = suggestion.confidence
+            prediction = None
+            try:
+                prediction = alias_prediction(suggestion.features)
+                model_card = prediction["model_card"]
+                score = prediction["confidence"]
+            except ModelUnavailable:
+                pass
+            # Feedback is an auditable priority signal, not retraining on the golden case.
+            related = [item for item in decisions if item.party_id == suggestion.party_id]
+            positive = sum(item.status == "confirmed" for item in related)
+            negative = sum(item.status == "reverted" for item in related)
+            utility = (1 + positive) / (2 + positive + negative)
+            priority = score * 0.8 + utility * 0.2
             ranked.append(
                 {
                     "id": suggestion.id,
@@ -82,9 +99,16 @@ class IdentityService:
                     "reasons": suggestion.reasons,
                     "features": suggestion.features,
                     "feedback_bonus": round(feedback_bonus, 3),
+                    "priority_score": round(priority, 5),
+                    "model_name": prediction["model_card"]["name"] if prediction else "deterministic heuristic fallback",
+                    "model_version": prediction["model_card"]["version"] if prediction else "1",
+                    "shap": prediction["shap"] if prediction else {},
+                    "top_reasons": prediction["top_reasons"] if prediction else suggestion.reasons,
+                    "explanation_method": "exact interventional SHAP" if prediction else "heuristic",
+                    "feedback": {"positive_labels": positive, "negative_labels": negative, "priority_utility": utility, "base_model_retrained_on_case": False},
                 }
             )
-        ranked.sort(key=lambda item: (-item["confidence"], item["party"], item["identifier"]))
+        ranked.sort(key=lambda item: (-item["priority_score"], item["party"], item["identifier"]))
         links = list(
             self.db.execute(
                 select(PartyIdentifier, Party, Identifier)
@@ -129,11 +153,12 @@ class IdentityService:
             ],
             "lookalike_domains": lookalike_domains(domains),
             "matcher": {
-                "kind": "deterministic_heuristic",
-                "version": "1",
-                "training": "none",
-                "ml_status": "planned_after_step_5a",
-                "labels_recorded": confirmed_count,
+                "kind": "calibrated_gradient_boosted" if model_card else "deterministic_heuristic_fallback",
+                "version": model_card["version"] if model_card else "1",
+                "training": "generated synthetic cases only; investigator feedback changes review priority",
+                "ml_status": "ready" if model_card else "local_model_unavailable",
+                "model_card": model_card,
+                "labels_recorded": confirmed_count + sum(item.status == "reverted" for item in suggestions),
                 "limits": "Suggestions are leads. Shared names, timing or devices do not establish identity.",
             },
         }
@@ -168,6 +193,7 @@ class IdentityService:
                 "confidence": suggestion.confidence,
                 "reasons": suggestion.reasons,
                 "reversible": True,
+                "label": 1, "features": suggestion.features, "model_version": "alias-gbt-1.0",
             },
         )
         self.db.flush()
@@ -194,6 +220,7 @@ class IdentityService:
                 "party_id": suggestion.party_id,
                 "identifier_id": suggestion.identifier_id,
                 "restored_separate_records": True,
+                "label": 0, "features": suggestion.features, "model_version": "alias-gbt-1.0",
             },
         )
         self.db.flush()
@@ -214,6 +241,14 @@ class IdentityService:
             (item.type, item.normalized_value): item for item in self.db.scalars(select(Identifier))
         }
         cooccurrence: defaultdict[tuple[int, int], set[int]] = defaultdict(set)
+        observed_identifiers: set[int] = set()
+        party_times: defaultdict[int, list[float]] = defaultdict(list)
+        identifier_times: defaultdict[int, list[float]] = defaultdict(list)
+        party_devices: defaultdict[int, set[int]] = defaultdict(set)
+        identifier_devices: defaultdict[int, set[int]] = defaultdict(set)
+        party_contacts: defaultdict[int, set[str]] = defaultdict(set)
+        identifier_contacts: defaultdict[int, set[str]] = defaultdict(set)
+        sources = {item.id: item for item in self.db.scalars(select(Evidence).where(Evidence.case_id == case_id))}
         for event in self.db.scalars(select(Event).where(Event.case_id == case_id)):
             event_parties: list[Party] = []
             for raw_name in event.actor_entities or []:
@@ -269,8 +304,20 @@ class IdentityService:
                                 reason="normalised_variant",
                             )
                         )
+                observed_identifiers.add(identifier.id)
+                if event.timestamp_utc:
+                    identifier_times[identifier.id].append(event.timestamp_utc.timestamp())
+                source = sources.get(event.evidence_id)
+                if source and source.device_id:
+                    identifier_devices[identifier.id].add(source.device_id)
+                identifier_contacts[identifier.id].update(event.actor_entities or [])
                 for party in event_parties:
+                    if source and source.device_id:
+                        party_devices[party.id].add(source.device_id)
+                    party_contacts[party.id].update(name for name in event.actor_entities or [] if name != party.display_name)
                     cooccurrence[(party.id, identifier.id)].add(event.id)
+                    if event.timestamp_utc:
+                        party_times[party.id].append(event.timestamp_utc.timestamp())
 
         existing_pairs = {
             (item.party_id, item.identifier_id): item
@@ -278,13 +325,38 @@ class IdentityService:
                 select(AliasSuggestion).where(AliasSuggestion.case_id == case_id)
             )
         }
+        candidate_index: defaultdict[str, set[int]] = defaultdict(set)
+        local_identifiers = {item.id: item for item in identifier_by_key.values() if item.id in observed_identifiers}
+        for identifier in local_identifiers.values():
+            form = normal_form(identifier.normalized_value.split("@", 1)[0])
+            for token in set(form.split()):
+                candidate_index["token:" + token].add(identifier.id)
+                candidate_index["sound:" + _phonetic_key(token)].add(identifier.id)
+            for trigram in {form[i:i+3] for i in range(max(1, len(form)-2))}:
+                candidate_index["tri:" + trigram].add(identifier.id)
         for party in party_by_name.values():
-            for identifier in identifier_by_key.values():
+            form = normal_form(party.display_name)
+            candidate_ids = {identifier_id for (party_id, identifier_id), value in cooccurrence.items() if party_id == party.id and value}
+            for token in form.split():
+                candidate_ids |= candidate_index["token:" + token] | candidate_index["sound:" + _phonetic_key(token)]
+            for trigram in {form[i:i+3] for i in range(max(1, len(form)-2))}:
+                candidate_ids |= candidate_index["tri:" + trigram]
+            for identifier in (local_identifiers[value] for value in sorted(candidate_ids)):
+
                 features = alias_features(
                     party.display_name,
                     identifier.normalized_value,
                     len(cooccurrence[(party.id, identifier.id)]),
                 )
+                features["shared_devices"] = len(party_devices[party.id] & identifier_devices[identifier.id])
+                features["shared_contact_count"] = len(party_contacts[party.id] & identifier_contacts[identifier.id])
+                from bisect import bisect_left
+                times = sorted(set(identifier_times[identifier.id]))
+                gaps: list[float] = []
+                for instant in set(party_times[party.id]):
+                    position = bisect_left(times, instant)
+                    gaps.extend(abs(instant - times[index]) for index in (position-1, position) if 0 <= index < len(times))
+                features["cooccurrence_timing"] = 1 / (1 + min(gaps) / 300) if gaps else 0.0
                 if not features["blocked_candidate"]:
                     continue
                 score, reasons = alias_score(features)
@@ -311,6 +383,11 @@ class IdentityService:
 def normal_form(value: str) -> str:
     replacements = {"पैसा": "paisa", "पैसे": "paise"}
     value = replacements.get(value.casefold(), value.casefold())
+    try:
+        from anyascii import anyascii
+        value = anyascii(value)
+    except ImportError:
+        pass
     value = unicodedata.normalize("NFKD", value)
     return " ".join(re.findall(r"[a-z0-9]+", value))
 

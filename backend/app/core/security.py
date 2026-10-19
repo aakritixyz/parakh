@@ -3,9 +3,10 @@ from enum import StrEnum
 from uuid import uuid4
 
 import bcrypt
+import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import InvalidHash, VerificationError
-from jose import JWTError, jwt
+from jwt import InvalidTokenError
 
 from app.core.config import get_settings
 
@@ -57,9 +58,9 @@ def encode_token(subject: str, role: Role, token_use: str, minutes: int, session
 def decode_token(token: str) -> dict:
     try:
         payload = jwt.decode(token, get_settings().secret_key, algorithms=["HS256"],
-                             options={"require_exp": True, "require_sub": True})
+                             options={"require": ["exp", "sub"]})
         return payload
-    except JWTError as exc:
+    except InvalidTokenError as exc:
         raise ValueError("Invalid or expired token") from exc
 
 

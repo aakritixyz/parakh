@@ -236,6 +236,7 @@ export function CaseWorkspace({
             evidence_id: event.evidence_id,
             timestamp_utc: event.timestamp_utc,
             original_timestamp: event.original_timestamp,
+            location: event.location,
             action: event.type === "transaction" ? "payment" : event.action,
             content: event.content,
             raw_ref: event.raw_ref,
@@ -273,6 +274,7 @@ export function CaseWorkspace({
     [answer, setAnswer] = useState<Finding | null>(null),
     [liveAnswer, setLiveAnswer] = useState<AssistantResult | null>(null),
     [assistantBusy, setAssistantBusy] = useState(false),
+    [assistantMode, setAssistantMode] = useState<"answer" | "summary" | "translate">("answer"),
     [assistantError, setAssistantError] = useState(""),
     [refusal, setRefusal] = useState(false);
   const [replay, setReplay] = useState(0),
@@ -311,7 +313,7 @@ export function CaseWorkspace({
           ...(deleted !== "all" ? { deleted: deleted === "recovered" } : {}),
         },
         time: day !== "All" ? { start: `${day}T00:00:00+05:30`, end: `${day}T23:59:59+05:30` } : {},
-        page: { limit: 100000 },
+        page: { limit: 1000 },
       })
         .then((result) => {
           setSearchResult(result);
@@ -389,8 +391,11 @@ export function CaseWorkspace({
     () =>
       records
         .filter((e) => e.timestamp_utc)
-        .sort((a, b) => a.timestamp_utc!.localeCompare(b.timestamp_utc!)),
-    [records],
+        .sort((a, b) => {
+          const time = (event: RecordEvent) => correlation?.timeline.all_events.find(item => String(item.event_id) === event.id)?.reconciled_timestamp_utc ?? event.timestamp_utc!;
+          return time(a).localeCompare(time(b));
+        }),
+    [records, correlation],
   );
   useEffect(() => {
     if (!playing) return;
@@ -453,7 +458,7 @@ export function CaseWorkspace({
   const identifiers = Array.from(
     new Set(records.flatMap((e) => e.identifiers ?? [])),
   ).sort();
-  const dates = Array.from(
+  const dates = searchResult ? (searchResult.histogram_ist ?? searchResult.histogram).map(item => item.bucket) : Array.from(
     new Set(
       records.flatMap((e) =>
         e.timestamp_utc ? [localDay(e.timestamp_utc)] : [],
@@ -562,6 +567,7 @@ export function CaseWorkspace({
   const activeOrdering = correlation?.timeline.all_events.find(
     (event) => String(event.event_id) === activeEvent?.id,
   );
+  const replayTimestamp = (event?: RecordEvent) => correlation?.timeline.all_events.find(item => String(item.event_id) === event?.id)?.reconciled_timestamp_utc ?? event?.timestamp_utc;
   function mapView(atTime?: string | null) {
     const gps = records.filter(
       (e) =>
@@ -569,7 +575,7 @@ export function CaseWorkspace({
         e.location?.lat !== undefined &&
         (!atTime ||
           !e.timestamp_utc ||
-          new Date(e.timestamp_utc).getTime() <= new Date(atTime).getTime()),
+          new Date(replayTimestamp(e) ?? 0).getTime() <= new Date(atTime).getTime()),
     );
     const allGps = records.filter(
       (e) => e.evidence_id === 7 && e.location?.lat !== undefined,
@@ -1289,19 +1295,19 @@ export function CaseWorkspace({
                     onClick={() =>
                       setDetail({
                         title: "Filtered record count",
-                        text: `${filtered.length} records match the current filters. Includes untimed provenance records and repeated representations.`,
+                        text: `${searchResult?.total_matching ?? filtered.length} records match the current filters. Includes untimed provenance records and repeated representations.`,
                         citations: Array.from(
                           new Set(filtered.map((e) => e.evidence_id)),
                         ).map((file) => ({ file })),
                       })
                     }
                   >
-                    {filtered.length} matching records
+                    {searchResult?.total_matching ?? filtered.length} matching records
                   </button>
                 </div>
                 <div className={styles.histogram}>
                   {dates.map((d) => {
-                    const count = filtered.filter(
+                    const count = searchResult ? (searchResult.histogram_ist ?? searchResult.histogram).find(item => item.bucket === d)?.count ?? 0 : filtered.filter(
                       (e) =>
                         (e.timestamp_utc ? localDay(e.timestamp_utc) : null) ===
                         d,
@@ -1315,7 +1321,7 @@ export function CaseWorkspace({
                           style={{
                             height: Math.max(
                               4,
-                              (count / Math.max(1, filtered.length)) * 90,
+                              (count / Math.max(1, searchResult?.total_matching ?? filtered.length)) * 90,
                             ),
                           }}
                         />
@@ -1332,6 +1338,13 @@ export function CaseWorkspace({
               </section>
               <section className={styles.panel}>
                 <h2>Event table</h2>
+                {searchResult?.next_cursor && token && caseId ? <button onClick={async () => {
+                  const current = searchResult;
+                  try {
+                    const next = await searchCaseEvents(caseId, {...current.filters, page: {limit: 1000, cursor: current.next_cursor ?? undefined}});
+                    setSearchResult(previous => previous === current ? {...next, items: [...current.items, ...next.items]} : previous);
+                  } catch (error) { setSearchError(error instanceof Error ? error.message : "Could not load the next page"); }
+                }}>Load next records · {searchResult.items.length} loaded of {searchResult.total_matching}</button> : null}
                 {filtered.length > 500 ? (
                   <VirtualList items={filtered}>
                     {(event) => recordButton(event)}
@@ -1957,7 +1970,8 @@ export function CaseWorkspace({
                               <strong>{suggestion.party} ↔ {suggestion.identifier}</strong>
                               <span>{Math.round(suggestion.confidence * 100)}% heuristic confidence · {suggestion.status}</span>
                               <small>{suggestion.reasons.join(" · ")}</small>
-                              {suggestion.feedback_bonus > 0 && <small>Ranking feedback bonus +{Math.round(suggestion.feedback_bonus * 100)}%</small>}
+                              <small>{suggestion.model_name} · {suggestion.explanation_method} · review priority {suggestion.priority_score?.toFixed(3)}</small>
+                              {suggestion.top_reasons?.map(reason => <small key={reason}>{reason}</small>)}
                             </div>
                             <button
                               disabled={readOnly}
@@ -2093,7 +2107,7 @@ export function CaseWorkspace({
                       : time(activeEvent?.timestamp_utc, displayZone === "UTC" ? "UTC" : "Asia/Kolkata")}
                   </button>
                   <span className={styles.viewLabel}>
-                    Incident replay · source-time sync
+                    Incident replay · reconciled time, original records retained
                   </span>
                 </div>
                 <p className={styles.note}>
@@ -2101,7 +2115,7 @@ export function CaseWorkspace({
                 </p>
                 {activeOrdering?.order_depends_on_clock && (
                   <p className={styles.warning}>
-                    Ordering uncertainty · {Math.round(activeOrdering.ordering_probability * 100)}% probability at the current clock confidence.
+                    Ordering uncertainty · {activeOrdering.ordering_probability == null ? "unknown" : `${Math.round(activeOrdering.ordering_probability * 100)}%`} probability at the current clock confidence.
                   </p>
                 )}
                 {activeEvent && recordButton(activeEvent)}
@@ -2115,7 +2129,7 @@ export function CaseWorkspace({
                     <h3>{phaseIndex + 1}. {phase.name.replaceAll("_", " ")}</h3>
                     {phase.events.map((event) => <button className={styles.claim} key={event.event_id} onClick={() => open({ file: event.evidence_id, ref: event.citation.reference })}>
                       {time(event.timestamp_utc, displayZone === "UTC" ? "UTC" : "Asia/Kolkata")} · {event.summary}
-                      <small>Confidence {Math.round(event.confidence * 100)}% · ordering {Math.round(event.ordering_probability * 100)}%{event.order_depends_on_clock ? " · depends on clock estimate" : ""}</small>
+                      <small>Confidence {Math.round(event.confidence * 100)}% · ordering {event.ordering_probability == null ? "unknown" : `${Math.round(event.ordering_probability * 100)}%`}{event.order_depends_on_clock ? " · depends on clock estimate" : ""}</small>
                     </button>)}
                   </article>)}
                   <p className={styles.note}>Coverage {Math.round(correlation.timeline.summary_selection.coverage * 100)}%. {correlation.timeline.summary_selection.guarantee}</p>
@@ -2135,9 +2149,9 @@ export function CaseWorkspace({
                         .filter(
                           (e) =>
                             e.evidence_id === 1 &&
-                            new Date(e.timestamp_utc ?? 0).getTime() <=
+                            new Date(replayTimestamp(e) ?? 0).getTime() <=
                               new Date(
-                                activeEvent?.timestamp_utc ?? 0,
+                                replayTimestamp(activeEvent) ?? 0,
                               ).getTime(),
                         )
                         .slice(-1),
@@ -2145,11 +2159,11 @@ export function CaseWorkspace({
                   </section>
                   <section className={styles.panel}>
                     <h2>Recorded money at cursor</h2>
-                    {flow(activeEvent?.timestamp_utc)}
+                    {flow(replayTimestamp(activeEvent))}
                   </section>
                   <section className={styles.panel}>
                     <h2>GPS at cursor</h2>
-                    {mapView(activeEvent?.timestamp_utc)}
+                    {mapView(replayTimestamp(activeEvent))}
                   </section>
                 </div>,
               )}
@@ -2354,10 +2368,10 @@ export function CaseWorkspace({
                         <dt>Licence</dt><dd>{card.licence}</dd>
                         <dt>Seed</dt><dd>{card.seed}</dd>
                         <dt>Offline</dt><dd>{card.offline_only ? "Yes" : "No"}</dd>
-                        <dt>Precision</dt><dd>{card.metrics.precision}</dd>
-                        <dt>Recall</dt><dd>{card.metrics.recall}</dd>
-                        <dt>PR-AUC</dt><dd>{card.metrics.pr_auc}</dd>
-                        <dt>Explanation</dt><dd>{card.explanations.tree.method}</dd>
+                        <dt>Precision</dt><dd>{card.metrics.precision ?? "Not evaluated"}</dd>
+                        <dt>Recall</dt><dd>{card.metrics.recall ?? "Not evaluated"}</dd>
+                        <dt>PR-AUC</dt><dd>{card.metrics.pr_auc ?? "Not evaluated"}</dd>
+                        <dt>Explanation</dt><dd>{card.explanations.tree?.method ?? "Pretrained; see model limits"}</dd>
                         <dt>Artifact SHA-256</dt><dd className={styles.hash}>{card.artifact_sha256}</dd>
                       </dl>
                       <p className={styles.warning}>ML output is a lead, never a finding.</p>
@@ -2420,7 +2434,7 @@ export function CaseWorkspace({
                 setAssistantBusy(true);
                 setAnswer(null);
                 try {
-                  const result = await askCaseAssistant(caseId, question);
+                  const result = await askCaseAssistant(caseId, question, assistantMode);
                   setLiveAnswer(result);
                   setRefusal(result.refused);
                 } catch (cause) {
@@ -2451,6 +2465,7 @@ export function CaseWorkspace({
               setRefusal(!result);
             }}
           >
+            {token && <label>Task<select value={assistantMode} onChange={e => setAssistantMode(e.target.value as "answer" | "summary" | "translate")}><option value="answer">Answer question</option><option value="summary">Summarise records</option><option value="translate">Translate to English</option></select></label>}
             <label htmlFor="assistant-question">Ask about the evidence</label>
             <textarea
               id="assistant-question"
@@ -2463,6 +2478,7 @@ export function CaseWorkspace({
               {assistantBusy ? "Checking sources…" : "Ask"} <ArrowRight />
             </button>
           </form>
+          {liveAnswer?.originals?.map((item, i) => <details key={i}><summary>Original · {item.citation.file} · {item.citation.reference}</summary><p>{item.text}</p></details>)}
           {assistantError && <p role="alert" className={styles.warning}>{assistantError}</p>}
           {liveAnswer && !liveAnswer.refused && (
             <div className={styles.answer}>

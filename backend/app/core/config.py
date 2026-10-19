@@ -30,8 +30,10 @@ class Settings(BaseSettings):
     max_zip_ratio: int = 100
     access_token_expire_minutes: int = 480
     local_llm_provider: str = "ollama"
-    local_llm_model: str = "qwen2.5:3b-instruct"
-    embedding_provider: str = "local-hash"
+    local_llm_model: str = "qwen2.5:1.5b"
+    ollama_base_url: str = "http://127.0.0.1:11436"
+    local_llm_timeout_seconds: int = 30
+    embedding_provider: str = "multilingual-e5-small"
     demo_admin_username: str = "admin"
     demo_admin_password: str | None = None
     whatsapp_timezone: str = "Asia/Kolkata"

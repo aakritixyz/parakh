@@ -198,6 +198,7 @@ def load_offline_model(card: dict):
 
 
 def register_model(db: Session, card: dict, actor: str = "operator-cli") -> ModelRecord:
+    card = {key: value for key, value in card.items() if key in ModelRecord.__table__.columns}
     record = db.scalar(
         select(ModelRecord).where(
             ModelRecord.name == card["name"], ModelRecord.version == card["version"]
@@ -215,7 +216,7 @@ def register_model(db: Session, card: dict, actor: str = "operator-cli") -> Mode
         actor=actor,
         target_type="model",
         target_id=f"{card['name']}:{card['version']}",
-        payload={"seed": card["seed"], "metrics": card["metrics"], "offline_only": True},
+        payload={"seed": card["seed"], "metrics": card["metrics"], "offline_only": True, "model_card": card},
     )
     db.commit()
     return record

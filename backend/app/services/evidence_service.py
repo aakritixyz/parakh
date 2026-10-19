@@ -13,7 +13,7 @@ from app.models.evidence import Event, Evidence
 from app.models.investigation import Extraction, Job
 from app.parsers.registry import ParserRegistry
 from app.services.audit_service import AuditService
-from app.services.document_extraction_service import DocumentExtractionService
+from app.services.document_extraction_service import DocumentExtractionService, index_ocr_event
 from app.services.file_types import extension_mismatch, sniff_type
 from app.storage.content_addressed import ContentAddressedStorage
 
@@ -211,7 +211,8 @@ class EvidenceService:
             self.db.add_all(events)
             self.db.flush()
             inserted += len(events)
-        _, document_warnings = DocumentExtractionService(self.db).extract(evidence)
+        document, document_warnings = DocumentExtractionService(self.db).extract(evidence)
+        inserted += index_ocr_event(self.db, evidence, extraction.id, document)
         parser.warnings.extend(document_warnings)
         extraction.warnings = list(getattr(parser, "warnings", []))
         extraction.parse_status = _parse_status(extraction.warnings)

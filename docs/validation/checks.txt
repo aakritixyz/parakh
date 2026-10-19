@@ -1,6 +1,6 @@
 cd backend && ruff check . && mypy app
 All checks passed!
-Success: no issues found in 83 source files
+Success: no issues found in 89 source files
 cd frontend && npm run lint && npm run typecheck && npm run build
 
 > parakh-frontend@0.1.0 lint
@@ -32,15 +32,22 @@ dist/assets/styles-Dzc0Bdoc.css    18.46 kB │ gzip:  4.72 kB
 dist/assets/main-B3SoiqFZ.css      39.96 kB │ gzip:  7.51 kB
 dist/assets/landing-C1I_9mQ4.js    13.53 kB │ gzip:  4.54 kB
 dist/assets/styles-ZAoEirZg.js    148.62 kB │ gzip: 48.66 kB
-dist/assets/main-jCLlvCMu.js      289.13 kB │ gzip: 68.57 kB
-✓ built in 1.59s
+dist/assets/main-Cq9mnHdk.js      290.64 kB │ gzip: 69.05 kB
+✓ built in 1.66s
 cd backend && pytest -q
-........................................................................ [ 67%]
-..................................                                       [100%]
+......s................................................................. [ 64%]
+.......................................                                  [100%]
 =============================== warnings summary ===============================
-../../../../../opt/anaconda3/lib/python3.13/site-packages/fastapi/testclient.py:1
-  /opt/anaconda3/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
-    from starlette.testclient import TestClient as TestClient  # noqa
+tests/test_phase0_bootstrap.py::test_unreadable_demo_pdf_is_preserved_and_flagged_without_fabricated_events
+tests/test_phase0_bootstrap.py::test_unreadable_demo_pdf_is_preserved_and_flagged_without_fabricated_events
+  <frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+tests/test_phase0_bootstrap.py::test_unreadable_demo_pdf_is_preserved_and_flagged_without_fabricated_events
+tests/test_phase0_bootstrap.py::test_unreadable_demo_pdf_is_preserved_and_flagged_without_fabricated_events
+  <frozen importlib._bootstrap>:241: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+tests/test_phase0_bootstrap.py::test_unreadable_demo_pdf_is_preserved_and_flagged_without_fabricated_events
+  <frozen importlib._bootstrap>:241: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
 
 tests/test_phase2_pipeline.py::test_ingest_sets_dedupe_hash_and_reparse_replaces_events
   /Users/Dell/Desktop/parakh/backend/app/services/evidence_service.py:212: SAWarning: Identity map already had an identity for (<class 'app.models.evidence.Event'>, (1,), None), replacing it with newly flushed object.   Are there load operations occurring inside of an event handler within the flush?
@@ -50,31 +57,52 @@ tests/test_phase2_pipeline.py::test_ingest_sets_dedupe_hash_and_reparse_replaces
   /Users/Dell/Desktop/parakh/backend/app/services/evidence_service.py:212: SAWarning: Identity map already had an identity for (<class 'app.models.evidence.Event'>, (2,), None), replacing it with newly flushed object.   Are there load operations occurring inside of an event handler within the flush?
     self.db.flush()
 
+tests/test_step1_access.py: 33 warnings
+  /Users/Dell/Desktop/parakh/backend/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 27 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/test_step1_access.py: 31 warnings
+  /Users/Dell/Desktop/parakh/backend/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 27 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
+tests/test_step2_intake.py::test_done_when_all_15_files_seal_dedupe_and_one_file_tamper_isolated
+tests/test_step2_intake.py::test_safe_zip_registers_hashed_children_and_blocks_traversal_and_bomb
+tests/test_step2_intake.py::test_magic_bytes_warning_and_cancel_retry_controls
+  /Users/Dell/Desktop/parakh/backend/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 22 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    return self._jws.encode(
+
+tests/test_step2_intake.py::test_done_when_all_15_files_seal_dedupe_and_one_file_tamper_isolated
+tests/test_step2_intake.py::test_safe_zip_registers_hashed_children_and_blocks_traversal_and_bomb
+tests/test_step2_intake.py::test_magic_bytes_warning_and_cancel_retry_controls
+  /Users/Dell/Desktop/parakh/backend/.venv/lib/python3.11/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 22 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+    decoded = self.decode_complete(
+
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-106 passed, 3 warnings in 25.67s
+110 passed, 1 skipped, 77 warnings in 26.41s
+sys:1: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
 cd frontend && npm test && npm run typecheck && npm run build
 
 > parakh-frontend@0.1.0 test
 > node --test scripts/api.test.mjs scripts/casework.test.mjs scripts/session.test.mjs
 
-✔ offline demo does not attempt a login or make network requests (1.490167ms)
-✔ runtime credentials are sent only to the token endpoint and API uses the returned bearer token (36.658125ms)
-✔ invalid credentials surface a sign-in error without pretending to connect (0.496875ms)
-✔ a network failure remains visible to the sign-in UI (0.270209ms)
-✔ a missing token is rejected before any case request (0.329333ms)
-✔ older backends still load through the existing individual endpoints (2.4225ms)
-✔ case creation and multipart evidence upload use the chosen case and in-memory token (0.969375ms)
-✔ failed case creation and oversized uploads surface errors (0.263083ms)
-✔ all source hashes match the original 15 synthetic files and all parser references resolve (7.653083ms)
-✔ curated findings point to actual source records and preserve uncertainty (0.34225ms)
-✔ demo chain verifies but tampered payloads and broken links fail (17.092958ms)
-✔ v2 login uses same-origin HttpOnly-cookie transport and authorizes case requests (119.651334ms)
-✔ concurrent expired access requests share one rotating refresh request (25.102958ms)
-✔ failed refresh clears the signed-in session instead of falling back to demo (16.1785ms)
-✔ logout prevents a late refresh from restoring the old session (12.273709ms)
-✔ malformed successful login responses do not create an authenticated session (11.546875ms)
-✔ failed server logout reports failure and still clears local access (11.074625ms)
-✔ evidence intake sends acquisition context and per-file classifications (13.54625ms)
+✔ offline demo does not attempt a login or make network requests (1.4ms)
+✔ runtime credentials are sent only to the token endpoint and API uses the returned bearer token (37.146458ms)
+✔ invalid credentials surface a sign-in error without pretending to connect (0.491291ms)
+✔ a network failure remains visible to the sign-in UI (0.271959ms)
+✔ a missing token is rejected before any case request (0.315917ms)
+✔ older backends still load through the existing individual endpoints (2.795125ms)
+✔ case creation and multipart evidence upload use the chosen case and in-memory token (1.039833ms)
+✔ failed case creation and oversized uploads surface errors (0.287083ms)
+✔ all source hashes match the original 15 synthetic files and all parser references resolve (7.89875ms)
+✔ curated findings point to actual source records and preserve uncertainty (0.332167ms)
+✔ demo chain verifies but tampered payloads and broken links fail (17.55275ms)
+✔ v2 login uses same-origin HttpOnly-cookie transport and authorizes case requests (120.529709ms)
+✔ concurrent expired access requests share one rotating refresh request (26.564167ms)
+✔ failed refresh clears the signed-in session instead of falling back to demo (16.563875ms)
+✔ logout prevents a late refresh from restoring the old session (12.700458ms)
+✔ malformed successful login responses do not create an authenticated session (11.727417ms)
+✔ failed server logout reports failure and still clears local access (11.062542ms)
+✔ evidence intake sends acquisition context and per-file classifications (13.515ms)
 ℹ tests 18
 ℹ suites 0
 ℹ pass 18
@@ -82,7 +110,7 @@ cd frontend && npm test && npm run typecheck && npm run build
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 737.066458
+ℹ duration_ms 720.039416
 
 > parakh-frontend@0.1.0 typecheck
 > tsc --noEmit
@@ -106,5 +134,5 @@ dist/assets/styles-Dzc0Bdoc.css    18.46 kB │ gzip:  4.72 kB
 dist/assets/main-B3SoiqFZ.css      39.96 kB │ gzip:  7.51 kB
 dist/assets/landing-C1I_9mQ4.js    13.53 kB │ gzip:  4.54 kB
 dist/assets/styles-ZAoEirZg.js    148.62 kB │ gzip: 48.66 kB
-dist/assets/main-jCLlvCMu.js      289.13 kB │ gzip: 68.57 kB
-✓ built in 1.59s
+dist/assets/main-Cq9mnHdk.js      290.64 kB │ gzip: 69.05 kB
+✓ built in 1.60s

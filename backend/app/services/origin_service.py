@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 import time
 from statistics import median
 
@@ -9,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.models.evidence import Event, Evidence
 from app.models.investigation import Device, Extraction, Owner
+from app.services.monte_carlo import event_ordering
 
 CLOCK_SEED = 91026
 
@@ -122,10 +122,9 @@ class OriginService:
         comparison, deltas = self._compare_devices(evidence, events)
         correction, engine, complete = self._solve_offset(deltas)
         spread = max([abs(value - correction) for value in deltas], default=0)
-        low, high = correction - max(30, spread), correction + max(30, spread)
-        rng = random.Random(CLOCK_SEED)
-        samples = [rng.uniform(low, high) for _ in range(500)]
-        probability = sum(value >= 0 for value in samples) / len(samples)
+        uncertainty = max(30, spread) if deltas else 86400
+        low, high = correction - uncertainty, correction + uncertainty
+        ordering = event_ordering(events, comparison.get("secondary_evidence_id"), correction, [low, high], 1.0)
         return {
             "display_timezone": "Asia/Kolkata",
             "timezone_options": ["Asia/Kolkata", "UTC", "Source time"],
@@ -149,10 +148,9 @@ class OriginService:
                 [("sent", "received", correction + 60), ("received", "sent", -correction + 60)]
             ),
             "ordering_probability": {
-                "statement": "The correction is non-negative",
-                "probability": probability,
-                "samples": len(samples),
-                "seed": CLOCK_SEED,
+                "statement": "Adjacent reconciled event ordering under sampled device-clock uncertainty",
+                "probability": min((pair["probability"] for pair in ordering["pairs"]), default=None),
+                **{key: value for key, value in ordering.items() if key != "events"},
             },
             "order_dependent_event_ids": [
                 item["event_id"]

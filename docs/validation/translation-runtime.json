@@ -1,0 +1,54 @@
+{
+  "model": "qwen2.5:1.5b",
+  "seed": 15026,
+  "temperature": 0,
+  "cloud": false,
+  "label": "on synthetic data",
+  "checks": [
+    {
+      "source": "पैसे वापस भेजो",
+      "result": {
+        "claims": [
+          {
+            "text": "Please return the money.",
+            "event_ids": [
+              1
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "entailment": 0.852869,
+        "contradiction": 0.002842,
+        "neutral": 0.144289,
+        "model": "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli",
+        "version": "8adb042d524ecd5c26d3e3ba0e3fbcf7e2d0864c",
+        "limits": "Uncalibrated pretrained NLI score; used conservatively alongside exact value and citation checks"
+      },
+      "accepted_by_validator": true
+    },
+    {
+      "source": "paise wapas bhejo",
+      "result": {
+        "claims": [
+          {
+            "text": "Congratulations, pocket money.",
+            "event_ids": [
+              1
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "entailment": 0.126502,
+        "contradiction": 0.238757,
+        "neutral": 0.634741,
+        "model": "MoritzLaurer/mDeBERTa-v3-base-mnli-xnli",
+        "version": "8adb042d524ecd5c26d3e3ba0e3fbcf7e2d0864c",
+        "limits": "Uncalibrated pretrained NLI score; used conservatively alongside exact value and citation checks"
+      },
+      "accepted_by_validator": false
+    }
+  ],
+  "limit": "Only checked examples; unsupported Hinglish translations are refused, not displayed as answers"
+}

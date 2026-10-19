@@ -1,4 +1,5 @@
 import hashlib
+from typing import Literal
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
@@ -16,6 +17,7 @@ router = APIRouter(tags=["v2 cited assistant"])
 
 class AssistantInput(BaseModel):
     question: str = Field(min_length=1, max_length=500)
+    mode: Literal["answer", "summary", "translate"] = "answer"
 
 
 @router.post("/cases/{case_id}/assistant")
@@ -26,7 +28,7 @@ def cited_assistant(
     user: User = Depends(get_current_user),
 ):
     require_case_access(db, user, case_id)
-    result = AssistantService(db).answer(case_id, payload.question)
+    result = AssistantService(db).answer(case_id, payload.question, payload.mode)
     AuditService(db).log(
         action="assistant.answered",
         actor=user.username,
@@ -39,6 +41,12 @@ def cited_assistant(
             "citation_count": len(result["citations"]),
             "model": result["model_card"]["name"],
             "model_card": result["model_card"],
+            "mode": payload.mode,
+            "seed": 15026,
+            "temperature": 0,
+            "time_limit_seconds": AssistantService(db).settings.local_llm_timeout_seconds,
+            "retrieval": result["retrieval"],
+            "validation": result["validation"],
         },
     )
     db.commit()

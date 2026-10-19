@@ -1,0 +1,85 @@
+{
+  "seed": 51026,
+  "time_limit_seconds": 120,
+  "assumptions": "Frozen models; no training; five independent synthetic retrieval cases; ten synthetic entailment pairs; threshold .85",
+  "fallback": "BM25 and exact excerpts if models unavailable",
+  "retrieval": [
+    {
+      "case_id": "MODEL-SYN-51026-0",
+      "query": "paise wapas",
+      "correct_top_one": true,
+      "scores": [
+        0.7652919292449951,
+        0.748299241065979
+      ]
+    },
+    {
+      "case_id": "MODEL-SYN-51026-1",
+      "query": "\u0913\u091f\u0940\u092a\u0940 \u092d\u0947\u091c\u094b",
+      "correct_top_one": true,
+      "scores": [
+        0.8892539739608765,
+        0.7952157258987427
+      ]
+    },
+    {
+      "case_id": "MODEL-SYN-51026-2",
+      "query": "bank transfer",
+      "correct_top_one": true,
+      "scores": [
+        0.8110073804855347,
+        0.726715087890625
+      ]
+    },
+    {
+      "case_id": "MODEL-SYN-51026-3",
+      "query": "call record",
+      "correct_top_one": true,
+      "scores": [
+        0.7591207027435303,
+        0.7332459092140198
+      ]
+    },
+    {
+      "case_id": "MODEL-SYN-51026-4",
+      "query": "location history",
+      "correct_top_one": true,
+      "scores": [
+        0.7801023125648499,
+        0.7454608678817749
+      ]
+    }
+  ],
+  "embedding_metrics": {
+    "label": "on synthetic data",
+    "top_one_accuracy": 1.0,
+    "queries": 5,
+    "limit": "Tiny multilingual synthetic smoke set; relevance scores are not calibrated probabilities"
+  },
+  "entailment_metrics": {
+    "label": "on synthetic data",
+    "precision": 1.0,
+    "recall": 0.4,
+    "pr_auc": 1.0,
+    "calibration_curve": [
+      {
+        "mean_predicted": 0.0406846,
+        "fraction_positive": 0.0
+      },
+      {
+        "mean_predicted": 0.39995,
+        "fraction_positive": 1.0
+      },
+      {
+        "mean_predicted": 0.798809,
+        "fraction_positive": 1.0
+      },
+      {
+        "mean_predicted": 0.8478163333333334,
+        "fraction_positive": 1.0
+      }
+    ],
+    "samples": 10,
+    "limit": "Tiny synthetic smoke set; no deployment-accuracy estimate"
+  }
+}

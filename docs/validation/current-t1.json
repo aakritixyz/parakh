@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-19",
+  "backend_tests": {
+    "passed": 110,
+    "skipped": 1,
+    "skip_reason": "Real pretrained runtime integration is explicit; it passed separately"
+  },
+  "frontend_tests": {
+    "passed": 18
+  },
+  "lint": "passed",
+  "typecheck": "passed",
+  "build": "passed",
+  "real_ocr_embedding_nli_integration": "passed",
+  "assistant_runtime": "See assistant-runtime.json; money citations pass and unsupported question refused",
+  "translation": "Hindi example passed, unsupported Hinglish example rejected; see translation-runtime.json",
+  "dependency_audits": {
+    "python_known_vulnerabilities": 0,
+    "npm_known_vulnerabilities": 0
+  },
+  "search_benchmark": "100000 synthetic rows; see search-benchmark.json",
+  "browser_smoke": "Pending CI on this commit; local runner lacks its Playwright browser; see local-smoke-limits.json",
+  "planned": "T2/T3 features remain explicitly planned"
+}

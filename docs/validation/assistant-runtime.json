@@ -1,0 +1,157 @@
+{
+  "Where did Riya's money go?": {
+    "answer": "The bank record shows a credit of INR 25000.00 involving DEMO-ACCT-RIYA-001 on account DEMO-ACCT-COLLECT-009. The bank record shows a debit of INR 1800.00 involving DEMO-GROCERY on account DEMO-ACCT-RIYA-001. The bank record shows a debit of INR 25000.00 involving arjun.collect@demo on account DEMO-ACCT-RIYA-001. The bank record shows a debit of INR 30000.00 involving cashout.one@demo on account DEMO-ACCT-COLLECT-009. This later debit is a separate record and does not prove the outgoing funds were Riya's.",
+    "refused": false,
+    "claims": [
+      {
+        "text": "The bank record shows a credit of INR 25000.00 involving DEMO-ACCT-RIYA-001 on account DEMO-ACCT-COLLECT-009.",
+        "citations": [
+          {
+            "event_id": 6,
+            "evidence_id": 2,
+            "file": "05_bank_statement_collection.csv",
+            "reference": "row:2",
+            "timestamp": "2026-09-12 03:55:05+00:00",
+            "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2"
+          }
+        ]
+      },
+      {
+        "text": "The bank record shows a debit of INR 1800.00 involving DEMO-GROCERY on account DEMO-ACCT-RIYA-001.",
+        "citations": [
+          {
+            "event_id": 1,
+            "evidence_id": 1,
+            "file": "03_bank_statement_riya.csv",
+            "reference": "row:2",
+            "timestamp": "2026-09-11 13:00:00+00:00",
+            "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321"
+          }
+        ]
+      },
+      {
+        "text": "The bank record shows a debit of INR 25000.00 involving arjun.collect@demo on account DEMO-ACCT-RIYA-001.",
+        "citations": [
+          {
+            "event_id": 4,
+            "evidence_id": 1,
+            "file": "03_bank_statement_riya.csv",
+            "reference": "row:5",
+            "timestamp": "2026-09-12 04:03:00+00:00",
+            "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321"
+          }
+        ]
+      },
+      {
+        "text": "The bank record shows a debit of INR 30000.00 involving cashout.one@demo on account DEMO-ACCT-COLLECT-009. This later debit is a separate record and does not prove the outgoing funds were Riya's.",
+        "citations": [
+          {
+            "event_id": 8,
+            "evidence_id": 2,
+            "file": "05_bank_statement_collection.csv",
+            "reference": "row:4",
+            "timestamp": "2026-09-12 04:06:00+00:00",
+            "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2"
+          }
+        ]
+      }
+    ],
+    "citations": [
+      {
+        "event_id": 6,
+        "evidence_id": 2,
+        "file": "05_bank_statement_collection.csv",
+        "reference": "row:2",
+        "timestamp": "2026-09-12 03:55:05+00:00",
+        "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2"
+      },
+      {
+        "event_id": 1,
+        "evidence_id": 1,
+        "file": "03_bank_statement_riya.csv",
+        "reference": "row:2",
+        "timestamp": "2026-09-11 13:00:00+00:00",
+        "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321"
+      },
+      {
+        "event_id": 4,
+        "evidence_id": 1,
+        "file": "03_bank_statement_riya.csv",
+        "reference": "row:5",
+        "timestamp": "2026-09-12 04:03:00+00:00",
+        "sha256": "0b8759c98c1b6dd749edd594103c841b9dabc04b5b21c69070cb16a033c59321"
+      },
+      {
+        "event_id": 8,
+        "evidence_id": 2,
+        "file": "05_bank_statement_collection.csv",
+        "reference": "row:4",
+        "timestamp": "2026-09-12 04:06:00+00:00",
+        "sha256": "8ae7e78a14a5b9884a19771fe346b7c413bd01db58ddda13912d59b3133458a2"
+      }
+    ],
+    "validation": {
+      "valid": true,
+      "repair_attempted": true,
+      "repair_method": "one source-rendering repair; translation uses one local-model repair",
+      "method": "canonical source excerpts or pretrained multilingual NLI plus exact citation/value checks"
+    },
+    "retrieval": {
+      "method": "BM25 + offline multilingual-e5-small when provisioned + RRF + MMR",
+      "retrieved": 6,
+      "cloud_models": "off"
+    },
+    "model_card": {
+      "name": "qwen2.5:1.5b",
+      "version": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+      "provider": "Ollama (loopback)",
+      "licence": "Apache-2.0 (Qwen2.5)",
+      "training_data": "Pretrained publisher corpus; no case data used for training",
+      "known_limits": [
+        "Small language models can mistranslate or hallucinate; semantic citation checks may refuse useful answers",
+        "Model probabilities are not forensic findings"
+      ],
+      "offline_only": true,
+      "cloud_models": false,
+      "seed": 15026,
+      "temperature": 0,
+      "time_limit_seconds": 30,
+      "fallback": "Validated source excerpts; translations refused if unavailable"
+    },
+    "mode": "answer",
+    "originals": []
+  },
+  "What colour was the caller's shirt?": {
+    "answer": "No supporting evidence found.",
+    "refused": true,
+    "claims": [],
+    "citations": [],
+    "validation": {
+      "valid": true,
+      "repair_attempted": false,
+      "method": "case-only citation validation",
+      "reason": "No retrieved case item supported the question."
+    },
+    "retrieval": {
+      "method": "BM25 + local vectors + RRF + MMR",
+      "retrieved": 0
+    },
+    "model_card": {
+      "name": "qwen2.5:1.5b",
+      "version": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+      "provider": "Ollama (loopback)",
+      "licence": "Apache-2.0 (Qwen2.5)",
+      "training_data": "Pretrained publisher corpus; no case data used for training",
+      "known_limits": [
+        "Small language models can mistranslate or hallucinate; semantic citation checks may refuse useful answers",
+        "Model probabilities are not forensic findings"
+      ],
+      "offline_only": true,
+      "cloud_models": false,
+      "seed": 15026,
+      "temperature": 0,
+      "time_limit_seconds": 30,
+      "fallback": "Validated source excerpts; translations refused if unavailable"
+    }
+  }
+}

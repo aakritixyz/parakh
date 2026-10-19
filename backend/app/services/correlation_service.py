@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from app.ml.entities import extract_entities
 from app.models.evidence import Event, Evidence
+from app.services.monte_carlo import event_ordering
 from app.services.origin_service import OriginService
 
 DISCLAIMER = "Being near each other does not prove being together."
@@ -523,6 +524,8 @@ class CorrelationService:
     ) -> dict:
         origin = OriginService(self.db).analyse(case_id)
         dependent = set(origin["order_dependent_event_ids"])
+        clock = origin["clock_reconciliation"]
+        simulation = event_ordering(events, origin["second_device_comparison"].get("secondary_evidence_id"), clock["correction_seconds"], clock["range_seconds"], clock_confidence)
         items = []
         for event in events:
             phase = self._phase(event)
@@ -540,7 +543,9 @@ class CorrelationService:
                     "phase": phase,
                     "summary": event.content[:220],
                     "confidence": confidence,
-                    "ordering_probability": round(0.5 + 0.49 * confidence, 3),
+                    "ordering_probability": simulation["events"].get(event.id, {}).get("ordering_probability"),
+                    "reconciled_timestamp_utc": simulation["events"].get(event.id, {}).get("reconciled_timestamp_utc", event.timestamp_utc),
+                    "clock_interval_seconds": simulation["events"].get(event.id, {}).get("clock_interval_seconds"),
                     "order_depends_on_clock": event.id in dependent,
                     "citation": {
                         "evidence_id": event.evidence_id,
@@ -551,7 +556,7 @@ class CorrelationService:
                     },
                 }
             )
-        items.sort(key=lambda item: (item["timestamp_utc"], item["event_id"]))
+        items.sort(key=lambda item: (item["reconciled_timestamp_utc"], item["event_id"]))
         selected, coverage = self._maximum_coverage(items, 12)
         boundaries = self._optimal_partition(items)
         phases = [
@@ -570,6 +575,7 @@ class CorrelationService:
                 "guarantee": "At least 1-1/e of the optimum for monotone maximum coverage under this cardinality limit.",
             },
             "clock_confidence": clock_confidence,
+            "ordering_simulation": {key: value for key, value in simulation.items() if key != "events"},
             "gaps": [
                 {
                     "missing": "Suspect device location",
