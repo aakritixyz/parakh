@@ -5,6 +5,7 @@ import time
 from collections import Counter
 from datetime import datetime
 
+import regex as timeout_regex
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
@@ -29,6 +30,11 @@ class EventSearchService:
         if q and self.db.bind and self.db.bind.dialect.name == "sqlite":
             ids = self._sqlite_fts_ids(case_id, expanded_q)
             query = query.where(Event.id.in_(ids))
+        total_in_case = self.db.scalar(select(func.count(Event.id)).where(Event.case_id == case_id)) or 0
+        requested_type = str((spec.get("facets") or {}).get("type") or "")
+        if requested_type:
+            requested_type = "transaction" if requested_type == "payment" else requested_type
+            query = query.where((Event.event_type == requested_type) | (Event.action == requested_type))
         events = list(self.db.scalars(query))
         evidence = {
             item.id: item
@@ -75,7 +81,7 @@ class EventSearchService:
                 or expanded_q.casefold() in haystack
                 or bool(self.db.bind and self.db.bind.dialect.name == "sqlite"),
                 not phrases or all(phrase in haystack for phrase in phrases),
-                regex is None or bool(regex.search(f"{event.content} {' '.join(event.actor_entities or [])}")),
+                self._regex_matches(regex, f"{event.content} {' '.join(event.actor_entities or [])}"),
                 not requested_type or type_match == requested_type or event.action == requested_type,
                 not filters.get("app") or event.source_app == filters["app"],
                 not filters.get("owner") or event_owner == filters["owner"],
@@ -123,7 +129,7 @@ class EventSearchService:
         return {
             "items": [self._event_out(event, evidence[event.evidence_id], owners, devices, tags_by_event) for event in page_events],
             "total_matching": len(filtered),
-            "total_in_case": len(events),
+            "total_in_case": total_in_case,
             "next_cursor": page_events[-1].id if len(page_events) == limit else None,
             "search_engine": "sqlite_fts5" if self.db.bind and self.db.bind.dialect.name == "sqlite" else "postgres_full_text",
             "facets": {
@@ -232,9 +238,18 @@ class EventSearchService:
         if len(pattern) > 160 or re.search(r"(?:\+|\*|\{\d+,?\d*\})[^)]*\)(?:\+|\*)", pattern):
             raise SearchError("Regex rejected by the timeout guard.")
         try:
-            return re.compile(pattern, re.IGNORECASE)
-        except re.error as exc:
+            return timeout_regex.compile(pattern, timeout_regex.IGNORECASE)
+        except timeout_regex.error as exc:
             raise SearchError(f"Invalid regex: {exc}") from exc
+
+    @staticmethod
+    def _regex_matches(pattern, value: str) -> bool:
+        if pattern is None:
+            return True
+        try:
+            return bool(pattern.search(value, timeout=0.025))
+        except TimeoutError as exc:
+            raise SearchError("Regex time limit reached. Narrow the pattern.") from exc
 
     @staticmethod
     def _event_out(

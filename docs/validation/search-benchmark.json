@@ -1,0 +1,42 @@
+{
+  "label": "on synthetic data",
+  "rows": 20000,
+  "seed": 18026,
+  "version": "1.0",
+  "python": "3.13.9",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "time_limit_seconds": 60,
+  "assumptions": "Single process, local SQLite, cold FTS first query; no production latency claim",
+  "results": [
+    {
+      "query": {
+        "q": "refund"
+      },
+      "milliseconds": 235.47,
+      "matching": 20,
+      "histogram_buckets": 0,
+      "status": "completed"
+    },
+    {
+      "query": {
+        "facets": {
+          "type": "payment"
+        }
+      },
+      "milliseconds": 109.57,
+      "matching": 2000,
+      "histogram_buckets": 0,
+      "status": "completed"
+    },
+    {
+      "query": {},
+      "milliseconds": 571.69,
+      "status": "time_limit",
+      "reason": "Search time limit reached. Narrow the filters or regex."
+    }
+  ],
+  "explain": [
+    "(3, 0, 52, 'SEARCH events USING COVERING INDEX ix_events_case_type_time (case_id=? AND event_type=?)')"
+  ],
+  "fallback": "Narrow filters; large unfiltered aggregation remains planned if the time guard triggers"
+}

@@ -6,6 +6,7 @@ from app.core.deps import get_current_user
 from app.core.rbac import require_case_access
 from app.models.user import User
 from app.services.money_service import MoneyService
+from app.services.run_receipt import record_run
 
 router = APIRouter(tags=["v2 money analysis"])
 
@@ -19,6 +20,6 @@ def money_analysis(
 ):
     require_case_access(db, user, case_id)
     try:
-        return MoneyService(db).analyse(case_id, rule)
+        return record_run(db, case_id, user.username, "money", {"rule": rule}, MoneyService(db).analyse(case_id, rule))
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc

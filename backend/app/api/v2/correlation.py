@@ -6,6 +6,7 @@ from app.core.deps import get_current_user
 from app.core.rbac import require_case_access
 from app.models.user import User
 from app.services.correlation_service import CorrelationService
+from app.services.run_receipt import record_run
 
 router = APIRouter(tags=["v2 correlation and reconstruction"])
 
@@ -22,7 +23,7 @@ def correlation(
     user: User = Depends(get_current_user),
 ):
     require_case_access(db, user, case_id)
-    return CorrelationService(db).analyse(
+    result = CorrelationService(db).analyse(
         case_id,
         source=source,
         target=target,
@@ -30,3 +31,5 @@ def correlation(
         depth=depth,
         clock_confidence=clock_confidence,
     )
+
+    return record_run(db, case_id, user.username, "correlation", {"source": source, "target": target, "focus": focus, "depth": depth, "clock_confidence": clock_confidence}, result)

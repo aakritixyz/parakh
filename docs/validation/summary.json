@@ -1,0 +1,11 @@
+{
+  "make_lint_test": "passed",
+  "backend_tests": 106,
+  "frontend_tests": 18,
+  "bundle_verifier": "passed on clean bundle; tamper tests pass",
+  "pdf_visual_review": "two-page synthetic report rendered and inspected",
+  "playwright_local": "blocked by macOS sandbox before browser launch; CI job added",
+  "frontend_dependency_audit": "zero advisories",
+  "python_dependency_audit": "advisories in installed direct requirements; see python-audit.json",
+  "performance": "measured on 20000 synthetic events; unfiltered query time guard remains a documented limitation"
+}

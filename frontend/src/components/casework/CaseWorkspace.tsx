@@ -66,6 +66,7 @@ import {
   type FindingStatus,
 } from "./model";
 import styles from "./Casework.module.css";
+import { ReviewPanel } from "./ReviewPanel";
 import { VirtualList } from "../ui/VirtualList";
 
 const views = [
@@ -412,6 +413,8 @@ export function CaseWorkspace({
   );
   const cite = (c: Citation) => (
     <button
+      draggable
+      onDragStart={(event) => event.dataTransfer.setData("application/parakh-source", JSON.stringify(c))}
       className={styles.citation}
       key={`${c.file}-${c.ref}-${c.label}`}
       onClick={() => open(c)}
@@ -459,6 +462,8 @@ export function CaseWorkspace({
   ).sort();
   const recordButton = (e: RecordEvent) => (
     <button
+      draggable
+      onDragStart={(event) => event.dataTransfer.setData("application/parakh-source", JSON.stringify({ file: e.evidence_id, ref: e.raw_ref, event_id: Number(e.id) }))}
       className={styles.eventButton}
       onClick={() => open({ file: e.evidence_id, ref: e.raw_ref }, e)}
     >
@@ -2191,7 +2196,7 @@ export function CaseWorkspace({
               </section>
             </>
           )}
-          {view === "Findings" &&
+          {view === "Findings" && isDemo &&
             scenarioGuard(
               <>
                 <p className={styles.intro}>
@@ -2246,6 +2251,7 @@ export function CaseWorkspace({
                 ))}
               </>,
             )}
+          {token && caseId && <ReviewPanel key={`${caseId}-${view}`} caseId={caseId} readOnly={readOnly} mode={view === "Findings" ? "Findings" : view === "Reports" ? "Reports" : "tray"} sources={sources} records={records} onOpen={open} />}
           {view === "Reports" && (
             <>
               <section className={styles.panel}>
@@ -2532,6 +2538,9 @@ export function CaseWorkspace({
           onExhibit={() => {
             if (detail.citation) {
               const selection = detail.citation;
+              if (token) {
+                window.dispatchEvent(new CustomEvent("parakh-exhibit", { detail: { ...selection, event_id: detail.event ? Number(detail.event.id) : undefined } }));
+              } else {
               setSourceExhibits((current) =>
                 current.some(
                   (c) => c.file === selection.file && c.ref === selection.ref,
@@ -2539,6 +2548,7 @@ export function CaseWorkspace({
                   ? current
                   : [...current, selection],
               );
+              }
               setNotice("Source reference added to the exhibit tray.");
               setDetail(null);
             }

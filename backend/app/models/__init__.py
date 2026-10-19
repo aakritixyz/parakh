@@ -32,6 +32,7 @@ from app.models.investigation import (
 )
 from app.models.ml import ModelRecord
 from app.models.report import Report
+from app.models.review import CaseReview
 from app.models.session import AuditHead, AuthSession
 from app.models.user import User
 
@@ -47,6 +48,7 @@ __all__ = [
     "Bookmark",
     "Case",
     "CaseMembership",
+    "CaseReview",
     "Comment",
     "DbRole",
     "Device",

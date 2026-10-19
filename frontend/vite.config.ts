@@ -14,7 +14,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "http://127.0.0.1:8000",
+      "/api": process.env.PARAKH_API || "http://127.0.0.1:8000",
     },
   },
 });

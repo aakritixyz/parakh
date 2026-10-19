@@ -53,7 +53,7 @@ class RetrievedItem:
     @property
     def citation(self) -> dict:
         return {
-            "event_id": self.event.id if self.event else -int(self.document.id),
+            "event_id": self.event.id if self.event else -int(self.document.id if self.document is not None else 0),
             "evidence_id": self.evidence.id,
             "file": self.evidence.filename,
             "reference": self.event.raw_ref if self.event else "ocr:document",
@@ -280,7 +280,7 @@ class AssistantService:
     @staticmethod
     def _validate_claims(claims: list[dict], items: list[RetrievedItem]) -> bool:
         available = {
-            (item.evidence.id, item.event.id if item.event else -int(item.document.id)): item
+            (item.evidence.id, item.event.id if item.event else -int(item.document.id if item.document is not None else 0)): item
             for item in items
         }
         if not claims:
@@ -308,7 +308,7 @@ class AssistantService:
     ) -> list[dict] | None:
         sources = [
             {
-                "event_id": item.event.id if item.event else -int(item.document.id),
+                "event_id": item.event.id if item.event else -int(item.document.id if item.document is not None else 0),
                 "evidence_id": item.evidence.id,
                 "text": item.text[:1200],
             }
@@ -334,7 +334,7 @@ class AssistantService:
         except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError, ValueError):
             return None
         lookup = {
-            item.event.id if item.event else -int(item.document.id): item for item in items
+            item.event.id if item.event else -int(item.document.id if item.document is not None else 0): item for item in items
         }
         claims = []
         for raw in payload.get("claims", []):

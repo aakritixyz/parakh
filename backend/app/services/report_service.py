@@ -1,7 +1,10 @@
 import csv
 import hashlib
 import json
+import re
+from html import escape
 from pathlib import Path
+from uuid import uuid4
 from zipfile import ZIP_DEFLATED, ZipFile
 
 try:
@@ -14,13 +17,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.audit import AuditLog
+from app.models.case import Case
 from app.models.evidence import Event, Evidence
 from app.models.investigation import AuditCheckpoint
+from app.models.ml import ModelRecord
 from app.models.report import Report
-from app.services.analysis_service import AnalysisService
 from app.services.audit_service import AuditService
 from app.services.authenticity_service import AuthenticityService
 from app.services.integrity_service import manifest_leaf, merkle_proof, merkle_root
+from app.services.review_service import review_out
 
 
 class ReportService:
@@ -30,7 +35,7 @@ class ReportService:
     def generate_case_report(self, case_id: int) -> Report:
         out_dir = Path("reports")
         out_dir.mkdir(exist_ok=True)
-        path = out_dir / f"case-{case_id}-court-report.pdf"
+        path = out_dir / f"case-{case_id}-{uuid4().hex}-review.pdf"
         lines = self._report_lines(case_id)
         if canvas is None or A4 is None:
             write_minimal_pdf(path, lines)
@@ -52,7 +57,7 @@ class ReportService:
     def export_case_bundle(self, case_id: int) -> Report:
         out_dir = Path("reports")
         out_dir.mkdir(exist_ok=True)
-        bundle_path = out_dir / f"case-{case_id}-portable-bundle.zip"
+        bundle_path = out_dir / f"case-{case_id}-{uuid4().hex}-portable-bundle.zip"
         evidence = list(
             self.db.scalars(
                 select(Evidence).where(Evidence.case_id == case_id).order_by(Evidence.id)
@@ -65,6 +70,7 @@ class ReportService:
                 .order_by(Event.timestamp_utc, Event.id)
             )
         )
+        pdf_report = self.generate_case_report(case_id)
         audit = AuditService(self.db).verify_chain()
         audit_logs = list(self.db.scalars(select(AuditLog).order_by(AuditLog.id)))
         checkpoints = list(self.db.scalars(select(AuditCheckpoint).order_by(AuditCheckpoint.id)))
@@ -118,6 +124,10 @@ class ReportService:
             ],
             "merkle": {"algorithm": "SHA-256", "root": root, "leaf_count": len(leaves)},
             "evidence": evidence_rows,
+            "derived_sha256": {
+                "report.pdf": pdf_report.sha256,
+                "review.json": hashlib.sha256(json.dumps(review_out(self.db, case_id), indent=2, default=str).encode()).hexdigest(),
+            },
         }
         with ZipFile(bundle_path, "w", ZIP_DEFLATED) as bundle:
             bundle.writestr("manifest.json", json.dumps(manifest, indent=2, default=str))
@@ -125,6 +135,22 @@ class ReportService:
             bundle.writestr("events.csv", _events_csv(events))
             bundle.writestr("viewer.html", _offline_viewer_html(manifest))
             bundle.writestr("verify.py", VERIFY_SCRIPT)
+            bundle.write(pdf_report.path, "report.pdf")
+            bundle.writestr("review.json", json.dumps(review_out(self.db, case_id), indent=2, default=str))
+            bundle.writestr("README.md", "# PARAKH review bundle\nSynthetic demo evidence only when marked as such.\nExtract verify.py, then run: python3 verify.py bundle.zip\nPython 3 and OpenSSL with Ed25519 support are required; Parakh is not.\nSources are sealed originals. Findings and OCR are derived review material.\nReview Section 63 draft with legal counsel. Hash integrity does not establish truth.\n")
+            from io import BytesIO
+
+            from PIL import Image
+            for item in evidence:
+                if item.mime.startswith("image/") and Path(item.storage_path).is_file():
+                    try:
+                        with Image.open(item.storage_path) as image:
+                            image.thumbnail((240, 240))
+                            output = BytesIO()
+                            image.convert("RGB").save(output, "JPEG")
+                            bundle.writestr(f"thumbnails/{item.id}.jpg", output.getvalue())
+                    except (OSError, ValueError):
+                        pass
             for item in evidence:
                 source = Path(item.storage_path)
                 if source.is_file():
@@ -161,42 +187,117 @@ class ReportService:
         return report
 
     def _report_lines(self, case_id: int) -> list[str]:
+        case = self.db.get(Case, case_id)
+        review = review_out(self.db, case_id)
         lines = [
-            "Parakh Court-Ready Investigation Report",
-            f"Case ID: {case_id}",
-            "Section 63 BSA 2023 certificate: DRAFT ONLY - verify with legal counsel.",
-            "",
-            "Evidence Manifest",
+            "PARAKH | Investigation review report",
+            f"Case: {case.title if case else case_id}",
+            f"FIR/case number: {case.case_number or 'not supplied' if case else 'not supplied'}",
+            f"Jurisdiction: {case.jurisdiction or 'not supplied' if case else 'not supplied'}",
+            f"Offence: {case.offence_type or 'not supplied' if case else 'not supplied'}",
+            "Section 63 BSA draft - verify with legal counsel.",
+            "Draft only. No legal sufficiency or acquisition truth is certified.",
+            "METHODS AND LIMITS",
+            "Logical exports only. Sealed originals are never edited by reporting.",
+            "All authenticity signals are heuristics; ML output is a lead, never a finding.",
+            "A matching hash establishes unchanged bytes since sealing, not truth.",
+            "FINDINGS",
         ]
+        if not review["findings"]:
+            lines.append("Not established: no investigator findings have been saved.")
+        for finding in review["findings"]:
+            lines.extend([f"{finding['id']} | {finding['status']} | {finding['review_state']}", finding["statement"],
+                          f"Notes: {finding['notes']}", f"Tags: {', '.join(finding['tags'])}"])
+            lines.extend(f"Comment: {comment}" for comment in finding["comments"])
+            for citation in finding["citations"]:
+                lines.append(f"SOURCE {citation['evidence_id']} | {citation.get('file', '')} | {citation['reference']} | {citation.get('timestamp') or 'time unknown'}")
+                lines.append(f"SHA256 {citation.get('sha256', '')}")
+        lines.append("EXHIBIT TRAY")
+        for exhibit in review["exhibits"]:
+            target = f"Finding {exhibit['finding_id']}" if exhibit.get("finding_id") else f"SOURCE {exhibit.get('evidence_id')} | {exhibit.get('reference', '')}"
+            lines.append(f"Exhibit {exhibit['id']} | {exhibit['kind']} | {target} | estimated pages: {exhibit['pages']}")
+        lines.append("EVIDENCE MANIFEST AND AUTHENTICITY")
         auth = AuthenticityService(self.db)
-        for ev in self.db.scalars(select(Evidence).where(Evidence.case_id == case_id)):
-            lines.append(f"Evidence {ev.id}: {ev.filename} SHA256={ev.sha256}")
-            report = auth.report(ev)
-            lines.append(f"  Authenticity score: {report.score}")
-        lines.append("")
-        lines.append("Timeline")
-        for item in AnalysisService(self.db).timeline(case_id)[:25]:
-            lines.append(f"{item['timestamp_utc']} {item['phase']} {item['summary']}")
-        chain = AuditService(self.db).verify_chain()
-        lines.append(f"Chain of custody verification: {chain}")
+        for ev in self.db.scalars(select(Evidence).where(Evidence.case_id == case_id).order_by(Evidence.id)):
+            lines.extend([f"SOURCE {ev.id} | {ev.filename}", f"SHA256 {ev.sha256}", f"MD5 {ev.md5}"])
+            if Path(ev.storage_path).is_file():
+                try:
+                    report = auth.report(ev)
+                    lines.append(f"Heuristic suspicion interval: {report.score_range}; not a calibrated probability of fraud.")
+                    lines.extend(f"Heuristic {finding.signal}: {finding.explanation}" for finding in report.findings)
+                    lines.append(report.limits)
+                except (OSError, ValueError):
+                    lines.append("Authenticity not assessed: document could not be decoded.")
+            else:
+                lines.append("Authenticity not assessed: source file unavailable.")
+        lines.append("CITED TIMELINE")
+        for event in self.db.scalars(select(Event).where(Event.case_id == case_id).order_by(Event.timestamp_utc, Event.id)):
+            lines.append(f"{event.timestamp_utc} | SOURCE {event.evidence_id} | {event.raw_ref} | {event.content}")
+        lines.append("MODEL CARDS | on synthetic data")
+        lines.append("Registry snapshot: registration alone does not establish that a model ran on this case.")
+        for model in self.db.scalars(select(ModelRecord).order_by(ModelRecord.name, ModelRecord.version)):
+            lines.extend([f"{model.name} version {model.version} | {model.licence}",
+                          f"Training data: {model.training_data}",
+                          f"Metrics on synthetic data: {json.dumps(model.metrics, sort_keys=True)}",
+                          f"Limits: {'; '.join(model.known_limits)}",
+                          f"Seed {model.seed}; artifact SHA256 {model.artifact_sha256}"])
+        lines.append("CASE MODEL AND SOLVER RUNS")
+        for entry in self.db.scalars(select(AuditLog).where(AuditLog.case_id == case_id).order_by(AuditLog.id)):
+            if any(word in entry.action for word in ("model", "assistant", "selected", "analysis")):
+                lines.append(f"Audit {entry.id} | {entry.action} | {json.dumps(entry.payload, default=str)}")
+        lines.append(f"Audit chain result: {AuditService(self.db).verify_chain()}")
+        lines.extend([
+            "SECTION 63 BSA DRAFT - VERIFY WITH LEGAL COUNSEL",
+            "Case identifier and exhibit list: see case details and manifest above.",
+            "Responsible signatory: [to be supplied and verified].",
+            "Acquisition device, process and lawful handover: [verify source acquisition notes].",
+            "Statements concerning operation and production of electronic records: [counsel review required].",
+            "Signature, capacity, date and place: [not completed].",
+            "PLANNED: neural tamper localisation, deepfake detection, GNN mule detection, stylometry, Hawkes processes, Z3, private set intersection, roaring bitmaps, HyperLogLog, DuckDB and HNSW.",
+        ])
         return lines
 
     def _write_reportlab_pdf(self, path: Path, lines: list[str]) -> None:
-        c = canvas.Canvas(str(path), pagesize=A4)
-        width, height = A4
-        y = height - 50
+        from reportlab.lib import colors
+        from reportlab.lib.styles import getSampleStyleSheet
+        from reportlab.lib.units import mm
+        from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
-        def line(text: str) -> None:
-            nonlocal y
-            if y < 70:
-                c.showPage()
-                y = height - 50
-            c.drawString(40, y, text[:120])
-            y -= 16
+        styles = getSampleStyleSheet()
+        styles["BodyText"].fontSize = 9
+        styles["BodyText"].leading = 13
+        styles["BodyText"].wordWrap = "CJK"
+        story = []
+        # ASCII output avoids silently rendering unsupported Indic glyphs with Helvetica.
+        # Originals and their Unicode text remain in events.csv and review.json.
+        in_manifest = False
+        anchored = set()
+        for index, value in enumerate(lines):
+            if value == "EVIDENCE MANIFEST AND AUTHENTICITY":
+                in_manifest = True
+            elif value == "CITED TIMELINE":
+                in_manifest = False
+            safe = escape(value.encode("ascii", "backslashreplace").decode())
+            match = re.search(r"SOURCE (\d+)", value)
+            if match:
+                source_id = match.group(1)
+                if in_manifest and source_id not in anchored:
+                    safe = f'<a name="source-{source_id}"/>' + safe
+                    anchored.add(source_id)
+                else:
+                    safe = safe.replace(f"SOURCE {source_id}", f'<link href="#source-{source_id}" color="blue">SOURCE {source_id}</link>')
+            heading = index == 0 or (value.isupper() and len(value) < 100)
+            story.append(Paragraph(safe, styles["Heading2"] if heading else styles["BodyText"]))
+            story.append(Spacer(1, 2 * mm))
 
-        for item in lines:
-            line(item)
-        c.save()
+        def footer(c, doc):
+            c.setFont("Helvetica", 8)
+            c.setFillColor(colors.HexColor("#4a4d68"))
+            c.drawString(18 * mm, 12 * mm, "PARAKH | Draft review | Verify with legal counsel")
+            c.drawRightString(A4[0] - 18 * mm, 12 * mm, str(doc.page))
+
+        SimpleDocTemplate(str(path), pagesize=A4, leftMargin=18*mm, rightMargin=18*mm,
+                          topMargin=18*mm, bottomMargin=22*mm).build(story, onFirstPage=footer, onLaterPages=footer)
 
 
 def write_minimal_pdf(path: Path, lines: list[str]) -> None:
@@ -275,7 +376,7 @@ def _csv_string(rows: list[list[object]]) -> str:
 
 def _offline_viewer_html(manifest: dict) -> str:
     evidence_rows = "\n".join(
-        f"<tr><td>{item['id']}</td><td>{item['filename']}</td><td><code>{item['sha256']}</code></td></tr>"
+        f"<tr><td>{item['id']}</td><td>{escape(item['filename'])}</td><td><code>{item['sha256']}</code></td></tr>"
         for item in manifest["evidence"]
     )
     return f"""<!doctype html>
@@ -303,6 +404,8 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+from html import escape
+from uuid import uuid4
 import subprocess
 import sys
 import tempfile
@@ -356,6 +459,10 @@ def main() -> None:
     failures = []
     with zipfile.ZipFile(candidate) as zf:
         manifest = json.loads(zf.read("manifest.json"))
+        for name, expected in manifest.get("derived_sha256", {}).items():
+            try: actual = digest(zf.read(name))
+            except KeyError: actual = None
+            if actual != expected: failures.append("derived export " + name)
         for item in manifest["evidence"]:
             try: actual = digest(zf.read(item["bundle_path"]))
             except KeyError: actual = None

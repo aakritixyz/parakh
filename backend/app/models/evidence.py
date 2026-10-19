@@ -6,6 +6,7 @@ from sqlalchemy import (
     Double,
     Float,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -57,6 +58,7 @@ class Evidence(Base):
 
 class Event(Base):
     __tablename__ = "events"
+    __table_args__ = (Index("ix_events_case_type_time", "case_id", "event_type", "timestamp_utc"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     case_id: Mapped[int] = mapped_column(ForeignKey("cases.id"), index=True)

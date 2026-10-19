@@ -1274,3 +1274,14 @@
   border-radius: 6px;
   background: var(--info-bg);
 }
+
+.exhibitDrop {
+  border: 2px dashed var(--line);
+  padding: 16px;
+  margin-block: 12px;
+  border-radius: var(--radius);
+}
+.exhibitDrop input { width: 60px; }
+.exhibitDrop + form { display: grid; gap: 12px; margin-block: 16px; }
+.exhibitDrop + form label { display: grid; gap: 6px; }
+.exhibitDrop + form textarea { min-height: 80px; }

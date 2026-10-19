@@ -7,6 +7,7 @@ from app.core.deps import get_current_user
 from app.core.rbac import require_case_access
 from app.models.user import User
 from app.services.fraud_service import FraudService
+from app.services.run_receipt import record_run
 
 router = APIRouter(tags=["v2 fraud and authenticity"])
 
@@ -25,8 +26,7 @@ def fraud_review(
 ):
     require_case_access(db, user, case_id)
     result = FraudService(db).board(case_id)
-    db.commit()
-    return result
+    return record_run(db, case_id, user.username, "fraud", {}, result)
 
 
 @router.patch("/cases/{case_id}/leads/{lead_id}")

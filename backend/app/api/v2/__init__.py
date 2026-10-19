@@ -13,6 +13,7 @@ from app.api.v2.models import router as models_router
 from app.api.v2.money import router as money_router
 from app.api.v2.origin import router as origin_router
 from app.api.v2.patterns import router as patterns_router
+from app.api.v2.review import router as review_router
 from app.api.v2.search import router as search_router
 
 api_router = APIRouter(prefix="/api/v2")
@@ -30,3 +31,5 @@ api_router.include_router(origin_router)
 api_router.include_router(fraud_router)
 api_router.include_router(correlation_router)
 api_router.include_router(assistant_router)
+
+api_router.include_router(review_router)

@@ -37,3 +37,13 @@ frontend:
 
 frontend-install:
 	cd frontend && npm install
+
+smoke:
+	cd frontend && node scripts/smoke.mjs
+
+benchmark:
+	cd backend && python -m scripts.benchmark_search
+
+dependency-audit:
+	cd frontend && npm audit
+	cd backend && python -m pip_audit -r requirements.txt

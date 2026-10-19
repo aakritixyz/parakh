@@ -38,6 +38,7 @@ def cited_assistant(
             "refused": result["refused"],
             "citation_count": len(result["citations"]),
             "model": result["model_card"]["name"],
+            "model_card": result["model_card"],
         },
     )
     db.commit()

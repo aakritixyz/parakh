@@ -1,0 +1,8 @@
+{
+  "status": "blocked",
+  "steps": [],
+  "synthetic_only": true,
+  "reason": "Chromium launch denied by macOS sandbox bootstrap_check_in MachPort permission; no UI steps were executed locally",
+  "command": "make smoke",
+  "ci": "GitHub CI smoke job executes this same isolated flow on Ubuntu"
+}

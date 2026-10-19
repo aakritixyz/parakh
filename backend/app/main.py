@@ -12,6 +12,7 @@ from app.api.v2 import api_router as v2_router
 from app.core.config import get_settings
 from app.core.database import engine
 from app.core.errors import install_error_handlers
+from app.core.hardening import RequestHardening
 from app.core.migrations import require_current_schema
 from app.schemas.common import Health
 
@@ -43,6 +44,7 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(RequestHardening)
     install_error_handlers(app)
     app.include_router(api_router)
     app.include_router(v2_router)

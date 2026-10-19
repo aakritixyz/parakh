@@ -1,0 +1,110 @@
+cd backend && ruff check . && mypy app
+All checks passed!
+Success: no issues found in 83 source files
+cd frontend && npm run lint && npm run typecheck && npm run build
+
+> parakh-frontend@0.1.0 lint
+> eslint . && node scripts/check-styles.mjs
+
+Muted text on surface: 5.47:1 (AA)
+Muted text on bg: 4.77:1 (AA)
+All source colors use tokens; no gradients.
+
+> parakh-frontend@0.1.0 typecheck
+> tsc --noEmit
+
+
+> parakh-frontend@0.1.0 build
+> tsc && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/lucide-react/dist/esm/context.mjs (2:0): Module level directives cause errors when bundled, "use client" in "node_modules/lucide-react/dist/esm/context.mjs" was ignored.
+node_modules/lucide-react/dist/esm/Icon.mjs (2:0): Module level directives cause errors when bundled, "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" was ignored.
+✓ 1957 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/signin.html                    0.88 kB │ gzip:  0.42 kB
+dist/dashboard.html                 0.88 kB │ gzip:  0.42 kB
+dist/index.html                     1.09 kB │ gzip:  0.53 kB
+dist/assets/landing-DSR9-nKP.css   13.37 kB │ gzip:  2.85 kB
+dist/assets/styles-Dzc0Bdoc.css    18.46 kB │ gzip:  4.72 kB
+dist/assets/main-B3SoiqFZ.css      39.96 kB │ gzip:  7.51 kB
+dist/assets/landing-C1I_9mQ4.js    13.53 kB │ gzip:  4.54 kB
+dist/assets/styles-ZAoEirZg.js    148.62 kB │ gzip: 48.66 kB
+dist/assets/main-jCLlvCMu.js      289.13 kB │ gzip: 68.57 kB
+✓ built in 1.59s
+cd backend && pytest -q
+........................................................................ [ 67%]
+..................................                                       [100%]
+=============================== warnings summary ===============================
+../../../../../opt/anaconda3/lib/python3.13/site-packages/fastapi/testclient.py:1
+  /opt/anaconda3/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_phase2_pipeline.py::test_ingest_sets_dedupe_hash_and_reparse_replaces_events
+  /Users/Dell/Desktop/parakh/backend/app/services/evidence_service.py:212: SAWarning: Identity map already had an identity for (<class 'app.models.evidence.Event'>, (1,), None), replacing it with newly flushed object.   Are there load operations occurring inside of an event handler within the flush?
+    self.db.flush()
+
+tests/test_phase2_pipeline.py::test_ingest_sets_dedupe_hash_and_reparse_replaces_events
+  /Users/Dell/Desktop/parakh/backend/app/services/evidence_service.py:212: SAWarning: Identity map already had an identity for (<class 'app.models.evidence.Event'>, (2,), None), replacing it with newly flushed object.   Are there load operations occurring inside of an event handler within the flush?
+    self.db.flush()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+106 passed, 3 warnings in 25.67s
+cd frontend && npm test && npm run typecheck && npm run build
+
+> parakh-frontend@0.1.0 test
+> node --test scripts/api.test.mjs scripts/casework.test.mjs scripts/session.test.mjs
+
+✔ offline demo does not attempt a login or make network requests (1.490167ms)
+✔ runtime credentials are sent only to the token endpoint and API uses the returned bearer token (36.658125ms)
+✔ invalid credentials surface a sign-in error without pretending to connect (0.496875ms)
+✔ a network failure remains visible to the sign-in UI (0.270209ms)
+✔ a missing token is rejected before any case request (0.329333ms)
+✔ older backends still load through the existing individual endpoints (2.4225ms)
+✔ case creation and multipart evidence upload use the chosen case and in-memory token (0.969375ms)
+✔ failed case creation and oversized uploads surface errors (0.263083ms)
+✔ all source hashes match the original 15 synthetic files and all parser references resolve (7.653083ms)
+✔ curated findings point to actual source records and preserve uncertainty (0.34225ms)
+✔ demo chain verifies but tampered payloads and broken links fail (17.092958ms)
+✔ v2 login uses same-origin HttpOnly-cookie transport and authorizes case requests (119.651334ms)
+✔ concurrent expired access requests share one rotating refresh request (25.102958ms)
+✔ failed refresh clears the signed-in session instead of falling back to demo (16.1785ms)
+✔ logout prevents a late refresh from restoring the old session (12.273709ms)
+✔ malformed successful login responses do not create an authenticated session (11.546875ms)
+✔ failed server logout reports failure and still clears local access (11.074625ms)
+✔ evidence intake sends acquisition context and per-file classifications (13.54625ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 737.066458
+
+> parakh-frontend@0.1.0 typecheck
+> tsc --noEmit
+
+
+> parakh-frontend@0.1.0 build
+> tsc && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+node_modules/lucide-react/dist/esm/context.mjs (2:0): Module level directives cause errors when bundled, "use client" in "node_modules/lucide-react/dist/esm/context.mjs" was ignored.
+node_modules/lucide-react/dist/esm/Icon.mjs (2:0): Module level directives cause errors when bundled, "use client" in "node_modules/lucide-react/dist/esm/Icon.mjs" was ignored.
+✓ 1957 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/signin.html                    0.88 kB │ gzip:  0.42 kB
+dist/dashboard.html                 0.88 kB │ gzip:  0.42 kB
+dist/index.html                     1.09 kB │ gzip:  0.53 kB
+dist/assets/landing-DSR9-nKP.css   13.37 kB │ gzip:  2.85 kB
+dist/assets/styles-Dzc0Bdoc.css    18.46 kB │ gzip:  4.72 kB
+dist/assets/main-B3SoiqFZ.css      39.96 kB │ gzip:  7.51 kB
+dist/assets/landing-C1I_9mQ4.js    13.53 kB │ gzip:  4.54 kB
+dist/assets/styles-ZAoEirZg.js    148.62 kB │ gzip: 48.66 kB
+dist/assets/main-jCLlvCMu.js      289.13 kB │ gzip: 68.57 kB
+✓ built in 1.59s
