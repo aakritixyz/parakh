@@ -5,7 +5,7 @@ Project layout:
 - `backend/` - FastAPI forensic investigation API
 - `frontend/` - Investigator dashboard UI
 
-## First setup
+## First setup.
 
 Copy `.env.example` to a private `.env` and set `DEMO_ADMIN_USERNAME`, `DEMO_ADMIN_PASSWORD`, and `SECRET_KEY`. There is no default demo password. From an activated backend environment, run `make backend-migrate` before starting or seeding the API. Full clean-checkout and existing-database instructions are in [Phase 0](docs/PHASE0.md).
 
