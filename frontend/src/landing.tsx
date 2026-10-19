@@ -28,13 +28,18 @@ function EvidenceLens() {
     surface.current?.style.setProperty("--lens-x", `${next.x}%`);
     surface.current?.style.setProperty("--lens-y", `${next.y}%`);
   };
-  const documentContents = <>
-    <div className="pl-document-heading"><Fingerprint/><span>PARAKH / SAMPLE DOCUMENT<small>ILLUSTRATIVE RECORD · NOT CASE EVIDENCE</small></span></div>
-    <div className="pl-document-title"><span lang="hi">भुगतान विवरण</span><h3>Payment acknowledgement</h3><p>Reference copy for visual demonstration</p></div>
-    <dl className="pl-document-fields"><div><dt>Record reference</dt><dd>DEMO-TRX-018</dd></div><div><dt>Recorded date</dt><dd>12 October 2026</dd></div><div><dt>Recorded time</dt><dd>10:18 IST</dd></div><div><dt>Transfer amount</dt><dd>₹25,000.00</dd></div><div><dt>Payment status</dt><dd>Subject to bank verification</dd></div></dl>
+  const documentContents = (inspected: boolean) => <>
+    <div className="pl-document-heading"><Fingerprint/><span>PARAKH / DOCUMENT REVIEW<small>ILLUSTRATIVE RECORD · NOT CASE EVIDENCE</small></span><span className="pl-document-folio">018</span></div>
+    <div className="pl-document-title"><span lang="hi">भुगतान विवरण</span><h3>Payment acknowledgement</h3><p>{inspected ? "SOURCE CONTEXT / ADDITIONAL DETAIL" : "A closer look starts with the original."}</p></div>
+    <dl className="pl-document-fields">{[
+      { label: "Record reference", value: "DEMO-TRX-018", context: "Sample source: bank-export.csv · row 18", kind: "reference" },
+      { label: "Recorded time", value: "12 Oct 2026 · 10:18 IST", context: "UTC 04:48 · original offset +05:30", kind: "time" },
+      { label: "Transfer amount", value: "₹25,000.00", context: "Amount in document · bank match not established", kind: "amount" },
+      { label: "Review status", value: "Awaiting corroboration", context: "A claim in a document is not a verified payment", kind: "status" },
+    ].map(({ label, value, context, kind }) => <div key={kind} className={`pl-document-field pl-document-field-${kind}`}><dt>{label}</dt><dd>{value}</dd><span className={inspected ? "pl-field-context is-revealed" : "pl-field-context"}>{inspected && <ScanLine/>}{inspected ? context : "Additional context beneath the lens"}</span></div>)}</dl>
     <div className="pl-document-signature"><span>Sample signature</span><svg viewBox="0 0 160 50" aria-hidden="true"><path d="M7 36 C25 2 23 48 39 26 S51 6 51 27 S68 36 78 18 S75 38 96 26 S118 30 147 13"/></svg></div>
-    <div className="pl-document-stamp">SAMPLE<br/><span>REVIEW COPY</span></div>
-    <div className="pl-document-foot"><ScanLine/> Examine the source. Verify the claim.</div>
+    <div className="pl-document-stamp">SAMPLE<br/><span>{inspected ? "SOURCE CONTEXT" : "REVIEW COPY"}</span></div>
+    <div className="pl-document-foot"><ScanLine/>{inspected ? "Illustrative annotations · No live analysis performed" : "Original wording visible. More context under the lens."}</div>
   </>;
   return <div className="pl-hero-art pl-lens-art"><div className="pl-inspection-backdrop" aria-hidden="true"/><div ref={surface} className="pl-inspection" role="group" tabIndex={0} aria-label="Interactive document magnifier" aria-describedby="pl-lens-instructions" onPointerMove={event => {
     if (event.pointerType !== "mouse" && event.buttons === 0) return;
@@ -50,11 +55,11 @@ function EvidenceLens() {
     if (event.key === "Home") { event.preventDefault(); move(62, 44); }
     else if (directions[event.key]) { event.preventDefault(); const [dx, dy] = directions[event.key]; move(position.current.x + dx, position.current.y + dy); }
   }}>
-    <div className="pl-document pl-document-muted" aria-hidden="true">{documentContents}</div>
-    <div className="pl-document-reveal" aria-hidden="true"><div className="pl-document">{documentContents}</div></div>
-    <div className="pl-magnifier" aria-hidden="true"><span className="pl-lens-crosshair"/><span className="pl-lens-rim">SOURCE DETAIL</span></div>
-    <span className="pl-inspection-label">INTERACTIVE ILLUSTRATION</span>
-  </div><p className="pl-lens-instructions" id="pl-lens-instructions"><Search/><span>Move the lens to reveal the detail.<small>Hover or drag · Keyboard: arrow keys · Home to reset</small></span></p></div>;
+    <div className="pl-document pl-document-original">{documentContents(false)}</div>
+    <div className="pl-document-reveal" aria-hidden="true"><div className="pl-document pl-document-inspected">{documentContents(true)}</div></div>
+    <div className="pl-magnifier" aria-hidden="true"><span className="pl-lens-crosshair"/><span className="pl-lens-rim">MORE CONTEXT</span></div>
+    <span className="pl-inspection-label">SYNTHETIC DOCUMENT / INTERACTIVE PREVIEW</span>
+  </div><p className="pl-lens-instructions" id="pl-lens-instructions"><Search/><span>The record stays visible. The lens reveals more.<small>Hover over a field · Drag on touch · Arrow keys to explore</small></span></p></div>;
 }
 const editorialImages = [
   { image: "photo-1516321318423-f06f85e504b3", title: "A place for careful collaboration.", caption: "REVIEW TOGETHER", alt: "People working together with laptops and notes at a table", fallback: "evidence-review.jpg" },

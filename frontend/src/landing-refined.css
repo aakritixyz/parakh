@@ -131,9 +131,9 @@
 .pl-inspection { --lens-x: 62%; --lens-y: 44%; --lens-radius: 102px; position: relative; height: 550px; overflow: hidden; isolation: isolate; background: var(--pl-paper); border: 1px solid var(--pl-steel); border-radius: 210px 210px 7px 7px; cursor: none; touch-action: pan-y; user-select: none; box-shadow: var(--shadow); }
 .pl-inspection:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
 .pl-document { position: absolute; inset: 0; padding: 76px 30px 25px; background: var(--surface); color: var(--ink); }
-.pl-document-muted { filter: blur(2.5px); opacity: .47; }
+.pl-document-original { filter: none; opacity: 1; }
 .pl-document-reveal { position: absolute; inset: 0; clip-path: circle(var(--lens-radius) at var(--lens-x) var(--lens-y)); pointer-events: none; }
-.pl-document-reveal>.pl-document { transform: scale(1.12); transform-origin: var(--lens-x) var(--lens-y); }
+.pl-document-reveal>.pl-document { transform: scale(1.04); transform-origin: var(--lens-x) var(--lens-y); }
 .pl-document-heading { display: flex; gap: 9px; align-items: center; font-size: 8px; letter-spacing: .07em; color: var(--pl-steel); }
 .pl-document-heading>svg.lucide { width: 25px; height: 25px; }
 .pl-document-heading small { display: block; font-size: 6px; margin-top: 5px; }
@@ -182,3 +182,44 @@
 @media(max-width:850px) { .pl-inspection { height: 510px; --lens-radius: 75px; }.pl-document { padding: 70px 18px 20px; }.pl-document-heading { font-size: 6px; }.pl-document-heading small { font-size: 5px; }.pl-document-title { margin-top: 24px; }.pl-document-title>h3 { font-size: 16px; }.pl-document-fields>div { font-size: 8px; padding-block: 13px; }.pl-document-fields>div:nth-child(4) dd { font-size: 14px; }.pl-document-stamp { bottom: 40px; width: 55px; height: 55px; right: 19px; }.pl-document-foot { left: 18px; font-size: 6px; }.pl-lens-instructions { font-size: 9px; }.pl-lens-instructions small { font-size: 7px; }.pl-editorial-feature { gap: 30px; margin-bottom: 66px; }.pl-editorial-feature-photo { height: 340px; }.pl-editorial-feature h2 { font-size: 33px; }.pl-editorial-feature-copy>p { font-size: 12px; }.pl-photo-story-grid { gap: 20px; }.pl-photo-story>div { height: 190px; }.pl-photo-story>h3 { font-size: 18px; }.pl-photo-stories { padding-bottom: 66px; } }
 @media(max-width:600px) { .pl-inspection { height: 490px; --lens-radius: 83px; border-radius: 165px 165px 5px 5px; }.pl-document { padding: 65px 23px 20px; }.pl-document-heading { font-size: 7px; }.pl-document-title { margin-top: 26px; }.pl-document-title>h3 { font-size: 18px; }.pl-document-fields>div { font-size: 9px; padding-block: 11px; }.pl-document-foot { left: 23px; }.pl-inspection-backdrop { inset-inline: 0; }.pl-editorial-feature { grid-template-columns: 1fr; gap: 26px; margin-bottom: 50px; }.pl-editorial-feature-photo { height: 290px; }.pl-editorial-feature-copy>p { font-size: 14px; }.pl-photo-story-grid { grid-template-columns: 1fr; gap: 30px; }.pl-photo-story>div { height: 260px; }.pl-photo-story>h3 { font-size: 23px; max-width: none; }.pl-photo-story>p { margin-top: 15px; }.pl-photo-stories { padding-bottom: 50px; } }
 @media(prefers-reduced-motion:reduce) { .pl-editorial-feature-photo:hover img,.pl-photo-story:hover img { transform: none; } }
+
+/* Readable original, extra source context only within the inspection lens. */
+.pl-lens-art { padding-top: 22px; }
+.pl-inspection-backdrop { transform: rotate(2deg); opacity: .22; inset: 8px -10px 78px -7px; }
+.pl-inspection { border-radius: 196px 196px 12px 12px; background: var(--surface); border-color: var(--pl-steel); box-shadow: 0 18px 45px var(--pl-lens-shadow); }
+.pl-document { padding: 76px 30px 24px; }
+.pl-document-original { background: var(--pl-paper); }
+.pl-document-inspected { background: var(--surface); }
+.pl-document-heading { padding-bottom: 13px; border-bottom: 1px solid var(--line); font-size: 7px; letter-spacing: .09em; }
+.pl-document-heading>svg.lucide { width: 23px; height: 23px; }
+.pl-document-heading small { font-size: 5px; letter-spacing: .06em; }
+.pl-document-folio { margin-left: auto; font-family: var(--font-mono); font-size: 16px; color: var(--ink-3); }
+.pl-document-title { margin: 22px 0 18px; }
+.pl-document-title>span { font-size: 17px; color: var(--pl-steel); }
+.pl-document-title>h3 { font-size: 22px; color: var(--navy-900); font-weight: 500; letter-spacing: -.02em; }
+.pl-document-title>p { font-size: 7px; letter-spacing: .035em; margin: 9px 0 0; color: var(--ink-3); }
+.pl-document-fields>.pl-document-field { display: grid; grid-template-columns: 1fr auto; align-content: center; position: relative; gap: 0 10px; min-height: 54px; padding: 9px 0 18px; font-size: 10px; }
+.pl-document-fields>.pl-document-field dd { font-weight: 600; color: var(--ink); }
+.pl-document-fields>.pl-document-field-amount dd { font-size: 20px; font-family: Georgia,serif; font-weight: 500; line-height: 1; }
+.pl-document-fields>.pl-document-field-amount dt { padding-top: 3px; }
+.pl-document-fields>.pl-document-field-status dd { font-size: 9px; }
+.pl-field-context { visibility: hidden; position: absolute; left: 0; bottom: 5px; display: flex; align-items: center; gap: 4px; font-size: 6px; color: var(--pl-steel); line-height: 1.3; white-space: nowrap; }
+.pl-field-context.is-revealed { visibility: visible; }
+.pl-field-context svg.lucide { width: 9px; height: 9px; stroke-width: 1.5; }
+.pl-document-inspected .pl-document-field { border-bottom-color: var(--pl-steel); }
+.pl-document-inspected .pl-document-field::before { content: ''; width: 3px; position: absolute; left: -10px; top: 9px; bottom: 8px; background: var(--pl-steel); border-radius: 2px; }
+.pl-document-signature { margin-top: 18px; }
+.pl-document-stamp { width: 63px; height: 63px; right: 31px; bottom: 36px; font-size: 8px; opacity: .85; }
+.pl-document-stamp span { font-size: 5px; }
+.pl-document-foot { bottom: 17px; font-size: 6px; gap: 5px; }
+.pl-document-foot>svg.lucide { width: 10px; height: 10px; }
+.pl-magnifier { border-width: 3px; box-shadow: inset 0 0 0 3px var(--surface),0 0 0 2px var(--surface),0 0 0 3px var(--pl-steel),0 10px 28px var(--pl-lens-shadow); }
+.pl-magnifier::after { width: 13px; height: 69px; border-radius: 4px 4px 8px 8px; border-width: 1px; }
+.pl-lens-crosshair { opacity: .45; }
+.pl-lens-rim { bottom: 10px; font-size: 5px; letter-spacing: .14em; border: 1px solid var(--line); border-radius: 10px; padding: 3px 6px; }
+.pl-inspection-label { font-size: 5px; right: 13px; bottom: 7px; }
+.pl-lens-instructions { font-size: 11px; gap: 10px; line-height: 1.6; }
+.pl-lens-instructions>svg.lucide { width: 17px; height: 17px; color: var(--pl-steel); }
+@media(max-width:1100px) { .pl-document { padding: 71px 23px 22px; }.pl-document-title>h3 { font-size: 20px; }.pl-document-fields>.pl-document-field { font-size: 9px; min-height: 52px; }.pl-document-fields>.pl-document-field-amount dd { font-size: 19px; }.pl-field-context { font-size: 5.5px; }.pl-document-stamp { right: 24px; } }
+@media(min-width:601px) and (max-width:850px) { .pl-document { padding: 67px 17px 22px; }.pl-document-heading { font-size: 5px; gap: 5px; }.pl-document-heading small { font-size: 4px; }.pl-document-folio { font-size: 12px; }.pl-document-title>h3 { font-size: 17px; }.pl-document-title>span { font-size: 15px; }.pl-document-title>p { font-size: 6px; }.pl-document-fields>.pl-document-field { font-size: 8px; min-height: 50px; }.pl-document-fields>.pl-document-field-status dd { font-size: 7px; }.pl-field-context { font-size: 4.5px; }.pl-document-stamp { width: 51px; height: 51px; bottom: 35px; right: 18px; }.pl-document-foot { left: 17px; font-size: 5px; }.pl-lens-instructions { font-size: 9px; } }
+@media(max-width:600px) { .pl-inspection { border-radius: 155px 155px 10px 10px; height: 510px; }.pl-document { padding: 67px 23px 22px; }.pl-document-heading { font-size: 6px; }.pl-document-heading small { font-size: 4.5px; }.pl-document-title>h3 { font-size: 20px; }.pl-document-fields>.pl-document-field { font-size: 9px; min-height: 52px; }.pl-document-title { margin: 20px 0 16px; }.pl-document-stamp { bottom: 34px; right: 25px; }.pl-document-foot { font-size: 5.5px; left: 23px; }.pl-lens-instructions { font-size: 10px; }.pl-document-fields>.pl-document-field-status dd { font-size: 8px; } }
