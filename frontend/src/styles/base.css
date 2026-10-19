@@ -115,3 +115,7 @@ ul {
     scroll-behavior: auto !important;
   }
 }
+
+body { -webkit-font-smoothing: antialiased; }
+h1,h2,h3 { font-weight: 750; letter-spacing: -.025em; }
+button,label { font-weight: 600; }

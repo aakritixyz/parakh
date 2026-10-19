@@ -1,3 +1,5 @@
+import { BrandMark } from "../ui/BrandMark";
+import { EvidenceComposition, RelationshipGraph, MoneyNetwork, ActivityChart } from "./AnalysisVisuals";
 import {
   askCaseAssistant,
   confirmAlias,
@@ -37,6 +39,7 @@ import {
 } from "react";
 import {
   ArrowRight,
+  LayoutDashboard, Database, MessagesSquare, Wallet, Fingerprint, Network, MapPin, Clock3, ClipboardCheck, Files, ListFilter, Upload,
   Check,
   ChevronRight,
   Download,
@@ -86,6 +89,8 @@ const views = [
   "Reports",
 ] as const;
 type View = (typeof views)[number];
+const viewIcons = {Board: Network, Overview: LayoutDashboard, Evidence: Database, Explore: Search, Comms: MessagesSquare, Money: Wallet, Authenticity: Fingerprint, Graph: Network, Map: MapPin, Timeline: Clock3, Findings: ClipboardCheck, Reports: Files};
+
 type Detail = {
   citation?: Citation;
   event?: RecordEvent;
@@ -832,7 +837,7 @@ export function CaseWorkspace({
           <Menu />
         </button>
         <a href="./index.html" className={styles.brand}>
-          P <span>Parakh</span>
+          <BrandMark size={36}/><span>PARAKH<small>INVESTIGATION SUITE</small></span>
         </a>
         <div className={styles.caseName} title={`Case ${caseId ?? "DEMO"}`}>
           <strong>
@@ -901,17 +906,16 @@ export function CaseWorkspace({
           className={`${styles.nav} ${nav ? styles.navOpen : ""}`}
           aria-label="Case navigation"
         >
-          <p>Investigator workspace</p>
-          {views.map((v, i) => (
-            <button
-              key={v}
-              aria-current={view === v ? "page" : undefined}
-              onClick={() => go(v)}
-            >
-              <span>{String(i + 1).padStart(2, "0")}</span>
-              {v}
-            </button>
-          ))}
+          <p>CASE NAVIGATOR</p>
+          <div className={styles.navCase}><FolderOpen /><div><strong>{caseId ? `CASE ${caseId}` : "DEMO CASE"}</strong><small>{isScenario ? "Investment scam complaint" : title}</small></div></div>
+          {views.map((v, i) => {
+            const Icon = viewIcons[v];
+            const count = v === "Evidence" ? sources.length : v === "Explore" ? searchResult?.total_in_case ?? records.length : null;
+            return <div key={v}>
+              {[1,3,9].includes(i) && <p className={styles.navGroup}>{i === 1 ? "EVIDENCE" : i === 3 ? "ANALYSIS" : "REVIEW & OUTPUT"}</p>}
+              <button aria-current={view === v ? "page" : undefined} onClick={() => go(v)}><Icon size={16} /><span className={styles.navText}>{v}</span>{count !== null && <span className={styles.navCount}>{count.toLocaleString()}</span>}</button>
+            </div>;
+          })}
           <button className={styles.newCase} onClick={onNew}>
             <FolderOpen />
             Active Cases
@@ -925,6 +929,10 @@ export function CaseWorkspace({
           </small>
         </nav>
         <main className={styles.main}>
+          <div className={styles.commandBar}>
+            <div className={styles.breadcrumb}><FolderOpen size={14} /><button onClick={onNew}>Cases</button><ChevronRight size={12}/><span>{caseId ? `Case ${caseId}` : "Synthetic demonstration"}</span><ChevronRight size={12}/><strong>{view}</strong></div>
+            <div><button onClick={() => go("Evidence")}><Upload size={14}/>Evidence intake</button><button onClick={() => go("Explore")}><ListFilter size={14}/>Search & filter</button><button onClick={() => go("Reports")}><Download size={14}/>Report & export</button></div>
+          </div>
           <div className={styles.viewHeader}>
             <div>
               <p>
@@ -934,7 +942,7 @@ export function CaseWorkspace({
                 / {view}
               </p>
               <h1>
-                {view === "Evidence"
+                {view === "Overview" ? "Investigation summary" : view === "Evidence"
                   ? "Evidence & custody"
                   : view === "Map"
                     ? "Map & telecom"
@@ -960,10 +968,66 @@ export function CaseWorkspace({
           )}
           {view === "Overview" && (
             <>
-              <p className={styles.intro}>
-                Four questions. Answers tied to the supplied records. Open any
-                answer or source chip to inspect its receipt.
-              </p>
+              <section className={styles.caseBrief}>
+                <div><span className={styles.briefEyebrow}><span/> INVESTIGATION CONTROL CENTRE</span><h2>{isScenario ? "Follow the evidence. Resolve the discrepancies." : "Your evidence. One investigation workspace."}</h2><p>{isScenario ? "Review communications, trace recorded transfers and test the refund claim against its sources." : "Begin with evidence intake, inspect parsed records and document source-backed findings."}</p><div className={styles.briefActions}><button onClick={()=>go("Explore")}><Search size={14}/>Explore evidence<ArrowRight size={14}/></button><button onClick={()=>go("Board")}><Network size={14}/>Open investigation board</button></div></div>
+                <div className={styles.briefWorkflow}><span>INVESTIGATION WORKFLOW</span>{[{label:"Evidence intake",description:"Originals & custody",view:"Evidence" as View,icon:Database},{label:"Analysis",description:"Search & correlate",view:"Explore" as View,icon:Network},{label:"Review",description:"Findings & exhibits",view:"Findings" as View,icon:ClipboardCheck}].map((step,index)=>{const Icon=step.icon;return <button key={step.label} onClick={()=>go(step.view)}><span>{String(index+1).padStart(2,"0")}</span><Icon size={16}/><div><strong>{step.label}</strong><small>{step.description}</small></div><ChevronRight size={14}/></button>;})}</div>
+              </section>
+              <div className={styles.metrics}>
+                <button onClick={() => go("Evidence")}>
+                  <span className={styles.metricIcon}><Database size={19}/></span><strong>{sources.length}</strong>
+                  <span>Evidence files</span>
+                </button>
+                <button onClick={() => go("Explore")}>
+                  <span className={styles.metricIcon}><ListFilter size={19}/></span><strong>{records.length}</strong>
+                  <span>Parsed source records · includes notices</span>
+                </button>
+                <button onClick={() => go("Findings")}>
+                  <span className={styles.metricIcon}><ClipboardCheck size={19}/></span><strong>{isScenario ? findings.length : 0}</strong>
+                  <span>Review findings {isScenario && "· curated demo"}</span>
+                </button>
+                <button onClick={() => setCustody(true)}>
+                  <span className={styles.metricIcon}>{chain === false ? <ShieldX size={19}/> : <ShieldCheck size={19}/>}</span><strong>
+                    {chain === true
+                      ? "Verified"
+                      : chain === false
+                        ? "Broken"
+                        : "Unchecked"}
+                  </strong>
+                  <span>
+                    {isDemo ? "Simulated demo chain" : "Backend chain status"}
+                  </span>
+                </button>
+              </div>
+              <div className={styles.overviewAnalytics}>
+              <EvidenceComposition sources={sources.map(file => ({name: short(file.file), count: records.filter(event => event.evidence_id === file.id).length, onSelect: () => {setSourceId(String(file.id)); go("Explore");}}))} />
+                <ActivityChart events={records} onDay={day=>{setDay(day);go("Explore");}}/>
+              </div>
+              <section className={styles.artifactPanel}>
+                <div className={styles.sectionHeading}><div><span>EXTRACTED CONTENT</span><h2>Evidence categories</h2></div><button onClick={() => go("Explore")}>View all records <ArrowRight size={14}/></button></div>
+                <div className={styles.artifactGrid}>
+                  {[{label:"Communications", icon:MessagesSquare, matches:(event: RecordEvent)=> /message|chat|call|email/i.test(event.action+" "+event.app+" "+event.file), view:"Comms" as View},
+                    {label:"Transactions", icon:Wallet, matches:(event: RecordEvent)=> /payment|transaction|debit|credit/i.test(event.action), view:"Money" as View},
+                    {label:"Locations", icon:MapPin, matches:(event: RecordEvent)=> Boolean(event.location) || /gps|location|tower/i.test(event.file+" "+event.action), view:"Map" as View},
+                    {label:"Documents", icon:Files, matches:(event: RecordEvent)=> /\.(pdf|png|jpe?g|tiff?)$/i.test(event.file) || /receipt|document/i.test(event.action), view:"Evidence" as View}].map(category => {
+                      const Icon=category.icon;
+                      return <button key={category.label} onClick={()=>go(category.view)}><Icon size={23}/><strong>{records.filter(category.matches).length.toLocaleString()}</strong><span>{category.label}</span><ChevronRight size={14}/></button>;
+                    })}
+                </div>
+                <p className={styles.note}>Counts describe loaded records and can overlap across categories. Open a category to inspect its sources.</p>
+              </section>
+              <div className={styles.reviewColumns}>
+                <section className={styles.panel}>
+                  <div className={styles.cardTitle}><div><span className={styles.eyebrow}>REVIEW DESK</span><h2>Items requiring attention</h2></div><span className={styles.viewLabel}>{isScenario ? "Curated synthetic leads" : "Evidence review"}</span></div>
+                  {isScenario ? findings.filter(finding=>finding.status==="Contradicted"||finding.status==="Possible").slice(0,3).map(finding=><button className={styles.reviewItem} key={finding.id} onClick={()=>setDetail({title:finding.question,text:finding.answer,citations:finding.citations})}><span className={`${styles.reviewIndicator} ${statusClass(finding.status)}`}><Fingerprint size={16}/></span><div><strong>{finding.question}</strong><small>{finding.status} · {finding.citations.length} source references</small></div><ChevronRight size={15}/></button>) : <p>Review the uploaded records before recording conclusions. No scenario leads have been applied.</p>}
+                  <button className={styles.reviewFooter} onClick={()=>go("Findings")}>Open findings workspace<ArrowRight size={13}/></button>
+                </section>
+                <section className={styles.panel}>
+                  <div className={styles.cardTitle}><div><span className={styles.eyebrow}>SOURCE CHRONOLOGY</span><h2>Latest dated records</h2></div><button onClick={()=>go("Timeline")}>Timeline<ArrowRight size={13}/></button></div>
+                  <div className={styles.recentRecords}>{[...records].filter(event=>event.timestamp_utc).sort((a,b)=>b.timestamp_utc!.localeCompare(a.timestamp_utc!)).slice(0,4).map(event=><button key={event.id} onClick={()=>open({file:event.evidence_id,ref:event.raw_ref},event)}><span className={styles.chronologyDot}/><div><strong>{event.action.replaceAll("_"," ")}</strong><small>{short(event.file)} · {event.raw_ref}</small></div><time>{time(event.timestamp_utc)}</time></button>)}</div>
+                  <p className={styles.note}>Original source timestamps · IST. Order can depend on device-clock uncertainty.</p>
+                </section>
+              </div>
+              <div className={styles.sectionHeading}><div><span>INVESTIGATIVE ASSESSMENT</span><h2>Questions & supporting evidence</h2></div><span className={styles.viewLabel}>Review required</span></div>
               {isScenario ? (
                 <div className={styles.questionGrid}>
                   {findings.slice(0, 4).map(questionCard)}
@@ -978,34 +1042,8 @@ export function CaseWorkspace({
                   <button onClick={() => go("Explore")}>Open Explore</button>
                 </section>
               )}
-              <div className={styles.metrics}>
-                <button onClick={() => go("Evidence")}>
-                  <strong>{sources.length}</strong>
-                  <span>Evidence files</span>
-                </button>
-                <button onClick={() => go("Explore")}>
-                  <strong>{records.length}</strong>
-                  <span>Parsed source records · includes notices</span>
-                </button>
-                <button onClick={() => go("Findings")}>
-                  <strong>{isScenario ? findings.length : 0}</strong>
-                  <span>Review findings {isScenario && "· curated demo"}</span>
-                </button>
-                <button onClick={() => setCustody(true)}>
-                  <strong>
-                    {chain === true
-                      ? "Verified"
-                      : chain === false
-                        ? "Broken"
-                        : "Unchecked"}
-                  </strong>
-                  <span>
-                    {isDemo ? "Simulated demo chain" : "Backend chain status"}
-                  </span>
-                </button>
-              </div>
               <section className={styles.panel}>
-                <h2>Source coverage</h2>
+                <h2>Evidence coverage by source</h2>
                 <p className={styles.note}>
                   Counts include provenance notes and duplicate document
                   representations. They are not independent corroboration.
@@ -1617,6 +1655,7 @@ export function CaseWorkspace({
                   </section>
                   <section className={styles.panel}>
                     <h2>Money-flow graph</h2>
+                    <MoneyNetwork edges={moneyAnalysis.graph.edges.filter(edge=>edge.support.length).map(edge=>({source:edge.source,target:edge.target,amount:edge.amount,reference:edge.utr,evidenceId:edge.support[0].evidence_id,rawRef:edge.support[0].reference}))} onSource={(file,ref)=>open({file,ref})} />
                     <div className={styles.auditList}>
                       {moneyAnalysis.graph.edges.map((edge) => (
                         <article key={`${edge.utr}-${edge.source}-${edge.target}`}>
@@ -1920,9 +1959,7 @@ export function CaseWorkspace({
                   <label>Node type<select value={graphType} onChange={(event) => setGraphType(event.target.value)}><option>All</option>{Array.from(new Set(correlation.graph.nodes.map((node) => node.type))).map((type) => <option key={type}>{type}</option>)}</select></label>
                   {graphFocus && <button onClick={() => setGraphFocus("")}>Show full graph</button>}
                 </div>
-                <div className={styles.graph}>
-                  {correlation.graph.nodes.filter((node) => graphType === "All" || node.type === graphType).map((node) => <button key={node.id} className={styles[`community${Math.abs(node.community) % 6}`]} style={{ minWidth: `${Math.min(180, Math.max(84, node.size * 3))}px` }} onClick={() => { setGraphFocus(node.id); if (node.type === "identifier") setIdentifier(node.label); else if (node.type === "party") setParty(node.label); else setQuery(node.label); }}>{node.label}<small>{node.type} · {node.edge_count} links · importance {node.importance}</small></button>)}
-                </div>
+                <RelationshipGraph nodes={correlation.graph.nodes.filter(node => graphType === "All" || node.type === graphType)} edges={correlation.graph.edges} path={correlation.graph.shortest_path.nodes} onSelect={node => { setGraphFocus(node.id); if (node.type === "identifier") setIdentifier(node.label); else if (node.type === "party") setParty(node.label); else setQuery(node.label); }} onSource={(file, ref) => open({file, ref})} />
                 <div className={styles.citations}>
                   {correlation.graph.nodes.slice(0, 20).map((node) => {
                     const edge = correlation.graph.edges.find((item) => item.source === node.id || item.target === node.id);
@@ -1943,8 +1980,8 @@ export function CaseWorkspace({
             scenarioGuard(
               <>
                 <section className={styles.panel}>
-                  <h2>Source-backed relationships</h2>
-                  {flow()}
+                  <h2>Recorded account relationships</h2>
+                  <MoneyNetwork edges={(source(5)?.table ?? []).map((row,index)=>({source:row.type === "credit" ? row.counterparty : row.account,target:row.type === "credit" ? row.account : row.counterparty,amount:Number(row.amount),reference:row.utr,evidenceId:5,rawRef:`line:${index+2}`}))} onSource={(file,ref)=>open({file,ref})} />
                   <div
                     className={`${styles.relationships} ${merged ? styles.grouped : ""}`}
                     role="group"

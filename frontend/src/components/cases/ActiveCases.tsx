@@ -1,3 +1,4 @@
+import { BrandMark } from "../ui/BrandMark";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowLeft,
@@ -212,7 +213,7 @@ export function ActiveCases({
     <div className={styles.page}>
       <header className={styles.header}>
         <a href="./index.html">
-          P <strong>Parakh</strong>
+          <BrandMark /><strong>Parakh</strong>
         </a>
         <div>
           <strong>Investigator workspace</strong>

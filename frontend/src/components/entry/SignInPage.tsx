@@ -1,3 +1,4 @@
+import { BrandMark } from "../ui/BrandMark";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowLeft,
@@ -49,7 +50,7 @@ export function SignInPage({
     <div className={styles.entry}>
       <header className={styles.header}>
         <a className={styles.brand} href="./index.html">
-          <span className={styles.mark}>P</span>Parakh
+          <BrandMark />Parakh
           <span className={styles.brandMeta}>Digital investigations</span>
         </a>
         <a className={styles.backLink} href="./index.html">

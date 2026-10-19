@@ -1,3 +1,4 @@
+import { BrandMark } from "../ui/BrandMark";
 import { useEffect, useState } from "react";
 import { AlertTriangle, ArrowLeft, ArrowRight, CheckCircle2, FileText, ScanText } from "lucide-react";
 import {
@@ -64,7 +65,7 @@ export function ImportReport({ caseInfo, onBack, onContinue }: Props) {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <a href="./index.html" className={styles.brand}><span>P</span>Parakh</a>
+        <a href="./index.html" className={styles.brand}><BrandMark />Parakh</a>
         <span>Investigator workspace</span><span className={styles.mode}>Signed in</span>
       </header>
       <main className={styles.main}>

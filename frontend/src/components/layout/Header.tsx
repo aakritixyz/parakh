@@ -1,3 +1,4 @@
+import { BrandMark } from "../ui/BrandMark";
 import { useEffect } from "react";
 import {
   Menu,
@@ -49,7 +50,7 @@ export function Header({
         href="./index.html"
         aria-label="Return to the Parakh landing page"
       >
-        <div className="brand-mark">P</div>
+        <BrandMark />
         <strong>Parakh</strong>
       </a>
       <div className="case-title">

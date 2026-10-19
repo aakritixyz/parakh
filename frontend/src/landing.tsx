@@ -1,214 +1,97 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import {
-  ArrowRight,
-  Files,
-  Network,
-  Search,
-  ShieldCheck,
-  MessageSquare,
-  MapPin,
-  ChevronRight,
-  Fingerprint,
-  FolderOpen,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, ChevronRight, Clock3, FileCheck2, Files, Fingerprint, FolderInput, GitBranch, Globe2, MapPin, MessageSquare, Network, ScanLine, Search, ShieldCheck, Sparkles } from "lucide-react";
+import { BrandMark } from "./components/ui/BrandMark";
 import "./styles.css";
 import "./landing-refined.css";
-import styles from "./components/entry/Entry.module.css";
 
-const showcaseViews = [
-  { title: "Evidence", image: "evidence-preview.jpg", heading: "Keep the source within reach.", body: "Review evidence details alongside the records you are examining." },
-  { title: "Timeline", image: "timeline-preview.jpg", heading: "See how the story unfolds.", body: "Explore records in time and compare events across your sources." },
-  { title: "Graph", image: "graph-preview.jpg", heading: "Follow the connections.", body: "Explore relationships and return to the evidence behind each lead." },
+const capabilities = [
+  { Icon: FolderInput, title: "Bring every source together", hindi: "संग्रह", text: "Start with logical exports: chats, bank statements, call records, documents and location history.", detail: "Evidence intake", target: "#workflow" },
+  { Icon: Search, title: "Find the meaningful detail", hindi: "खोज", text: "Search across records, narrow the context and return to the original file behind a result.", detail: "Search & exploration", target: "#workspace" },
+  { Icon: Fingerprint, title: "Check what has changed", hindi: "सत्यापन", text: "Review file hashes and custody history. Unchanged since sealing does not mean a record is true.", detail: "Integrity & provenance", target: "#principles" },
+  { Icon: ScanLine, title: "Examine the inconsistencies", hindi: "परख", text: "Compare a document with other records, review suspicious signals and keep alternative explanations visible.", detail: "Authenticity review", target: "#workspace" },
+  { Icon: Network, title: "Connect the evidence", hindi: "संबंध", text: "Explore people, identifiers and transfers. Bring cited records onto a visual investigation board.", detail: "Graph & investigation board", target: "#workspace" },
+  { Icon: Clock3, title: "Reconstruct the sequence", hindi: "क्रम", text: "Build a source-linked timeline, inspect clock uncertainty and replay the sequence for review.", detail: "Timeline & replay", target: "#workflow" },
 ];
-const storyEvents = [
-  { time: "10:12", kind: "Message", title: "A conversation begins", text: "“Please share the payment reference once the transfer is complete.”", source: "Sample chat export · Message 04", context: "A payment request appears in a conversation. It is a starting point for review, not proof of a completed transfer.", Icon: MessageSquare },
-  { time: "10:18", kind: "Transaction", title: "A payment is recorded", text: "Transfer recorded · ₹12,500 · Reference DEMO-018", source: "Sample bank statement · Row 12", context: "The statement records a transfer six minutes later. Matching time alone does not establish who requested or received it.", Icon: Files },
-  { time: "10:24", kind: "Location", title: "Location adds context", text: "Location record · Sample point A · 10:24 IST", source: "Sample location export · Record 08", context: "A nearby location record provides another point of context. It does not independently confirm a person’s presence.", Icon: MapPin },
+const previews = [
+  { label: "Evidence", Icon: Files, title: "The detail is always within reach.", body: "Review the source, its recorded time and the context around it. Follow a finding back to the records that support it.", image: "evidence-preview.jpg", alt: "Parakh evidence interface preview", note: "Interface preview · Synthetic demonstration data" },
+  { label: "Timeline", Icon: Clock3, title: "A sequence you can interrogate.", body: "Put different records on one timeline. Examine the source timestamps and the uncertainty behind their order.", image: "timeline-preview.jpg", alt: "Parakh timeline interface preview", note: "Interface preview · Synthetic demonstration data" },
+  { label: "Connections", Icon: Network, title: "Follow the links. Keep the proof.", body: "Link conversations, accounts and records into a working picture. A connection is a lead to examine, never automatic proof.", image: null, alt: "", note: "Illustrative connection map · Not a case finding" },
 ];
-function Landing() {
-  const [activeView, setActiveView] = React.useState(2);
-  const [activeEvent, setActiveEvent] = React.useState(0);
-  const [selectedNode, setSelectedNode] = React.useState(0);
-  const view = showcaseViews[activeView];
-  return (
-    <div className={`${styles.entry} landing-refined`}>
-      <a className={styles.skip} href="#main">
-        Skip to content
-      </a>
-      <header className={styles.header}>
-        <a className={styles.brand} href="./index.html">
-          <span className={styles.mark}>P</span>Parakh
-          <span className={styles.brandMeta}>Digital investigations</span>
-        </a>
-        <nav aria-label="Main navigation">
-          <a href="#workspace">The workspace</a>
-          <a href="#workflow">How it works</a>
-          <a href="#start">Get started</a>
-        </nav>
-        <a className={styles.headerAction} href="./signin.html">
-          Investigator workspace <ArrowRight />
-        </a>
-      </header>
-      <main id="main">
-        <section className={styles.hero}>
-          <div className={styles.heroCopy}>
-            <span className={styles.eyebrow}>
-              <span className={styles.statusDot} /> One workspace. A clearer
-              picture.
-            </span>
-            <h1>
-              Every piece of evidence.
-              <br />
-              One connected story.
-            </h1>
-            <p className={styles.lead}>
-              Bring scattered digital records into focus. Explore the timeline,
-              follow the connections, and keep the original evidence within
-              reach.
-            </p>
-            <div className={styles.actions}>
-              <a className={styles.primary} href="./signin.html">
-                Investigator workspace <ArrowRight />
-              </a>
-              <a className={styles.textLink} href="./dashboard.html?mode=demo">
-                Try the demo <ArrowRight />
-              </a>
-            </div>
-            <p className={styles.heroNote}>
-              <ShieldCheck /> Self-hosted prototype <span>·</span> Offline demo
-              available
-            </p>
-          </div>
-          <figure className={styles.heroVisual}>
-            <img
-              src="./images/evidence-review.jpg"
-              width="1600"
-              height="1068"
-              alt="Professionals reviewing documents together at a desk with laptops"
-              fetchPriority="high"
-            />
-            <figcaption className={styles.photoLabel}>
-              A focused space for careful investigation.
-            </figcaption>
-            <div className={styles.caseOverlay}>
-              <span className={styles.caseIcon}>
-                <FolderOpen />
-              </span>
-              <div>
-                <span className={styles.smallLabel}>
-                  Start an investigation
-                </span>
-                <strong>Upload your evidence</strong>
-                <span>Bring your source files into one case</span>
-              </div>
-              <span className={styles.demoBadge}>Evidence first</span>
-            </div>
-          </figure>
-        </section>
-        <div className={styles.sourceStrip}>
-          <span className={styles.stripLabel}>
-            Different sources. Shared context.
-          </span>
-          <span>
-            <MessageSquare /> Chats & emails
-          </span>
-          <span>
-            <Files /> Statements & documents
-          </span>
-          <span>
-            <MapPin /> Location & call records
-          </span>
-          <span>
-            <Fingerprint /> File integrity
-          </span>
-        </div>
-        <section id="workspace" className="interactive-showcase" aria-labelledby="showcase-heading">
-          <div className="showcase-intro"><div><span className={styles.eyebrow}>A closer look</span><h2 id="showcase-heading">One case. Different perspectives.</h2></div><p>Explore the tools that bring your investigation into focus.</p></div>
-          <div className="showcase-tabs" role="tablist" aria-label="Workspace previews">{showcaseViews.map((item, index) => <button key={item.title} id={`preview-tab-${index}`} role="tab" aria-selected={activeView === index} aria-controls="workspace-preview-panel" tabIndex={activeView === index ? 0 : -1} onClick={() => setActiveView(index)} onKeyDown={event => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); const next = (index + (event.key === 'ArrowRight' ? 1 : -1) + showcaseViews.length) % showcaseViews.length; setActiveView(next); document.getElementById(`preview-tab-${next}`)?.focus(); } }}>{index === 0 ? <Files /> : index === 1 ? <ChevronRight /> : <Network />}{item.title}</button>)}</div>
-          <div className="showcase-panel" role="tabpanel" id="workspace-preview-panel" aria-labelledby={`preview-tab-${activeView}`}><div className="showcase-copy"><span className="showcase-number">0{activeView + 1} / WORKSPACE</span><h3>{view.heading}</h3><p>{view.body}</p><a href="./dashboard.html?mode=demo">Try the interactive demo <ArrowRight /></a><small>Illustrative graph and project interface previews.<br />Demo opens the current sample case list.</small></div><div className="showcase-image">{activeView === 2 ? <div className="live-graph"><span className="graph-label">ILLUSTRATIVE CONNECTION MAP · SYNTHETIC</span><div className="graph-canvas"><svg viewBox="0 0 500 340" aria-hidden="true">{[[250,60],[85,175],[415,175],[250,290]].map(([x,y],i)=><line key={i} x1="250" y1="175" x2={x} y2={y} className={selectedNode === 0 || selectedNode === i+1 ? 'edge-active' : ''}/>)}</svg>{[{name:'Sample case',x:50,y:51,detail:'Select a source to explore its connection to this illustrative case.'},{name:'Person A',x:50,y:18,detail:'Person A appears in the sample chat export. Identity requires independent review.'},{name:'Messages',x:17,y:51,detail:'A sample conversation contains a payment request. Review the original wording and timestamp.'},{name:'Transfer',x:83,y:51,detail:'A sample statement records a ₹12,500 transfer. Timing alone does not prove a relationship.'},{name:'Location',x:50,y:85,detail:'A sample location record provides context, not independent proof of presence.'}].map((node,i)=><button key={node.name} style={{left:`${node.x}%`,top:`${node.y}%`}} className={`graph-node ${selectedNode===i?'node-selected':''}`} aria-pressed={selectedNode===i} onClick={()=>setSelectedNode(i)}>{i===0?<FolderOpen/>:i===1?<Search/>:i===2?<MessageSquare/>:i===3?<Files/>:<MapPin/>}<span>{node.name}</span></button>)}</div><p className="graph-receipt" aria-live="polite">{['Select a source to explore its connection to this illustrative case.','Person A appears in the sample chat export. Identity requires independent review.','A sample conversation contains a payment request. Review the original wording and timestamp.','A sample statement records a ₹12,500 transfer. Timing alone does not prove a relationship.','A sample location record provides context, not independent proof of presence.'][selectedNode]}</p></div> : <img src={`./images/${view.image}`} alt={`${view.title} interface preview from Parakh`} loading="lazy" />}</div></div>
-        </section>
-        <section className="story-timeline" aria-labelledby="story-heading">
-          <div className="story-heading"><div><span className={styles.eyebrow}>Follow the sequence</span><h2 id="story-heading">A moment. More context.</h2><p>Select an event to see how different sources add to the picture.</p></div><span className="synthetic-label">Illustrative example · Synthetic records</span></div>
-          <div className="story-track" role="tablist" aria-label="Sample investigation events">{storyEvents.map(({time, kind, Icon}, index) => <button key={time} role="tab" id={`story-tab-${index}`} aria-selected={activeEvent === index} aria-controls="story-panel" tabIndex={activeEvent === index ? 0 : -1} onClick={() => setActiveEvent(index)} onKeyDown={event => { if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') { event.preventDefault(); const next = (index + (event.key === 'ArrowRight' ? 1 : -1) + storyEvents.length) % storyEvents.length; setActiveEvent(next); document.getElementById(`story-tab-${next}`)?.focus(); } }}><span className="event-time">{time} <small>IST</small></span><span className="event-dot"><Icon /></span><span>{kind}</span></button>)}</div>
-          <div className="story-detail" id="story-panel" role="tabpanel" aria-labelledby={`story-tab-${activeEvent}`}><div><span className="story-label">SOURCE EXCERPT</span><h3>{storyEvents[activeEvent].title}</h3><blockquote>{storyEvents[activeEvent].text}</blockquote><small>{storyEvents[activeEvent].source}</small></div><div><span className="story-label">INVESTIGATOR CONTEXT</span><p>{storyEvents[activeEvent].context}</p><span className="context-note"><ShieldCheck /> Keep the source. Check the connection.</span></div></div>
-        </section>
-        <section className={styles.workflow} id="workflow">
-          <div className={styles.workflowPhoto}>
-            <img
-              src="./images/research-library.jpg"
-              width="1000"
-              height="665"
-              loading="lazy"
-              alt="A stack of reference books, illustrating careful research and review"
-            />
-            <span>Context matters. Sources matter.</span>
-          </div>
-          <div className={styles.workflowBody}>
-            <span className={styles.eyebrow}>From records to review</span>
-            <h2>A clear path through the evidence.</h2>
-            <ol>
-              {[
-                [
-                  "Upload evidence",
-                  "Create a case and upload all the evidence files before starting your review.",
-                ],
-                [
-                  "Examine",
-                  "Review records by time, source and relationship. Compare what each source says.",
-                ],
-                [
-                  "Explain",
-                  "Build a source-linked account, keeping assumptions and gaps visible.",
-                ],
-              ].map(([title, body], i) => (
-                <li key={title}>
-                  <span>{String(i + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3>{title}</h3>
-                    <p>{body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-        <section className={styles.section} id="start">
-          <div className={styles.demoPanel}>
-            <div>
-              <span className={styles.demoBadge}>Start your investigation</span>
-              <h2>Your investigation starts with the evidence.</h2>
-              <p>
-                Upload the source files for your case, review the evidence list,
-                then explore timelines, connections and source-linked findings.
-              </p>
-              <a className={styles.secondary} href="./signin.html">
-                Open investigator workspace <ArrowRight />
-              </a>
-              <small>
-                Or explore the synthetic demo without signing in.
-              </small>
-            </div>
-            <a className="final-demo" href="./dashboard.html?mode=demo">Explore the demo <ArrowRight /></a>
-          </div>
-        </section>
-      </main>
-      <footer className={styles.footer}>
-        <a className={styles.brand} href="./index.html">
-          <span className={styles.mark}>P</span>Parakh
-        </a>
-        <span>Digital evidence. Thoughtful investigation.</span>
-        <div>
-          <a href="./signin.html">Investigator sign-in</a>
-          <a href="./image-credits.html">Photo credits</a>
-          <span>Prototype</span>
-        </div>
-      </footer>
-    </div>
-  );
+const connectionDetails = ["A working picture built from separate records. Select a source to inspect the connection.", "A conversation can contain a payment request. Check its wording and original timestamp.", "A bank row records a transfer. Attribution needs supporting records.", "A call log records contact, not what was said.", "A location record adds context. Proximity alone does not prove people were together."];
+function EvidenceLens() {
+  const surface = React.useRef<HTMLDivElement>(null);
+  const position = React.useRef({ x: 62, y: 44 });
+  const move = (x: number, y: number) => {
+    const next = { x: Math.min(94, Math.max(6, x)), y: Math.min(90, Math.max(10, y)) };
+    position.current = next;
+    surface.current?.style.setProperty("--lens-x", `${next.x}%`);
+    surface.current?.style.setProperty("--lens-y", `${next.y}%`);
+  };
+  const documentContents = <>
+    <div className="pl-document-heading"><Fingerprint/><span>PARAKH / SAMPLE DOCUMENT<small>ILLUSTRATIVE RECORD · NOT CASE EVIDENCE</small></span></div>
+    <div className="pl-document-title"><span lang="hi">भुगतान विवरण</span><h3>Payment acknowledgement</h3><p>Reference copy for visual demonstration</p></div>
+    <dl className="pl-document-fields"><div><dt>Record reference</dt><dd>DEMO-TRX-018</dd></div><div><dt>Recorded date</dt><dd>12 October 2026</dd></div><div><dt>Recorded time</dt><dd>10:18 IST</dd></div><div><dt>Transfer amount</dt><dd>₹25,000.00</dd></div><div><dt>Payment status</dt><dd>Subject to bank verification</dd></div></dl>
+    <div className="pl-document-signature"><span>Sample signature</span><svg viewBox="0 0 160 50" aria-hidden="true"><path d="M7 36 C25 2 23 48 39 26 S51 6 51 27 S68 36 78 18 S75 38 96 26 S118 30 147 13"/></svg></div>
+    <div className="pl-document-stamp">SAMPLE<br/><span>REVIEW COPY</span></div>
+    <div className="pl-document-foot"><ScanLine/> Examine the source. Verify the claim.</div>
+  </>;
+  return <div className="pl-hero-art pl-lens-art"><div className="pl-inspection-backdrop" aria-hidden="true"/><div ref={surface} className="pl-inspection" role="group" tabIndex={0} aria-label="Interactive document magnifier" aria-describedby="pl-lens-instructions" onPointerMove={event => {
+    if (event.pointerType !== "mouse" && event.buttons === 0) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    move((event.clientX - bounds.left) / bounds.width * 100, (event.clientY - bounds.top) / bounds.height * 100);
+  }} onPointerDown={event => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    event.currentTarget.focus({ preventScroll: true });
+    const bounds = event.currentTarget.getBoundingClientRect();
+    move((event.clientX - bounds.left) / bounds.width * 100, (event.clientY - bounds.top) / bounds.height * 100);
+  }} onKeyDown={event => {
+    const directions: Record<string, [number, number]> = { ArrowLeft: [-4, 0], ArrowRight: [4, 0], ArrowUp: [0, -4], ArrowDown: [0, 4] };
+    if (event.key === "Home") { event.preventDefault(); move(62, 44); }
+    else if (directions[event.key]) { event.preventDefault(); const [dx, dy] = directions[event.key]; move(position.current.x + dx, position.current.y + dy); }
+  }}>
+    <div className="pl-document pl-document-muted" aria-hidden="true">{documentContents}</div>
+    <div className="pl-document-reveal" aria-hidden="true"><div className="pl-document">{documentContents}</div></div>
+    <div className="pl-magnifier" aria-hidden="true"><span className="pl-lens-crosshair"/><span className="pl-lens-rim">SOURCE DETAIL</span></div>
+    <span className="pl-inspection-label">INTERACTIVE ILLUSTRATION</span>
+  </div><p className="pl-lens-instructions" id="pl-lens-instructions"><Search/><span>Move the lens to reveal the detail.<small>Hover or drag · Keyboard: arrow keys · Home to reset</small></span></p></div>;
 }
-createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <Landing />
-  </React.StrictMode>,
-);
+const editorialImages = [
+  { image: "photo-1516321318423-f06f85e504b3", title: "A place for careful collaboration.", caption: "REVIEW TOGETHER", alt: "People working together with laptops and notes at a table", fallback: "evidence-review.jpg" },
+  { image: "photo-1499750310107-5fef28a66643", title: "Keep the working picture connected.", caption: "FIND THE CONTEXT", alt: "A working desk with a notebook and laptop", fallback: "research-library.jpg" },
+  { image: "photo-1450101499163-c8848c66ca85", title: "Explain the account behind the records.", caption: "DOCUMENT THE REASONING", alt: "Professionals reviewing paperwork and written records", fallback: "evidence-review.jpg" },
+];
+function EditorialPhoto({ image, alt, fallback, className }: { image: string; alt: string; fallback: string; className?: string }) {
+  const [failed, setFailed] = React.useState(false);
+  return <img className={className} src={failed ? `./images/${fallback}` : `https://images.unsplash.com/${image}?auto=format&fit=crop&w=1100&q=85`} alt={failed ? "Editorial photograph of research and document review" : alt} loading="lazy" width="1100" height="740" referrerPolicy="no-referrer" onError={() => { if (!failed) setFailed(true); }}/>
+}
+function Landing() {
+  const [active, setActive] = React.useState(0);
+  const [node, setNode] = React.useState(0);
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const preview = previews[active];
+  return <div className="pl-page">
+    <a className="pl-skip" href="#main">Skip to content</a>
+    <header className="pl-header">
+      <a className="pl-brand" href="./index.html" aria-label="Parakh home"><BrandMark size={38}/><span>PARAKH<small>DIGITAL EVIDENCE INTELLIGENCE</small></span></a>
+      <button className="pl-menu" aria-expanded={menuOpen} aria-controls="landing-navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? "Close" : "Menu"}</button>
+      <nav id="landing-navigation" className={menuOpen ? "pl-nav is-open" : "pl-nav"} aria-label="Main navigation" onClick={() => setMenuOpen(false)}><a href="#capabilities">Capabilities</a><a href="#workflow">How it works</a><a href="#workspace">The workspace</a><a href="#principles">Our approach</a></nav>
+      <a className="pl-header-cta" href="./signin.html">Investigator sign-in <ArrowUpRight/></a>
+    </header>
+    <main id="main">
+      <section className="pl-hero pl-container" aria-labelledby="hero-title">
+        <div className="pl-hero-copy"><span className="pl-eyebrow"><span/> CLARITY THROUGH EVIDENCE</span><div className="pl-hindi" lang="hi">परख<span>हर डिजिटल सुराग, सही संदर्भ में।</span></div><h1 id="hero-title">Every trace.<br/>A clearer <em>picture.</em></h1><p>Scattered records. Connected context. A focused workspace to examine digital evidence and explain the story it supports.</p><div className="pl-actions"><a className="pl-button" href="./signin.html">Open investigator workspace <ArrowRight/></a><a className="pl-link" href="./dashboard.html?mode=demo">Explore the demo <ArrowUpRight/></a></div><div className="pl-hero-note"><ShieldCheck/><span>Evidence first. Uncertainty visible. Sources within reach.</span></div></div>
+        <EvidenceLens/>
+      </section>
+      <section className="pl-source-band" aria-label="Evidence sources"><div className="pl-container"><span className="pl-band-intro">MANY SOURCES.<br/><strong>ONE WORKSPACE.</strong></span>{[{Icon:MessageSquare,label:"Chats & emails"},{Icon:FileCheck2,label:"Bank records"},{Icon:Files,label:"PDFs & images"},{Icon:Globe2,label:"Browser history"},{Icon:MapPin,label:"Location & calls"}].map(({Icon,label})=><span key={label}><Icon/>{label}</span>)}</div></section>
+      <section className="pl-capabilities pl-container pl-section" id="capabilities"><div className="pl-section-heading"><div><span className="pl-eyebrow">PURPOSE-BUILT FOR INVESTIGATION</span><h2>Less scattered evidence.<br/>More informed decisions.</h2></div><p>Move from individual records to a connected account, with the supporting evidence close at hand.</p></div><div className="pl-capability-grid">{capabilities.map(({Icon,title,hindi,text,detail,target},i)=><a className="pl-capability" href={target} key={title}><div className="pl-card-top"><span className="pl-icon"><Icon/></span><span className="pl-card-number">0{i+1}</span></div><span className="pl-card-hindi" lang="hi">{hindi}</span><h3>{title}</h3><p>{text}</p><span className="pl-card-link">{detail}<ArrowUpRight/></span></a>)}</div></section>
+      <section className="pl-editorial-feature pl-container" aria-labelledby="editorial-heading"><div className="pl-editorial-feature-photo"><EditorialPhoto image="photo-1516321318423-f06f85e504b3" alt="People reviewing work together around laptops and notes" fallback="evidence-review.jpg"/><span>THE HUMAN SIDE OF DIGITAL INVESTIGATION</span></div><div className="pl-editorial-feature-copy"><span className="pl-eyebrow">BETTER CONTEXT. BETTER QUESTIONS.</span><h2 id="editorial-heading">Behind every record,<br/>a question worth asking.</h2><p>Give the investigator room to compare, challenge and connect. Parakh brings the records into one working space, while keeping judgement with the person reviewing them.</p><a className="pl-link" href="#workspace">See the workspace <ArrowRight/></a></div></section>
+      <section className="pl-workflow" id="workflow"><div className="pl-container"><div className="pl-section-heading"><div><span className="pl-eyebrow">A CLEAR PATH THROUGH THE CASE</span><h2>Start with the source.<br/>Finish with a supported account.</h2></div><a className="pl-link" href="./signin.html">Start an investigation <ArrowRight/></a></div><ol className="pl-steps">{[["Upload & seal","Create a case. Add the owner and acquisition context, upload your evidence, then review the import report."],["Explore & connect","Search the records, follow the money and connect sources on the graph or investigation board."],["Test & reconstruct","Compare conflicting records, examine document signals and review the sequence with clock uncertainty."],["Review & explain","Record findings with their status and citations. Assemble exhibits and export a reviewable account."]].map(([title,text],i)=><li key={title}><span className="pl-step-number">0{i+1}<ChevronRight/></span><h3>{title}</h3><p>{text}</p></li>)}</ol></div></section>
+      <section className="pl-container pl-section pl-workspace" id="workspace"><div className="pl-section-heading"><div><span className="pl-eyebrow">ONE CASE. MULTIPLE PERSPECTIVES.</span><h2>See the context.<br/>Inspect the detail.</h2></div><p>A workspace that keeps exploration and the original source in the same conversation.</p></div><div className="pl-preview-tabs" role="tablist" aria-label="Workspace previews">{previews.map(({label,Icon},i)=><button key={label} id={`pl-tab-${i}`} aria-selected={active===i} role="tab" aria-controls="pl-preview" tabIndex={active===i?0:-1} onClick={()=>setActive(i)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='Home'||e.key==='End'){e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?previews.length-1:(i+(e.key==='ArrowRight'?1:-1)+previews.length)%previews.length;setActive(next);document.getElementById(`pl-tab-${next}`)?.focus();}}}><Icon/>{label}<ArrowUpRight/></button>)}</div><div className="pl-preview" role="tabpanel" id="pl-preview" aria-labelledby={`pl-tab-${active}`}><div className="pl-preview-copy"><span className="pl-eyebrow">0{active+1} / WORKSPACE VIEW</span><h3>{preview.title}</h3><p>{preview.body}</p><a className="pl-link" href="./dashboard.html?mode=demo">Open the interactive demo <ArrowRight/></a><small>{preview.note}</small></div><div className="pl-preview-visual">{preview.image ? <img src={`./images/${preview.image}`} alt={preview.alt} loading="lazy" width="1200" height="800"/> : <div className="pl-graph"><div className="pl-graph-canvas"><svg viewBox="0 0 500 320" aria-hidden="true">{[[95,80],[405,80],[95,240],[405,240]].map(([x,y],i)=><path key={i} d={`M250 160 Q${x} 160 ${x} ${y}`} className={node===i+1||node===0?'pl-edge-selected':''}/>)}</svg>{[{label:'Case',Icon:FolderInput,x:50,y:50},{label:'Messages',Icon:MessageSquare,x:19,y:25},{label:'Transactions',Icon:FileCheck2,x:81,y:25},{label:'Call records',Icon:Network,x:19,y:75},{label:'Locations',Icon:MapPin,x:81,y:75}].map(({label,Icon,x,y},i)=><button key={label} aria-pressed={node===i} className={node===i?'is-selected':''} style={{left:`${x}%`,top:`${y}%`}} onClick={()=>setNode(i)}><Icon/><span>{label}</span></button>)}</div><p aria-live="polite">{connectionDetails[node]}</p></div>}</div></div><div className="pl-workspace-footnote"><ShieldCheck/><span>Demo mode uses clearly labelled synthetic data. No sign-in required.</span><a href="./dashboard.html?mode=demo">View demo <ArrowRight/></a></div></section>
+      <section className="pl-photo-stories pl-container" aria-labelledby="photo-stories-heading"><div className="pl-section-heading"><div><span className="pl-eyebrow">BUILT AROUND THE WAY YOU WORK</span><h2 id="photo-stories-heading">Space to think.<br/>Tools to follow through.</h2></div><p>From a first review to a supported account, keep the detail and the wider picture together.</p></div><div className="pl-photo-story-grid">{editorialImages.map(({ image, title, caption, alt, fallback }, i) => <article key={image} className="pl-photo-story"><div><EditorialPhoto image={image} alt={alt} fallback={fallback}/><span>0{i+1}</span></div><p>{caption}</p><h3>{title}</h3></article>)}</div><small className="pl-editorial-note">Editorial stock photographs · Illustrations of review and research, not case evidence or endorsements. <a href="./image-credits.html">Photo sources</a></small></section>
+      <section className="pl-principles pl-container" id="principles"><div className="pl-principles-photo"><img src="./images/research-library.jpg" width="1000" height="665" loading="lazy" alt="Reference books arranged for study and careful research"/><span><Fingerprint/> CAREFUL EXAMINATION. CLEAR LIMITS.</span></div><div className="pl-principles-copy"><span className="pl-eyebrow">DESIGNED TO BE QUESTIONED</span><h2>Confidence comes<br/>from showing your work.</h2><p>Useful evidence tools should make it easier to ask difficult questions, including questions about their own conclusions.</p><ul><li><Check/><div><strong>Every claim needs a receipt.</strong><span>Follow a supported finding to its source. Missing support means “not established”.</span></div></li><li><Check/><div><strong>Leads stay separate from findings.</strong><span>Review reasons, caveats and uncertainty before drawing a conclusion.</span></div></li><li><Check/><div><strong>Integrity has a precise meaning.</strong><span>A matching hash shows a file is unchanged since sealing. It does not prove it was truthful.</span></div></li></ul></div></section>
+      <section className="pl-container pl-section" id="start"><div className="pl-final"><div className="pl-final-emblem" aria-hidden="true"><Fingerprint/></div><span className="pl-eyebrow">THE NEXT STEP STARTS WITH YOUR EVIDENCE</span><h2>Bring clarity to<br/>your next investigation.</h2><p>Open the investigator workspace, or explore a synthetic case<br className="pl-desktop-break"/> before bringing in your own source files.</p><div className="pl-actions"><a className="pl-button pl-button-light" href="./signin.html">Open investigator workspace <ArrowRight/></a><a className="pl-link" href="./dashboard.html?mode=demo">View demo without signing in <ArrowUpRight/></a></div><span className="pl-final-note"><ShieldCheck/> Self-hosted prototype · Synthetic demo available</span></div></section>
+    </main><footer className="pl-footer pl-container"><div><a className="pl-brand" href="./index.html"><BrandMark size={32}/><span>PARAKH<small>EXAMINE. CONNECT. SUBSTANTIATE.</small></span></a><p>Digital evidence. A clearer perspective.</p></div><div className="pl-footer-links"><a href="#capabilities">Capabilities</a><a href="#workflow">How it works</a><a href="./signin.html">Investigator sign-in</a><a href="./image-credits.html">Photo credits</a></div><span className="pl-footer-note"><GitBranch/> Investigation prototype<br/><Sparkles/> Built for thoughtful review</span></footer>
+  </div>;
+}
+createRoot(document.getElementById("root")!).render(<React.StrictMode><Landing/></React.StrictMode>);

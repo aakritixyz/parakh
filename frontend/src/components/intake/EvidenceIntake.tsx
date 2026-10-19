@@ -1,3 +1,4 @@
+import { BrandMark } from "../ui/BrandMark";
 import {
   useEffect,
   useRef,
@@ -360,7 +361,7 @@ export function EvidenceIntake({
     <div className={styles.page}>
       <header className={styles.header}>
         <a href="./index.html" className={styles.brand}>
-          <span>P</span>Parakh
+          <BrandMark />Parakh
         </a>
         <span>Investigator workspace</span>
         <span className={styles.mode}>
