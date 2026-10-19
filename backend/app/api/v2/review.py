@@ -36,8 +36,8 @@ def save_review(case_id: int, payload: ReviewInput, db: Session = Depends(get_db
         db.add(current)
         db.flush()
     result = db.execute(update(CaseReview).where(CaseReview.case_id == case_id, CaseReview.revision == payload.revision).values(
-        findings=data["findings"], exhibits=data["exhibits"], revision=payload.revision + 1))
-    if result.rowcount != 1:
+        findings=data["findings"], exhibits=data["exhibits"], revision=payload.revision + 1).returning(CaseReview.revision))
+    if result.scalar_one_or_none() is None:
         raise HTTPException(409, "Review changed; reload before saving")
     AuditService(db).log(action="case.review_saved", actor=user.username, case_id=case_id,
                          payload={"revision": payload.revision + 1, "findings": data["findings"], "exhibits": data["exhibits"]})

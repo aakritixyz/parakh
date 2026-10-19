@@ -23,6 +23,7 @@ for (const child of [backend, frontend]) { child.stdout.on("data", (data) => { l
 const output = `${root}/docs/validation`;
 await mkdir(output, { recursive: true });
 let browser;
+let page;
 const steps = [];
 try {
   for (const url of ["http://127.0.0.1:18180/health", "http://127.0.0.1:18181/signin.html"]) {
@@ -34,7 +35,7 @@ try {
     if (!ready) throw Error(`Service unavailable: ${url}\n${logs}`);
   }
   browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
+  page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   page.setDefaultTimeout(25000);
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -47,6 +48,7 @@ try {
   await page.getByLabel("Case title", { exact: true }).fill("Riya: investment scam complaint");
   await page.getByLabel("FIR / case number", { exact: true }).fill("SYN-SMOKE-001");
   await page.getByLabel("Police station / jurisdiction", { exact: true }).fill("Synthetic demo");
+  await page.getByLabel("Lead investigator", { exact: true }).selectOption("smoke-investigator");
   await page.getByRole("button", { name: "Create case", exact: true }).click();
   await page.getByRole("button", { name: "Upload evidence", exact: true }).click(); steps.push("create-case");
   await page.getByLabel("Owner", { exact: true }).fill("Riya");
@@ -81,6 +83,7 @@ try {
   await writeFile(`${output}/smoke.json`, JSON.stringify({ status: "passed", steps, synthetic_only: true, browser: browser.version() }, null, 2));
   console.log(`PASS: ${steps.join(" -> ")}`);
 } catch (error) {
+  await page?.screenshot({ path: `${output}/smoke-failure.png`, fullPage: true }).catch(() => {});
   await writeFile(`${output}/smoke.json`, JSON.stringify({ status: "failed", steps, error: String(error), synthetic_only: true }, null, 2));
   console.error(logs.slice(-6000)); throw error;
 } finally {

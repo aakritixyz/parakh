@@ -117,6 +117,10 @@ def test_review_api_enforces_case_membership_and_read_only_role(tmp_path):
         assert client.get("/cases/1/review").status_code == 200
         assert client.get("/cases/2/review").status_code == 403
         assert client.put("/cases/1/review", json={"revision": 0, "findings": [], "exhibits": []}).status_code == 403
+        user.role = "admin"
+        saved = client.put("/cases/1/review", json={"revision": 0, "findings": [], "exhibits": []})
+        assert saved.status_code == 200 and saved.json()["revision"] == 1
+        assert client.put("/cases/1/review", json={"revision": 0, "findings": [], "exhibits": []}).status_code == 409
 
     db.close()
     engine.dispose()
