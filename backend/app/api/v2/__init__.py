@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.v2.assistant import router as assistant_router
 from app.api.v2.auth import router as auth_router
+from app.api.v2.board import router as board_router
 from app.api.v2.cases import router as cases_router
 from app.api.v2.correlation import router as correlation_router
 from app.api.v2.fraud import router as fraud_router
@@ -18,6 +19,7 @@ from app.api.v2.search import router as search_router
 
 api_router = APIRouter(prefix="/api/v2")
 api_router.include_router(auth_router)
+api_router.include_router(board_router)
 api_router.include_router(cases_router)
 api_router.include_router(intake_router)
 api_router.include_router(import_report_router)

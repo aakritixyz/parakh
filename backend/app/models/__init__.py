@@ -5,6 +5,7 @@ from app.models.audit import (
     Comment,
     Lead,
 )
+from app.models.board import BoardSnapshot, EvidenceBoard
 from app.models.case import Case, CaseMembership
 from app.models.entity import Entity
 from app.models.evidence import DocumentExtraction, Event, Evidence
@@ -47,6 +48,7 @@ __all__ = [
     "AuthenticityFinding",
     "AuthenticityReport",
     "Bookmark",
+    "BoardSnapshot",
     "Case",
     "CaseMembership",
     "CaseReview",
@@ -58,6 +60,7 @@ __all__ = [
     "Entity",
     "Event",
     "Evidence",
+    "EvidenceBoard",
     "Extraction",
     "Identifier",
     "IdentifierAlias",
