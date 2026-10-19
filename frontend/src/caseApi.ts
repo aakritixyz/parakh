@@ -283,7 +283,7 @@ export type FraudReview = {
   ranking: { method: string; assumption: string; feedback: string };
 };
 export type FraudLead = { id: number; title: string; status: "new" | "reviewing" | "confirmed" | "dismissed"; assignee: string | null; score: number; reasons: string[]; citations: { evidence_id: number; event_id?: number; reference?: string }[]; comments: { id: number; body: string; author: string; created_at: string }[]; dismissal_reason: string | null };
-type SourceReceipt = { evidence_id: number; file: string; event_id: number; reference: string; timestamp?: string; sha256?: string };
+type SourceReceipt = { evidence_id: number; file: string; event_id: number; reference: string; timestamp?: string | null; sha256?: string };
 export type CorrelationResult = {
   graph: {
     nodes: { id: string; label: string; type: string; edge_count: number; importance: number; betweenness: number; size: number; community: number }[];
@@ -317,6 +317,24 @@ export type CorrelationResult = {
   planned: Record<string, string>;
 };
 export type CorrelatedTimelineEvent = { event_id: number; evidence_id: number; timestamp_utc: string; original_timestamp: string | null; phase: string; summary: string; confidence: number; ordering_probability: number; order_depends_on_clock: boolean; citation: SourceReceipt };
+export type AssistantResult = {
+  answer: string;
+  refused: boolean;
+  claims: { text: string; citations: SourceReceipt[] }[];
+  citations: SourceReceipt[];
+  validation: { valid: boolean; repair_attempted: boolean; method: string; reason?: string };
+  retrieval: { method: string; retrieved: number; cloud_models?: string };
+  model_card: {
+    name: string;
+    version: string;
+    provider: string;
+    licence: string;
+    training_data: string;
+    known_limits: string[];
+    offline_only: boolean;
+    cloud_models: boolean;
+  };
+};
 export type MoneySupport = {
   evidence_id: number;
   file: string;
@@ -635,6 +653,11 @@ export const getCorrelation = (caseId: number, options: { source?: string; targe
   if (options.clockConfidence !== undefined) query.set("clock_confidence", String(options.clockConfidence));
   return sessionRequest<CorrelationResult>(`/api/v2/cases/${caseId}/correlation?${query.toString()}`);
 };
+export const askCaseAssistant = (caseId: number, question: string) =>
+  sessionRequest<AssistantResult>(
+    `/api/v2/cases/${caseId}/assistant`,
+    json({ question }),
+  );
 export const updateFraudLead = (caseId: number, leadId: number, status: string, assignee?: string, comment?: string) =>
   sessionRequest<FraudReview>(`/api/v2/cases/${caseId}/leads/${leadId}`, json({ status, assignee: assignee || null, comment: comment || null }));
 export async function downloadVerifiedBundle(caseId: number) {

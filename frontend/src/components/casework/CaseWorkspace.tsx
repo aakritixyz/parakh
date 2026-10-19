@@ -1,4 +1,5 @@
 import {
+  askCaseAssistant,
   confirmAlias,
   getIdentities,
   getModelCards,
@@ -15,6 +16,7 @@ import {
   unmergeAlias,
   verifyLiveIntegrity,
   type Audit,
+  type AssistantResult,
   type IdentityOverview,
   type IntegrityResult,
   type FraudReview,
@@ -268,9 +270,13 @@ export function CaseWorkspace({
   const [sourceExhibits, setSourceExhibits] = useState<Citation[]>([]);
   const [question, setQuestion] = useState(""),
     [answer, setAnswer] = useState<Finding | null>(null),
+    [liveAnswer, setLiveAnswer] = useState<AssistantResult | null>(null),
+    [assistantBusy, setAssistantBusy] = useState(false),
+    [assistantError, setAssistantError] = useState(""),
     [refusal, setRefusal] = useState(false);
   const [replay, setReplay] = useState(0),
     [playing, setPlaying] = useState(false),
+    [replaySpeed, setReplaySpeed] = useState(1),
     [notice, setNotice] = useState("");
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
@@ -396,10 +402,10 @@ export function CaseWorkspace({
           }
           return i + 1;
         }),
-      900,
+      900 / replaySpeed,
     );
     return () => window.clearInterval(tick);
-  }, [playing, dated.length]);
+  }, [playing, dated.length, replaySpeed]);
   const open = useCallback(
     (citation: Citation, event?: RecordEvent) => setDetail({ citation, event }),
     [],
@@ -548,6 +554,9 @@ export function CaseWorkspace({
       </section>
     );
   const activeEvent = dated[replay];
+  const activeOrdering = correlation?.timeline.all_events.find(
+    (event) => String(event.event_id) === activeEvent?.id,
+  );
   function mapView(atTime?: string | null) {
     const gps = records.filter(
       (e) =>
@@ -2050,6 +2059,18 @@ export function CaseWorkspace({
                       setReplay(Number(e.target.value));
                     }}
                   />
+                  <label>
+                    Speed
+                    <select
+                      aria-label="Replay speed"
+                      value={replaySpeed}
+                      onChange={(event) => setReplaySpeed(Number(event.target.value))}
+                    >
+                      <option value={0.5}>0.5×</option>
+                      <option value={1}>1×</option>
+                      <option value={2}>2×</option>
+                    </select>
+                  </label>
                   <button
                     onClick={() =>
                       activeEvent &&
@@ -2067,9 +2088,17 @@ export function CaseWorkspace({
                       : time(activeEvent?.timestamp_utc, displayZone === "UTC" ? "UTC" : "Asia/Kolkata")}
                   </button>
                   <span className={styles.viewLabel}>
-                    Demo replay · source-time sync
+                    Incident replay · source-time sync
                   </span>
                 </div>
+                <p className={styles.note}>
+                  Close-in-time events are shown together for review. Timing alone does not establish cause.
+                </p>
+                {activeOrdering?.order_depends_on_clock && (
+                  <p className={styles.warning}>
+                    Ordering uncertainty · {Math.round(activeOrdering.ordering_probability * 100)}% probability at the current clock confidence.
+                  </p>
+                )}
                 {activeEvent && recordButton(activeEvent)}
               </section>
               {token && correlation && <>
@@ -2370,15 +2399,32 @@ export function CaseWorkspace({
             </button>
           </div>
           <span className={styles.viewLabel}>
-            Curated demo answers · no language model
+            {token ? "Case-only cited assistant · cloud off" : "Curated demo answers · no language model"}
           </span>
           <p>
-            Answers are limited to the supplied synthetic sources. A
+            Answers are limited to {token ? "this case's parsed evidence" : "the supplied synthetic sources"}. A
             source-backed refusal is valid.
           </p>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
+              setAssistantError("");
+              setLiveAnswer(null);
+              if (token && caseId) {
+                setAssistantBusy(true);
+                setAnswer(null);
+                try {
+                  const result = await askCaseAssistant(caseId, question);
+                  setLiveAnswer(result);
+                  setRefusal(result.refused);
+                } catch (cause) {
+                  setRefusal(false);
+                  setAssistantError(cause instanceof Error ? cause.message : "Assistant request failed.");
+                } finally {
+                  setAssistantBusy(false);
+                }
+                return;
+              }
               const q = question.toLowerCase();
               const result =
                 !isScenario ||
@@ -2407,10 +2453,26 @@ export function CaseWorkspace({
               required
               placeholder="Does the receipt match the bank record?"
             />
-            <button type="submit">
-              Ask <ArrowRight />
+            <button type="submit" disabled={assistantBusy}>
+              {assistantBusy ? "Checking sources…" : "Ask"} <ArrowRight />
             </button>
           </form>
+          {assistantError && <p role="alert" className={styles.warning}>{assistantError}</p>}
+          {liveAnswer && !liveAnswer.refused && (
+            <div className={styles.answer}>
+              {liveAnswer.claims.map((claim, index) => (
+                <div key={`${index}-${claim.text}`}>
+                  <p>{claim.text}</p>
+                  {cites(claim.citations.map((citation) => ({
+                    file: citation.evidence_id,
+                    ref: citation.reference,
+                    label: `${citation.file} · ${citation.reference}`,
+                  })))}
+                </div>
+              ))}
+              <p className={styles.note}>{liveAnswer.retrieval.method}</p>
+            </div>
+          )}
           {answer && (
             <div className={styles.answer}>
               <span
@@ -2436,10 +2498,16 @@ export function CaseWorkspace({
           )}
           {refusal && (
             <p role="status" className={styles.warning}>
-              No supporting evidence found in this curated answer set. No answer
-              is inferred from missing data. Open Explore to inspect the
-              supplied records.
+              No supporting evidence found. No answer is inferred from missing data.
             </p>
+          )}
+          {liveAnswer && (
+            <section className={styles.modelCard} aria-label="Assistant model card">
+              <strong>{liveAnswer.model_card.name} · {liveAnswer.model_card.version}</strong>
+              <span>{liveAnswer.model_card.provider} · offline only · cloud models off</span>
+              <p>{liveAnswer.model_card.training_data}</p>
+              <ul>{liveAnswer.model_card.known_limits.map((limit) => <li key={limit}>{limit}</li>)}</ul>
+            </section>
           )}
         </aside>
       )}

@@ -29,7 +29,8 @@ class Settings(BaseSettings):
     max_zip_uncompressed_bytes: int = 1024 * 1024 * 1024
     max_zip_ratio: int = 100
     access_token_expire_minutes: int = 480
-    local_llm_provider: str = "stub"
+    local_llm_provider: str = "ollama"
+    local_llm_model: str = "qwen2.5:3b-instruct"
     embedding_provider: str = "local-hash"
     demo_admin_username: str = "admin"
     demo_admin_password: str | None = None

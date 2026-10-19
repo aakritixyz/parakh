@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.api.v2.assistant import router as assistant_router
 from app.api.v2.auth import router as auth_router
 from app.api.v2.cases import router as cases_router
 from app.api.v2.correlation import router as correlation_router
@@ -28,3 +29,4 @@ api_router.include_router(integrity_router)
 api_router.include_router(origin_router)
 api_router.include_router(fraud_router)
 api_router.include_router(correlation_router)
+api_router.include_router(assistant_router)
