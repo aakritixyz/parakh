@@ -48,7 +48,7 @@ try {
   await page.getByLabel("Case title", { exact: true }).fill("Riya: investment scam complaint");
   await page.getByLabel("FIR / case number", { exact: true }).fill("SYN-SMOKE-001");
   await page.getByLabel("Police station / jurisdiction", { exact: true }).fill("Synthetic demo");
-  await page.getByLabel("Lead investigator", { exact: true }).selectOption("smoke-investigator");
+  await page.getByLabel("Lead investigator").selectOption("smoke-investigator");
   await page.getByRole("button", { name: "Create case", exact: true }).click();
   await page.getByRole("button", { name: "Upload evidence", exact: true }).click(); steps.push("create-case");
   await page.getByLabel("Owner", { exact: true }).fill("Riya");
@@ -67,7 +67,7 @@ try {
   await go("Timeline"); await page.getByRole("button", { name: "Play replay", exact: true }).click(); await expect(page.getByRole("button", { name: "Pause replay", exact: true })).toBeVisible(); await page.getByRole("button", { name: "Pause replay", exact: true }).click(); steps.push("replay");
   await go("Findings");
   await page.getByLabel("Finding statement", { exact: true }).fill("The cited bank row records Riya's payment; review the source before drawing conclusions.");
-  const records = page.getByLabel("Supporting record", { exact: true });
+  const records = page.getByLabel("Supporting record");
   const options = await records.locator("option").evaluateAll((nodes) => nodes.map((node) => ({ value: node.value, text: node.textContent })));
   await records.selectOption(options.find((option) => option.text.includes("03_bank_statement_riya.csv"))?.value ?? options[1].value);
   await page.getByRole("button", { name: "Add finding", exact: true }).click();
