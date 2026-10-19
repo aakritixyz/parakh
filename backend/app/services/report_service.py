@@ -41,6 +41,30 @@ class ReportService:
             write_minimal_pdf(path, lines)
         else:
             self._write_reportlab_pdf(path, lines)
+        # A previously exported board is a cited report page, not merely a filename in the text.
+        board_page = self.db.scalars(
+            select(Report).where(
+                Report.case_id == case_id, Report.kind == "evidence_board_pdf"
+            ).order_by(Report.created_at.desc(), Report.id.desc()).limit(1)
+        ).first()
+        if board_page and Path(board_page.path).is_file():
+            try:
+                from pypdf import PdfReader, PdfWriter
+
+                writer = PdfWriter()
+                primary = PdfReader(path)
+                board_reader = PdfReader(board_page.path)
+                for page in primary.pages:
+                    writer.add_page(page)
+                for page in board_reader.pages:
+                    writer.add_page(page)
+                merged = path.with_suffix(".merged.pdf")
+                with merged.open("wb") as output:
+                    writer.write(output)
+                merged.replace(path)
+            except (OSError, ValueError):
+                # The text manifest still records the board hashes and receipts.
+                pass
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         report = Report(case_id=case_id, path=str(path), sha256=digest)
         self.db.add(report)
@@ -137,7 +161,7 @@ class ReportService:
             bundle.writestr("verify.py", VERIFY_SCRIPT)
             bundle.write(pdf_report.path, "report.pdf")
             bundle.writestr("review.json", json.dumps(review_out(self.db, case_id), indent=2, default=str))
-            bundle.writestr("README.md", "# PARAKH review bundle\nSynthetic demo evidence only when marked as such.\nExtract verify.py, then run: python3 verify.py bundle.zip\nPython 3 and OpenSSL with Ed25519 support are required; Parakh is not.\nSources are sealed originals. Findings and OCR are derived review material.\nReview Section 63 draft with legal counsel. Hash integrity does not establish truth.\n")
+            bundle.writestr("README.md", "# PARAKH review bundle\nSynthetic demo evidence only when marked as such.\nExtract verify.py, then run: python3 verify.py bundle.zip\nPython 3 plus either cryptography or OpenSSL with Ed25519 support are required; Parakh is not.\nSources are sealed originals. Findings and OCR are derived review material.\nReview Section 63 draft with legal counsel. Hash integrity does not establish truth.\n")
             from io import BytesIO
 
             from PIL import Image
@@ -216,6 +240,17 @@ class ReportService:
         for exhibit in review["exhibits"]:
             target = f"Finding {exhibit['finding_id']}" if exhibit.get("finding_id") else f"SOURCE {exhibit.get('evidence_id')} | {exhibit.get('reference', '')}"
             lines.append(f"Exhibit {exhibit['id']} | {exhibit['kind']} | {target} | estimated pages: {exhibit['pages']}")
+        board_exports = list(self.db.scalars(select(Report).where(
+            Report.case_id == case_id, Report.kind.in_(["evidence_board_png", "evidence_board_pdf"])
+        ).order_by(Report.created_at, Report.id)))
+        lines.append("EVIDENCE BOARD EXPORTS")
+        if not board_exports:
+            lines.append("No evidence board export has been attached.")
+        for board in board_exports:
+            metadata = board.metadata_json or {}
+            lines.append(f"Board {board.id} | {board.kind} | {metadata.get('caption') or 'Evidence board'}")
+            lines.append(f"Board SHA256 {metadata.get('board_hash', '')} | Export SHA256 {board.sha256}")
+            lines.append(f"Receipts: {', '.join(metadata.get('receipt_ids', [])) or 'none'}")
         lines.append("EVIDENCE MANIFEST AND AUTHENTICITY")
         auth = AuthenticityService(self.db)
         for ev in self.db.scalars(select(Evidence).where(Evidence.case_id == case_id).order_by(Evidence.id)):
@@ -439,6 +474,16 @@ def verify_signature(entry_hash, signed):
     if signed.get("algorithm") != "Ed25519" or signed.get("kind") != "entry_signature":
         return True
     raw = base64.b64decode(signed["public_key"])
+    try:
+        from cryptography.exceptions import InvalidSignature
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+        try:
+            Ed25519PublicKey.from_public_bytes(raw).verify(base64.b64decode(signed["signature"]), entry_hash.encode())
+            return True
+        except InvalidSignature:
+            return False
+    except ModuleNotFoundError:
+        pass
     der = bytes.fromhex("302a300506032b6570032100") + raw
     with tempfile.TemporaryDirectory() as folder:
         root = Path(folder); key = root / "key.der"; sig = root / "sig"; data = root / "data"

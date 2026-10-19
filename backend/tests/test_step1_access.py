@@ -1,9 +1,11 @@
+import base64
 from argparse import Namespace
 from datetime import UTC, datetime, timedelta
 
 import bcrypt
 import pytest
 from fastapi.testclient import TestClient
+from pypdf import PdfReader
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 
@@ -16,6 +18,7 @@ from app.models.case import CaseMembership
 from app.models.session import AuthSession
 from app.models.user import User
 from app.services.audit_service import AuditService
+from app.services.report_service import ReportService
 
 PASSWORD = "synthetic-step1-password"
 CASE = {"title": "Riya: investment scam complaint", "case_number": "SYN-RIYA-001", "jurisdiction": "Synthetic demo jurisdiction",
@@ -231,3 +234,70 @@ def test_unknown_or_revoked_token_is_rejected_by_all_case_surfaces(api):
     for path in ['/api/v2/cases','/api/v2/users','/api/v1/cases','/api/v1/jobs','/api/v1/parsers/capabilities']:
         assert client.get(path).status_code==401
         assert client.get(path,headers={'Authorization':'Bearer invalid'}).status_code==401
+
+
+def _board_state():
+    def card(identifier, title, x):
+        return {"id": identifier, "kind": "bank", "title": title, "body": "Synthetic test card",
+                "timestamp": "2026-09-12T09:25:00+05:30", "source_badge": "Synthetic CSV",
+                "receipt": {"evidence_id": 1, "file": "synthetic.csv", "reference": f"row:{x}", "sha256": "a" * 64},
+                "x": x * 100, "y": 100, "locked": identifier == "riya", "community": 0, "size": 1}
+    return {"schema_version": 1, "seed": 51026, "viewport": {"x": 0, "y": 0, "zoom": 1}, "zones": [],
+            "exhibit_ids": [], "caption": "Synthetic board",
+            "cards": [card("riya", "Riya", 1), card("collection", "Collection", 2), card("end", "End account", 3)],
+            "links": [
+                {"id": "one", "source": "riya", "target": "collection", "label": "paid", "type": "payment between accounts", "status": "established", "auto": True, "support": ["1:row:1"], "reasons": ["Direct row"]},
+                {"id": "two", "source": "collection", "target": "end", "label": "onward", "type": "payment between accounts", "status": "established", "auto": True, "support": ["1:row:2"], "reasons": ["Direct row"]},
+                {"id": "unsupported", "source": "riya", "target": "end", "label": "controls?", "type": "hypothesis", "status": "hypothesis", "auto": False, "support": [], "reasons": []},
+            ]}
+
+
+def test_board_done_when_path_snapshot_audit_and_prosecutor_read_only(api):
+    client, sessions = api
+    owner = login(client)
+    case_id = create(client, owner)
+    state = _board_state()
+    saved = client.put(f"/api/v2/cases/{case_id}/board", headers=owner,
+                       json={"expected_revision": 0, "action": "card.added", "target_id": "riya", "detail": {}, "state": state})
+    assert saved.status_code == 200, saved.text
+    assert saved.json()["revision"] == 1
+    # Unsupported investigator strings are downgraded server-side, never presented as established.
+    unsupported = next(item for item in saved.json()["state"]["links"] if item["id"] == "unsupported")
+    assert unsupported["status"] == "not_established"
+    connected = client.post(f"/api/v2/cases/{case_id}/board/analysis/connect", headers=owner,
+                            json={"selected": ["riya", "end"], "time_limit_ms": 1000}).json()
+    assert connected["nodes"] == ["collection", "end", "riya"]
+    assert connected["links"] == ["one", "two"] and connected["complete"]
+    snapshot = client.post(f"/api/v2/cases/{case_id}/board/snapshots", headers=owner, json={"name": "Answer key"})
+    assert snapshot.status_code == 201
+    restored = client.get(f"/api/v2/cases/{case_id}/board/snapshots/{snapshot.json()['id']}", headers=owner).json()
+    assert restored["board_hash"] == saved.json()["board_hash"]
+    assert restored["state"]["cards"] == saved.json()["state"]["cards"]
+    transparent_png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    exported = client.post(
+        f"/api/v2/cases/{case_id}/board/export",
+        headers=owner,
+        json={"format": "pdf", "png_data_url": f"data:image/png;base64,{transparent_png}",
+              "caption": "Riya to end account", "receipt_ids": ["1:row:1", "1:row:2"]},
+    )
+    assert exported.status_code == 200, exported.text
+    assert base64.b64decode(exported.json()["content_base64"]).startswith(b"%PDF")
+    assert exported.json()["board_hash"] == saved.json()["board_hash"]
+    assert exported.json()["receipts"] == ["1:row:1", "1:row:2"]
+    prosecutor = login(client, "demo-prosecutor")
+    assert client.get(f"/api/v2/cases/{case_id}/board", headers=prosecutor).json()["can_edit"] is False
+    denied = client.put(f"/api/v2/cases/{case_id}/board", headers=prosecutor,
+                        json={"expected_revision": 1, "action": "card.deleted", "target_id": "riya", "detail": {}, "state": state})
+    assert denied.status_code == 403
+    audit = client.get(f"/api/v2/cases/{case_id}/audit", headers=owner).json()
+    actions = {entry["action"] for entry in audit["entries"]}
+    assert {"board.card.added", "board.analysis.connect", "board.snapshot_saved", "board.exported"} <= actions
+    with sessions() as db:
+        report = ReportService(db).generate_case_report(case_id)
+        db.flush()
+        pages = PdfReader(report.path).pages
+        assert len(pages) >= 2
+        report_text = "\n".join(page.extract_text() or "" for page in pages)
+        assert "Board SHA-256" in report_text
+        assert "1:row:1" in report_text
+        assert AuditService(db).verify_chain()["valid"]
