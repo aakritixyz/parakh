@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { ArrowRight, ArrowUpRight, Check, ChevronRight, Clock3, FileCheck2, Files, Fingerprint, FolderInput, GitBranch, Globe2, MapPin, MessageSquare, Network, ScanLine, Search, ShieldCheck, Sparkles } from "lucide-react";
 import { BrandMark } from "./components/ui/BrandMark";
+import { LanguageProvider, LanguageToggle } from "./i18n";
 import "./styles.css";
 import "./landing-refined.css";
 
@@ -99,4 +100,4 @@ function Landing() {
     </main><footer className="pl-footer pl-container"><div><a className="pl-brand" href="./index.html"><BrandMark size={32}/><span>PARAKH<small>EXAMINE. CONNECT. SUBSTANTIATE.</small></span></a><p>Digital evidence. A clearer perspective.</p></div><div className="pl-footer-links"><a href="#capabilities">Capabilities</a><a href="#workflow">How it works</a><a href="./signin.html">Investigator sign-in</a><a href="./image-credits.html">Photo credits</a></div><span className="pl-footer-note"><GitBranch/> Investigation prototype<br/><Sparkles/> Built for thoughtful review</span></footer>
   </div>;
 }
-createRoot(document.getElementById("root")!).render(<React.StrictMode><Landing/></React.StrictMode>);
+createRoot(document.getElementById("root")!).render(<React.StrictMode><LanguageProvider><LanguageToggle/><Landing/></LanguageProvider></React.StrictMode>);

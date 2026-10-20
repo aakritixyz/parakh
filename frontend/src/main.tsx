@@ -20,6 +20,7 @@ import { ActiveCases } from "./components/cases/ActiveCases";
 import { EvidenceIntake } from "./components/intake/EvidenceIntake";
 import { ImportReport } from "./components/intake/ImportReport";
 import { CaseWorkspace } from "./components/casework/CaseWorkspace";
+import { LanguageProvider, LanguageToggle } from "./i18n";
 import "./styles.css";
 function App() {
   const [signOutNotice, setSignOutNotice] = useState("");
@@ -206,6 +207,9 @@ function App() {
 }
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <LanguageProvider>
+      <LanguageToggle />
+      <App />
+    </LanguageProvider>
   </React.StrictMode>,
 );

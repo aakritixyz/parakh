@@ -16,3 +16,43 @@
 .evidence-workflow strong {
   color: var(--ink);
 }
+
+.language-toggle {
+  position: fixed;
+  z-index: 3000;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  color: var(--ink-2);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 11px;
+  font-weight: 700;
+}
+.language-toggle > span { padding: 0 7px; white-space: nowrap; }
+.language-toggle button {
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--ink-2);
+  background: transparent;
+  font: inherit;
+}
+.language-toggle button:hover { background: var(--hover); }
+.language-toggle button[aria-pressed="true"] {
+  border-color: var(--navy-700);
+  color: var(--surface);
+  background: var(--navy-900);
+}
+.language-toggle button:focus-visible { box-shadow: var(--focus); }
+
+@media (max-width: 700px) {
+  .language-toggle { right: 10px; bottom: 10px; }
+  .language-toggle > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
