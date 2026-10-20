@@ -17,7 +17,11 @@ for (const args of [["-m", "app.cli", "migrate"], ["-m", "app.cli", "create-admi
   if (run.status !== 0) throw Error(run.stderr);
 }
 const backend = spawn(python, ["-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", "18180"], { cwd: `${root}/backend`, env, detached: process.platform !== "win32", stdio: ["ignore", "pipe", "pipe"] });
-const frontend = spawn("npm", ["run", "dev", "--", "--port", "18181", "--strictPort"], { cwd: `${root}/frontend`, env, detached: process.platform !== "win32", stdio: ["ignore", "pipe", "pipe"] });
+const frontendCommand = process.platform === "win32" ? (process.env.ComSpec || "cmd.exe") : "npm";
+const frontendArgs = process.platform === "win32"
+  ? ["/d", "/s", "/c", "npm.cmd run dev -- --port 18181 --strictPort"]
+  : ["run", "dev", "--", "--port", "18181", "--strictPort"];
+const frontend = spawn(frontendCommand, frontendArgs, { cwd: `${root}/frontend`, env, detached: process.platform !== "win32", stdio: ["ignore", "pipe", "pipe"] });
 let logs = "";
 for (const child of [backend, frontend]) { child.stdout.on("data", (data) => { logs += data; }); child.stderr.on("data", (data) => { logs += data; }); }
 const output = `${root}/docs/validation`;
@@ -61,7 +65,12 @@ try {
   await page.getByRole("button", { name: "Review import report", exact: true }).click({ timeout: 120000 });
   await page.getByRole("button", { name: "Confirm and continue", exact: true }).click(); step("upload-15-synthetic-files");
   const nav = page.getByRole("navigation", { name: "Case navigation" });
-  const go = async (view) => nav.getByRole("button", { name: new RegExp(`^\\d+ ${view}$`) }).click();
+  const go = async (view) =>
+    nav
+      .getByRole("button", {
+        name: new RegExp(`^(?:\\d+\\s+)?${view}(?:\\s+\\d+)?$`),
+      })
+      .click();
   await go("Explore"); await expect(page.getByRole("heading", { name: "Event table", exact: true })).toBeVisible(); step("explore");
   await go("Money"); await page.getByRole("heading", { name: /Normalised|Normalized|transaction/i }).first().waitFor(); step("money");
   await go("Authenticity"); await page.getByRole("heading", { name: /contradiction/i }).first().waitFor(); step("contradiction");
