@@ -763,7 +763,8 @@
 }
 .map {
   width: 100%;
-  max-height: 320px;
+  height: 390px;
+  max-height: none;
   border: 1px solid var(--line);
   background: var(--hover);
   border-radius: 6px;
@@ -771,13 +772,206 @@
   position: relative;
   overflow: hidden;
 }
+.mapGuide { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 18px 0 10px; color: var(--ink-2); font-size: 11px; font-weight: 650; }
+.mapGuide span { display: inline-flex; align-items: center; gap: 7px; }
+.mapGuide i { display: inline-grid; place-items: center; width: 22px; height: 22px; font-style: normal; font-size: 9px; }
+.gpsKey { border-radius: 50%; color: var(--navy-900); background: var(--chart-cyan); border: 2px solid var(--surface); }
+.routeKey { height: 3px!important; width: 28px!important; background: var(--chart-teal); }
+.stayKey { border-radius: 50%; background: color-mix(in srgb, var(--chart-blue) 18%, transparent); border: 1px dashed var(--chart-blue); }
+.towerKey { border-radius: 5px; color: var(--surface); background: var(--chart-violet); }
+.streetMapShell {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 440px;
+  min-height: 320px;
+  border: 1px solid var(--line);
+  border-radius: 7px 7px 0 0;
+  background: var(--hover);
+}
+.streetMap {
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+}
+.streetMap:focus-visible {
+  outline: 3px solid var(--info);
+  outline-offset: -3px;
+}
+.streetMap :global(.leaflet-control-zoom),
+.streetMap :global(.leaflet-control-attribution) {
+  border: 0;
+  box-shadow: 0 3px 14px color-mix(in srgb, var(--navy-900) 22%, transparent);
+}
+.streetMap :global(.leaflet-control-zoom a) {
+  color: var(--navy-900);
+  background: var(--surface);
+}
+.streetMap :global(.leaflet-control-attribution) {
+  color: var(--ink-3);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+}
+.streetMap :global(.leaflet-tooltip) {
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink-1);
+  background: var(--surface);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--navy-900) 20%, transparent);
+}
+.leafletDivIcon {
+  border: 0;
+  background: transparent;
+}
+.leafletGpsPin {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--navy-900);
+  border-radius: 50% 50% 50% 7px;
+  color: var(--navy-900);
+  background: var(--chart-cyan);
+  box-shadow: 0 0 0 2px var(--surface), 0 4px 10px color-mix(in srgb, var(--navy-900) 30%, transparent);
+  font-size: 11px;
+  font-weight: 850;
+  transform: rotate(-45deg);
+}
+.leafletGpsPin b { font-size: 11px; transform: rotate(45deg); }
+.leafletEndpoint {
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--chart-cyan), 0 4px 10px color-mix(in srgb, var(--navy-900) 30%, transparent);
+}
+.leafletTowerPin {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 46px;
+  min-height: 32px;
+  padding: 5px 7px;
+  border: 2px solid var(--surface);
+  border-radius: 7px;
+  color: var(--surface);
+  background: var(--chart-violet);
+  box-shadow: 0 0 0 2px var(--navy-900), 0 4px 12px color-mix(in srgb, var(--navy-900) 25%, transparent);
+}
+.leafletTowerPin b { font-size: 10px; }
+.leafletTowerPin small {
+  display: grid;
+  place-items: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  color: var(--navy-900);
+  background: var(--surface);
+  font-size: 8px;
+  font-weight: 800;
+}
+.mapTooltip { display: grid; gap: 2px; min-width: 145px; }
+.mapTooltip strong { color: var(--navy-900); font-size: 11px; }
+.mapTooltip span { color: var(--ink-2); font-size: 10px; }
+.tileWarning {
+  position: absolute;
+  z-index: 500;
+  top: 12px;
+  left: 50%;
+  width: min(460px, calc(100% - 120px));
+  padding: 9px 12px;
+  border: 1px solid var(--warn);
+  border-radius: 5px;
+  color: var(--ink-1);
+  background: var(--warn-bg);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--navy-900) 16%, transparent);
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.mapPrivacyNote {
+  margin: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  color: var(--ink-3);
+  background: var(--hover);
+  font-size: 9px;
+  line-height: 1.45;
+}
+.map > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.mapGridLine { fill: none; stroke: var(--navy-700); stroke-width: .22; opacity: .45; }
+.routeArrow { fill: var(--chart-teal); }
+.stayZone { fill: color-mix(in srgb, var(--chart-blue) 18%, transparent); stroke: var(--chart-blue); stroke-width: .6; stroke-dasharray: 2 1; opacity: .8; }
+.mapNorth { position: absolute; top: 16px; right: 17px; z-index: 1; color: var(--shell-muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+.mapScaleNote { position: absolute; left: 16px; bottom: 13px; z-index: 1; color: var(--shell-muted); font-size: 10px; letter-spacing: .04em; }
+.mapEmpty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  color: var(--shell-muted);
+}
+.mapEmpty svg { position: static; width: 26px; height: 26px; }
+.mapEmpty strong { color: var(--graph-text); }
+.towerRadius {
+  fill: color-mix(in srgb, var(--chart-amber) 14%, transparent);
+  stroke: var(--chart-amber);
+  stroke-width: .8;
+  stroke-dasharray: 2 2;
+}
 .map > button {
   position: absolute;
   z-index: 2;
+  transform: translate(-50%, -50%);
   min-width: 40px;
   min-height: 40px;
   padding: 6px;
   border-radius: 50%;
+}
+.map > button.gpsMarker { min-width: 30px; min-height: 30px; width: 30px; height: 30px; padding: 0; border: 3px solid var(--navy-900); background: var(--chart-cyan); color: var(--navy-900); font-size: 11px; font-weight: 850; box-shadow: 0 0 0 2px var(--surface); }
+.gpsMarker[data-endpoint]::after { content: attr(data-endpoint); position: absolute; top: 34px; left: 50%; transform: translateX(-50%); color: var(--graph-text); background: var(--navy-800); border: 1px solid var(--navy-700); border-radius: 3px; padding: 2px 5px; font-size: 8px; line-height: 1; white-space: nowrap; }
+.map > button.towerMarker { display: grid; grid-template-columns: auto auto; align-items: center; gap: 4px; min-width: 48px; min-height: 34px; width: auto; padding: 6px 8px; border: 2px solid var(--surface); border-radius: 7px; background: var(--chart-violet); box-shadow: 0 0 0 2px var(--navy-900); }
+.towerMarker strong { font-size: 11px; }
+.towerMarker small { display: grid; place-items: center; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 9px; color: var(--navy-900); background: var(--surface); font-size: 8px; }
+.mapTimeControl { display: grid; grid-template-columns: auto minmax(160px, 1fr) 46px; align-items: center; gap: 14px; padding: 12px 14px; margin-top: 16px; border: 1px solid var(--line); background: var(--hover); }
+.mapTimeControl label { display: flex; align-items: center; gap: 7px; color: var(--ink-2); font-size: 11px; font-weight: 750; }
+.mapTimeControl label svg { width: 15px; }
+.mapTimeControl input { width: 100%; }
+.mapTimeControl output { padding: 6px 8px; border-radius: 3px; background: var(--navy-900); color: var(--surface); text-align: center; font-size: 11px; font-weight: 800; }
+.mapReading { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-top: 0; background: var(--surface); }
+.mapReading > div { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-right: 1px solid var(--line); }
+.mapReading > div:nth-child(3) { border-right: 0; }
+.mapReading > div strong { color: var(--navy-900); font-size: 22px; line-height: 1; }
+.mapReading > div span { color: var(--ink-3); font-size: 10px; font-weight: 650; }
+.mapReading > p { grid-column: 1 / -1; margin: 0; padding: 12px 16px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 11px; }
+.towerDirectory { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.towerDirectory > span { display: grid; grid-template-columns: 25px auto; gap: 1px 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); background: var(--hover); }
+.towerDirectory i { grid-row: 1 / 3; display: grid; place-items: center; width: 25px; height: 25px; border-radius: 5px; color: var(--surface); background: var(--chart-violet); font-style: normal; font-size: 9px; font-weight: 800; }
+.towerDirectory strong { font-size: 10px; }
+.towerDirectory small { color: var(--ink-3); font-size: 9px; }
+.mapReceipts { margin-top: 14px; border: 1px solid var(--line); background: var(--hover); }
+.mapReceipts summary { cursor: pointer; padding: 12px 14px; color: var(--ink-2); font-size: 11px; font-weight: 750; }
+.mapReceipts > p { margin: 0; padding: 0 14px 8px; color: var(--ink-3); font-size: 10px; }
+.mapReceipts .citations { padding: 0 14px 14px; }
+@media(max-width:700px) {
+  .map { height: 330px; }
+  .streetMapShell { height: 360px; }
+  .tileWarning { width: calc(100% - 90px); }
+  .mapTimeControl { grid-template-columns: minmax(0, 1fr) 46px; }
+  .mapTimeControl label { grid-column: 1 / -1; }
+  .mapGuide { gap: 8px 13px; }
+  .mapReading { grid-template-columns: 1fr; }
+  .mapReading > div { border-right: 0; border-bottom: 1px solid var(--line); }
+  .mapReading > p { grid-column: 1; }
+  .gpsMarker[data-endpoint]::after { display: none; }
 }
 .map > button.tower {
   border-radius: 4px;

@@ -73,6 +73,7 @@ import styles from "./Casework.module.css";
 import { ReviewPanel } from "./ReviewPanel";
 import { VirtualList } from "../ui/VirtualList";
 import { EvidenceBoard } from "../board/EvidenceBoard";
+import { EvidenceMap } from "./EvidenceMap";
 
 const views = [
   "Overview",
@@ -226,6 +227,8 @@ export function CaseWorkspace({
   const [originData, setOriginData] = useState<OriginResult | null>(null);
   const [fraudReview, setFraudReview] = useState<FraudReview | null>(null);
   const [correlation, setCorrelation] = useState<CorrelationResult | null>(null);
+  const [correlationError, setCorrelationError] = useState("");
+  const [correlationAttempt, setCorrelationAttempt] = useState(0);
   const [graphFocus, setGraphFocus] = useState("");
   const [graphSource, setGraphSource] = useState("");
   const [graphTarget, setGraphTarget] = useState("");
@@ -361,14 +364,30 @@ export function CaseWorkspace({
   }, [caseId, token, view]);
   useEffect(() => {
     if (!token || !caseId || !["Graph", "Map", "Timeline"].includes(view)) return;
+    let active = true;
+    setCorrelationError("");
     void getCorrelation(caseId, {
       source: graphSource || undefined,
       target: graphTarget || undefined,
       focus: graphFocus || undefined,
       depth: graphDepth,
       clockConfidence,
-    }).then(setCorrelation);
-  }, [caseId, clockConfidence, graphDepth, graphFocus, graphSource, graphTarget, token, view]);
+    })
+      .then((result) => {
+        if (active) setCorrelation(result);
+      })
+      .catch((cause) => {
+        if (active)
+          setCorrelationError(
+            cause instanceof Error
+              ? cause.message
+              : "Location and telecom analysis could not be loaded.",
+          );
+      });
+    return () => {
+      active = false;
+    };
+  }, [caseId, clockConfidence, correlationAttempt, graphDepth, graphFocus, graphSource, graphTarget, token, view]);
   useEffect(() => {
     if (isDemo) {
       let active = true;
@@ -588,6 +607,16 @@ export function CaseWorkspace({
     (event) => String(event.event_id) === activeEvent?.id,
   );
   const replayTimestamp = (event?: RecordEvent) => correlation?.timeline.all_events.find(item => String(item.event_id) === event?.id)?.reconciled_timestamp_utc ?? event?.timestamp_utc;
+  function liveMapView(map: CorrelationResult["map"]) {
+    return (
+      <EvidenceMap
+        map={map}
+        cursor={mapCursor}
+        formatTime={time}
+        onOpenReceipt={(receipt) => open({ file: receipt.evidence_id, ref: receipt.reference })}
+      />
+    );
+  }
   function mapView(atTime?: string | null) {
     const gps = records.filter(
       (e) =>
@@ -2065,16 +2094,10 @@ export function CaseWorkspace({
           {view === "Map" && !isDemo && (
             correlation ? <>
               <section className={styles.panel}>
-                <div className={styles.cardTitle}><h2>GPS trail, stay points and towers</h2><span className={styles.viewLabel}>Up to {mapCursor}% of observed time</span></div>
-                <input type="range" min="1" max="100" value={mapCursor} onChange={(event) => setMapCursor(Number(event.target.value))} aria-label="Map time slider" />
-                <div className={styles.map}>
-                  {correlation.map.gps_trail.slice(0, Math.ceil(correlation.map.gps_trail.length * mapCursor / 100)).map((point) => <button key={point.event_id} style={{ left: `${8 + ((point.lon - 77.35) * 7000) % 82}%`, top: `${8 + ((28.63 - point.lat) * 7000) % 72}%` }} onClick={() => open({ file: point.support.evidence_id, ref: point.support.reference })} aria-label={`GPS ${point.lat}, ${point.lon}`}>GPS</button>)}
-                  {correlation.map.towers.slice(0, Math.ceil(correlation.map.towers.length * mapCursor / 100)).map((tower) => <button key={tower.event_id} className={styles.tower} style={{ left: `${12 + ((tower.lon - 77.35) * 6500) % 75}%`, top: `${12 + ((28.63 - tower.lat) * 6500) % 65}%` }} onClick={() => open({ file: tower.support.evidence_id, ref: tower.support.reference })}>{tower.cell_id}</button>)}
-                </div>
-                <div className={styles.citations}>
-                  {correlation.map.gps_trail.slice(0, 12).map((point) => <button className={styles.citation} key={`pin-gps-${point.event_id}`} onClick={() => pinSource(point.support.evidence_id, point.support.reference, `GPS ${point.lat}, ${point.lon}`, "Pinned map record")}><Pin/>Pin GPS receipt</button>)}
-                  {correlation.map.towers.slice(0, 12).map((tower) => <button className={styles.citation} key={`pin-tower-${tower.event_id}`} onClick={() => pinSource(tower.support.evidence_id, tower.support.reference, tower.cell_id, "Pinned tower record")}><Pin/>Pin {tower.cell_id}</button>)}
-                </div>
+                <div className={styles.cardTitle}><div><span className={styles.eyebrow}>LOCATION & TELECOM CONTEXT</span><h2>GPS trail, stay points and towers</h2><p>Move through the observed sequence, then open any marker to inspect its source receipt.</p></div><span className={styles.viewLabel}>Up to {mapCursor}% of observed time</span></div>
+                <div className={styles.mapTimeControl}><label htmlFor="map-time-slider"><Clock3/>Observed-time lens</label><input id="map-time-slider" type="range" min="1" max="100" value={mapCursor} onChange={(event) => setMapCursor(Number(event.target.value))} aria-label="Map time slider" /><output htmlFor="map-time-slider">{mapCursor}%</output></div>
+                 {liveMapView(correlation.map)}
+                <details className={styles.mapReceipts}><summary>Source receipts · {correlation.map.gps_trail.length + correlation.map.towers.length} records</summary><p>Pin a source record to the Evidence Board or open a marker above to inspect its receipt.</p><div className={styles.citations}>{correlation.map.gps_trail.slice(0, 12).map((point, index) => <button className={styles.citation} key={`pin-gps-${point.event_id}`} onClick={() => pinSource(point.support.evidence_id, point.support.reference, `GPS ${point.lat}, ${point.lon}`, "Pinned map record")}><Pin/>GPS {index + 1}</button>)}{Array.from(new Map(correlation.map.towers.map((tower) => [tower.cell_id, tower])).values()).map((tower) => <button className={styles.citation} key={`pin-tower-${tower.cell_id}`} onClick={() => pinSource(tower.support.evidence_id, tower.support.reference, tower.cell_id, "Pinned tower record")}><Pin/>{tower.cell_id}</button>)}</div></details>
                 <p className={styles.warning}>{correlation.disclaimer}</p>
               </section>
               <div className={styles.twoColumns}>
@@ -2082,10 +2105,10 @@ export function CaseWorkspace({
                 <section className={styles.panel}><h2>Telecom and tower hops</h2><p>{correlation.map.map_matching.method}: {correlation.map.map_matching.sequence.join(" → ") || "No tower sequence"}</p>{correlation.map.tower_hops.map((hop, index) => <p key={`${hop.from}-${hop.to}-${index}`}>{hop.from} → {hop.to} · {time(hop.timestamp)}</p>)}<p className={styles.note}>{correlation.map.map_matching.limits}</p></section>
               </div>
               <div className={styles.twoColumns}>
-                <section className={styles.panel}><h2>Call records</h2>{correlation.map.calls.map((call) => <button className={styles.claim} key={call.event_id} onClick={() => open({ file: call.support.evidence_id, ref: call.support.reference })}>{time(call.timestamp)} · {call.caller} → {call.called} · {call.duration_seconds}s · {call.status}</button>)}</section>
+                <section className={styles.panel}><h2>Call records</h2><p className={styles.note}>Unique call observations; select one to open its source receipt.</p>{Array.from(new Map(correlation.map.calls.map((call) => [`${call.timestamp}-${call.caller}-${call.called}-${call.duration_seconds}`, call])).values()).map((call) => <button className={styles.claim} key={call.event_id} onClick={() => open({ file: call.support.evidence_id, ref: call.support.reference })}>{time(call.timestamp)} · {call.caller} → {call.called} · {call.duration_seconds}s · {call.status || "status not supplied"}</button>)}</section>
                 <section className={styles.panel}><h2>Common numbers</h2>{correlation.map.common_numbers.map((number) => <p key={number.number}>{number.number} · {number.count} records</p>)}</section>
               </div>
-            </> : <section className={styles.panel}><p>Correlating uploaded location and telecom records…</p></section>
+             </> : correlationError ? <section className={styles.panel} role="alert"><h2>Map analysis could not be displayed</h2><p>{correlationError}</p><button onClick={() => setCorrelationAttempt((attempt) => attempt + 1)}>Retry map analysis</button></section> : <section className={styles.panel}><p role="status">Correlating uploaded location and telecom records…</p></section>
           )}
           {view === "Map" && isDemo &&
             scenarioGuard(
